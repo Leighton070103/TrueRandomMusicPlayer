@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widgetmainframe"
+    android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_margin="5dp"
+        android:background="@android:color/transparent"> 
+           
+
+	<LinearLayout 
+    android:id="@+id/widgetbuttonframe"
+    android:orientation="horizontal"
+    android:layout_width="260dp"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
+    android:background="@mipmap/frame_widget">
+    
+
+	    <ImageView android:id="@+id/widgetshufflebutton"
+            android:src="@mipmap/shuffle"
+            android:layout_width="32dp"
+            android:layout_height="22dp" 
+            android:layout_marginBottom="4dp" />   
+       <ImageView android:id="@+id/widgetrewbutton"
+            android:src="@drawable/btn_rew_nob"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="4dp" />         
+        <ImageView android:id="@+id/widgetplaypausebutton"
+            android:src="@drawable/btn_play_nob"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="4dp" />
+        <ImageView android:id="@+id/widgetskipbutton"
+            android:src="@drawable/btn_ff_nob"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="4dp" />
+        <ImageView android:id="@+id/widgetstopbutton"
+            android:src="@drawable/btn_stop_nob"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="4dp" />
+            
+    
+	</LinearLayout>
+   	<TextView
+	        android:id="@+id/widgetsongplaying"
+	        android:layout_height="match_parent"
+	        android:layout_width="match_parent"
+ 	        android:textAppearance="?android:attr/textAppearanceSmall" 
+	        android:lines="1"
+	        android:gravity="center"
+	        android:layout_margin="6dp"
+	        android:textColor="@color/text"
+	        android:shadowColor="@color/textReverse"
+	        android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="0.01"
+	        android:width="260dp"   />   
+</LinearLayout>

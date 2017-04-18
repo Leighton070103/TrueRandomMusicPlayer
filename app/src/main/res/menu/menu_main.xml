@@ -1,0 +1,26 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="net.classicgarage.truerandommusicplayer.MainActivity">
+
+    <item
+        android:id="@+id/preferences"
+        android:enabled="true"
+        android:title="@string/preferences"
+        android:visible="true"/>
+    <item
+        android:id="@+id/rebuildCatalog"
+        android:enabled="true"
+        android:title="@string/rebuild_catalog"
+        android:visible="true"/>
+    <item
+        android:id="@+id/killService"
+        android:enabled="true"
+        android:title="@string/reset"
+        android:visible="true"/>
+    <item
+        android:id="@+id/deleteSong"
+        android:enabled="true"
+        android:title="@string/delete_song"
+        android:visible="false"/>
+</menu>

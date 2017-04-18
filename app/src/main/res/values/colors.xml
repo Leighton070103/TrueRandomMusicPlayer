@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="bg">#000000</color>
+    <color name="text">#ECECEC</color>
+    <color name="textDim">#969494</color>
+    <color name="textReverse">#000000</color>
+    <color name="bgReverse">#ECECEC</color>
+    <color name="xparent1">#AA000000</color>
+    <color name="glow">#28A7DE</color>
+    <color name="lightGrey">#D8E0E3</color>
+    <color name="darkerGrey">#AEB3B5</color>
+</resources>

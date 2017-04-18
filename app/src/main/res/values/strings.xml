@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">True Random Music Player</string>
+    <string name="app_title">TRMP</string>
+    <string name="set_preferences">Preferences</string>
+    <string name="file_picker">Catalog</string>
+    <string name="msg_catalog_empty">songs catalog is empty. Try a rebuild or go to App. preferences to specify music location</string>
+    <string name="msg_added_to_favorites">added to favorites</string>
+    <string name="msg_catalog_rebuilt">catalog has been rebuilt</string>
+    <string name="msg_catalog_rebuild_failed">catalog rebuild has failed</string>
+    <string name="msg_removed_from_favorites">removed from favorites</string>
+    <string name="preferences">Preferences</string>
+    <string name="rebuild_catalog">Rebuild Catalog</string>
+    <string name="reset">Reset</string>
+    <string name="delete_song">Delete Song</string>
+</resources>
