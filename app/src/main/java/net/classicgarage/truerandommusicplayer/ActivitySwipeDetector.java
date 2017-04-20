@@ -7,38 +7,38 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
-public class ActivitySwipeDetector implements View.OnTouchListener {
+class ActivitySwipeDetector implements View.OnTouchListener {
 
 static final String TAG = "ActivitySwipeDetector";
-private Activity activity;
-static final int SWIPE_MIN_DISTANCE = 100;
-private int REL_SWIPE_MIN_DISTANCE = 100;
+private Activity mActivityAct;
+private static final int SWIPE_MIN_DISTANCE = 100;
+private int mSwipeMinDistance = 100;
 
-private float downX, downY, upX, upY;
+private float mDownXFlt, mDownYFlt, mUpXFlt, mUpYFlt;
 
-public ActivitySwipeDetector(Activity activity){
-    this.activity = activity;
+ActivitySwipeDetector(Activity mActivityAct){
+    this.mActivityAct = mActivityAct;
     
-    DisplayMetrics dm = activity.getResources().getDisplayMetrics();
-    REL_SWIPE_MIN_DISTANCE = (int)(SWIPE_MIN_DISTANCE * dm.densityDpi / 160.0f);
+    DisplayMetrics dm = mActivityAct.getResources().getDisplayMetrics();
+    mSwipeMinDistance = (int)(SWIPE_MIN_DISTANCE * dm.densityDpi / 160.0f);
 }
 
-public void onRightToLeftSwipe(){
+private void onRightToLeftSwipe(){
     Log.i(TAG, "RightToLeftSwipe!");
-    activity.startService(new Intent(PlayerService.ACTION_SKIP));
+    mActivityAct.startService(new Intent(PlayerService.ACTION_SKIP));
 }
 
-public void onLeftToRightSwipe(){
+private void onLeftToRightSwipe(){
     Log.i(TAG, "LeftToRightSwipe!");
-    activity.startService(new Intent(PlayerService.ACTION_REW));
+    mActivityAct.startService(new Intent(PlayerService.ACTION_REW));
 }
 
-public void onTopToBottomSwipe(){
+private void onTopToBottomSwipe(){
     Log.i(TAG, "onTopToBottomSwipe!");
     // do nothing
 }
 
-public void onBottomToTopSwipe(){
+private void onBottomToTopSwipe(){
     Log.i(TAG, "onBottomToTopSwipe!");
     // do nothing
 }
@@ -46,36 +46,36 @@ public void onBottomToTopSwipe(){
 public boolean onTouch(View v, MotionEvent event) {
     switch(event.getAction()){
         case MotionEvent.ACTION_DOWN: {
-            downX = event.getX();
-            downY = event.getY();
+            mDownXFlt = event.getX();
+            mDownYFlt = event.getY();
             return true;
         }
         case MotionEvent.ACTION_UP: {
-            upX = event.getX();
-            upY = event.getY();
+            mUpXFlt = event.getX();
+            mUpYFlt = event.getY();
 
-            float deltaX = downX - upX;
-            float deltaY = downY - upY;
+            float deltaX = mDownXFlt - mUpXFlt;
+            float deltaY = mDownYFlt - mUpYFlt;
 
             // swipe horizontal?
-            if(Math.abs(deltaX) > REL_SWIPE_MIN_DISTANCE){
+            if(Math.abs(deltaX) > mSwipeMinDistance){
                 // left or right
                 if(deltaX < 0) { this.onLeftToRightSwipe(); return true; }
                 if(deltaX > 0) { this.onRightToLeftSwipe(); return true; }
             }
             else {
-                    Log.i(TAG, "Swipe was only " + Math.abs(deltaX) + " long, need at least " + REL_SWIPE_MIN_DISTANCE);
+                    Log.i(TAG, "Swipe was only " + Math.abs(deltaX) + " long, need at least " + mSwipeMinDistance);
                     return false; // We don't consume the event
             }
 
             // swipe vertical?
-            if(Math.abs(deltaY) > REL_SWIPE_MIN_DISTANCE){
+            if(Math.abs(deltaY) > mSwipeMinDistance){
                 // top or down
                 if(deltaY < 0) { this.onTopToBottomSwipe(); return true; }
                 if(deltaY > 0) { this.onBottomToTopSwipe(); return true; }
             }
             else {
-                    Log.i(TAG, "Swipe was only " + Math.abs(deltaX) + " long, need at least " + REL_SWIPE_MIN_DISTANCE);
+                    Log.i(TAG, "Swipe was only " + Math.abs(deltaX) + " long, need at least " + mSwipeMinDistance);
                     return false; // We don't consume the event
             }
 
