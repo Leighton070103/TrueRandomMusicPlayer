@@ -99,7 +99,8 @@ public class SongItem implements Serializable, Comparable<SongItem> {
     }
 
 	public int compareTo(SongItem another) {
-	        return this.toString2().compareTo(another.toString2());
+
+        return this.toString2().compareTo(another.toString2());
 	}
 
 
