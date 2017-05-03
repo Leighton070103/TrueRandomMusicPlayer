@@ -173,6 +173,12 @@ public class MusicPlayerActivity extends Activity
         	Intent i = new Intent(PlayerService.ACTION_FAVORITE);
         	i.putExtra(PlayerService.INTENT_EXTRA_SONG_FAVORITE, !songPlaying.getFavorite());    			
         	startService(i);
+            /**
+             *   @Override
+             *   public ComponentName startService(Intent service) {
+             *   return mBase.startService(service);
+             *   }
+             */
         }
         else if (target == mFilePickerButton) {
         	 Intent i = new Intent(this, SongPickerActivity.class);
