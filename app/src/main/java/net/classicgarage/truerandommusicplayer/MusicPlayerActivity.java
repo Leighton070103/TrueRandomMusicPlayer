@@ -38,7 +38,7 @@ public class MusicPlayerActivity extends Activity
 	public static final int REQUEST_PICK_SONG = 0; 	// used for calling SongPicker activity
 	
 	PlayerStatusReceiver receiver ; 	// broadcast receiver to receive updates about player status
-	
+	//hhhuhuhuh
     Button mPlayPauseButton;
     Button mRandomButton;
     Button mSkipButton;
