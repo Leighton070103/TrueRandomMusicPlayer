@@ -23,7 +23,7 @@ import java.util.Random;
 /**
  * Songs and Catalog management
  * @author phid75
- *
+ *MediaMetadataCompat we dont need to use the songIETM
  */
 public class MusicEngine {
 
@@ -31,8 +31,8 @@ public class MusicEngine {
 	private List<String> mMusicFileLocations;	// directories on SD card where songs are located
 	private PlayerApplication mApplication;
 	
-	private ArrayList<SongItem> mSongsCatalog;
-	private displayTypes mCatalogSortOrder;
+	private ArrayList<SongItem> mSongsCatalog;	//song of sequence
+	private displayTypes mCatalogSortOrder;		// already order the song of sequence
 	private HashSet<String> mFavoriteSongs;		// set of favorite songs identified by ARTIST+SONG key
 		
 	static private final String CATALOG_FILE = "catalog.dat";		// catalog backup file
@@ -239,6 +239,7 @@ public class MusicEngine {
 
 	/**
 	 * gets a random song from catalog
+	 * it also not a true random song>?
 	 * @return SongItem
 	 */
 	 public SongItem getRandomSong() {
@@ -298,7 +299,9 @@ public class MusicEngine {
 	/**
 	 * gets a random favorite song from catalog
 	 * @return SongItem
-	 * 
+	 * how to get the random: get a random index from the account of favoriteSong but i dont know why code need to iterator the list???
+	 * it is not a true romdam
+	 * should we need a flag which means already run....in the songItem
 	 */
 	 public SongItem getRandomFavoriteSong() {
 		 SongItem thisSong = null;
@@ -327,6 +330,7 @@ public class MusicEngine {
 					 else {
 						 Log.e(TAG, "getRandomFavoriteSong : song "+key+" was NOT foung in catalog. Will pick another one");
 						 retry++;
+						 /*what he meaning of the retry???*/
 					 }
 				 }			
 			 }
@@ -389,7 +393,7 @@ public class MusicEngine {
 			 if (pfd != null)              
 			 {                 
 				 FileDescriptor fd = pfd.getFileDescriptor();
-				 bm = BitmapFactory.decodeFileDescriptor(fd);             
+				 bm = BitmapFactory.decodeFileDescriptor(fd);   //get the picture and do some things in this piectur
 				 }     
 			 } 
 		 catch (FileNotFoundException e) {
