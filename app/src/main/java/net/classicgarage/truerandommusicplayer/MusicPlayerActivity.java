@@ -38,7 +38,7 @@ public class MusicPlayerActivity extends Activity
 	public static final int REQUEST_PICK_SONG = 0; 	// used for calling SongPicker activity
 	
 	PlayerStatusReceiver receiver ; 	// broadcast receiver to receive updates about player status
-	
+	//hhhuhuhuh
     Button mPlayPauseButton;
     Button mRandomButton;
     Button mSkipButton;
@@ -60,11 +60,11 @@ public class MusicPlayerActivity extends Activity
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+        setContentView(R.layout.activity_main);
         
         Log.d(TAG, "onCreate");
         
-        mSongTitle = (TextView) findViewById(R.id.songplaying);
+        /*mSongTitle = (TextView) findViewById(R.id.songplaying);
         mAlbumArt = (ImageView) findViewById(R.id.albumart);   
         
         mPlayPauseButton = (Button) findViewById(R.id.playpausebutton);
@@ -89,7 +89,7 @@ public class MusicPlayerActivity extends Activity
         // manage swipe movements
         ActivitySwipeDetector activitySwipeDetector = new ActivitySwipeDetector(this);
         LinearLayout mainLayout = (LinearLayout)this.findViewById(R.id.mainlayout);
-        mainLayout.setOnTouchListener(activitySwipeDetector);
+        mainLayout.setOnTouchListener(activitySwipeDetector);*/
     }
     
     @Override
@@ -173,12 +173,6 @@ public class MusicPlayerActivity extends Activity
         	Intent i = new Intent(PlayerService.ACTION_FAVORITE);
         	i.putExtra(PlayerService.INTENT_EXTRA_SONG_FAVORITE, !songPlaying.getFavorite());    			
         	startService(i);
-            /**
-             *   @Override
-             *   public ComponentName startService(Intent service) {
-             *   return mBase.startService(service);
-             *   }
-             */
         }
         else if (target == mFilePickerButton) {
         	 Intent i = new Intent(this, SongPickerActivity.class);
