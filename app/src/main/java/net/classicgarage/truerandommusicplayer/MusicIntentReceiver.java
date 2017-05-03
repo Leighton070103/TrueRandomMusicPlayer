@@ -34,6 +34,10 @@ public class MusicIntentReceiver extends BroadcastReceiver {
     
     @Override
     public void onReceive(Context context, Intent intent) {
+
+        // AudioManager.ACTION_AUDIO_BECOMING_NOISY:
+        // Broadcast intent, a hint for applications that audio is about to become 'noisy'
+        // due to a change in audio outputs.
         if (intent.getAction().equals(android.media.AudioManager.ACTION_AUDIO_BECOMING_NOISY)) {
             Toast.makeText(context, "Headphones disconnected", Toast.LENGTH_SHORT).show();
 

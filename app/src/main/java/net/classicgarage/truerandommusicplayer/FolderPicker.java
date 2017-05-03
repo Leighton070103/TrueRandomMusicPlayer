@@ -29,19 +29,20 @@ implements OnItemClickListener {
 	private FolderAdapter mAdapter;
 
 	private static final String TAG="FolderPicker";
-	
 
+	/* If the SD card is available, get the folder from file path
+	* if not, show a toast
+	* */
 	public FolderPicker(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		
 		PlayerApplication app = PlayerApplication.getInstance();
-		
+
 		if (app.isExternalStorageAvail()) {
-	        String prefDir = app.getPreferences().getString(PlayerApplication.PREF_MUSICDIRECTORIES, 
+	        String prefDir = app.getPreferences().getString(PlayerApplication.PREF_MUSICDIRECTORIES,
 		        		app.getRootSDCard().getAbsolutePath());
 				mPath=new Folder(prefDir);
-		}
-		else {
+		} else {
 			Toast.makeText(context, "SD card appears to be unavailable. Please fix the problem and retry.", Toast.LENGTH_SHORT).show();
 			mPath=null;
 		}
@@ -77,8 +78,9 @@ implements OnItemClickListener {
 		if (positiveResult)  {
 			Log.d(TAG, "onDialogClosed : pref value persisted="+mPath.getAbsolutePath());
 
-			if (shouldPersist())
+			if (shouldPersist()) {
 				persistString(mPath.getAbsolutePath());
+			}
 
 			Toast.makeText(this.getContext(), "File location is now set to "+mPath.getAbsolutePath(), Toast.LENGTH_SHORT).show();
 		}
