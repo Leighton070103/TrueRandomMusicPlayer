@@ -25,7 +25,7 @@ import java.util.Random;
  * @author phid75
  *MediaMetadataCompat we dont need to use the songIETM
  */
-public class MusicEngine {
+public class MusicEngine{
 
 	private ContentResolver mContentResolver;	// will be queried to build catalog
 	private List<String> mMusicFileLocations;	// directories on SD card where songs are located
