@@ -24,9 +24,7 @@ public class PlayerWidgetProvider extends AppWidgetProvider {
  
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-               
-//        Log.d(TAG, "onUpdate");
-        
+
         for (int appWidgetId : appWidgetIds) {        	
         	
         	Intent intent;
@@ -199,8 +197,9 @@ public class PlayerWidgetProvider extends AppWidgetProvider {
     	}
     	else if (intent.getAction().equals("android.appwidget.action.APPWIDGET_UPDATE")) {
     		// since we don't update periodically this widget, will occur only when widget is created
-    		// we need to ask player service to broadcast the status and song played if any       	
-    		context.startService(new Intent(PlayerService.ACTION_BROADCAST));
+    		// we need to ask player service to broadcast the status and song played if any
+    		// context.startService(new Intent(PlayerService.ACTION_BROADCAST));
+			context.startService(new Intent(context, PlayerService.class));
     	}
     		        	
     	super.onReceive(context, intent);    	
