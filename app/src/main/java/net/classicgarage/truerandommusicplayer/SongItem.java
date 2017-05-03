@@ -8,73 +8,73 @@ import java.io.Serializable;
 import java.util.Comparator;
 
 public class SongItem implements Serializable, Comparable<SongItem> {
-
+    //variable not used
 	static final long serialVersionUID = 1;
 
 	private static final String TAG="SongItem"; 
 	
-	private long id;
-	private String artist;
-	private String title;
-	private String album;
-	private long albumId;
-	private long duration;
-	private String path;
-	private boolean favorite;
+	private long mIdLog;
+	private String mArtistStr;
+	private String mTitleStr;
+	private String mAlbumStr;
+	private long mAlbumIdLog;
+	private long mDurationLog;
+	private String mPathStr;
+	private boolean mFavoriteblo;
 
     public SongItem(long id, String artist, String title, 
     		long albumId, String album, long duration, String path) {
-        this.id = id;
-        this.artist = artist;
-        this.title = title;
-        this.albumId = albumId;
-        this.album = album;
-        this.duration = duration;
-        this.path = path;
-        this.favorite = false;
+        this.mIdLog = id;
+        this.mArtistStr = artist;
+        this.mTitleStr = title;
+        this.mAlbumIdLog = albumId;
+        this.mAlbumStr = album;
+        this.mDurationLog = duration;
+        this.mPathStr = path;
+        this.mFavoriteblo = false;
     }
 
     public long getId() {
-        return id;
+        return mIdLog;
     }
 
     public String getArtist() {
-        return artist;
+        return mArtistStr;
     }
 
     public String getTitle() {
-        return title;
+        return mTitleStr;
     }
 
     public String getAlbum() {
-        return album;
+        return mAlbumStr;
     }
 
     public long getAlbumId() {
-        return albumId;
+        return mAlbumIdLog;
     }
 
     public long getDuration() {
-        return duration;
+        return mDurationLog;
     }
     
     public String getPath() {
-        return path;
+        return mPathStr;
     }
     
     public boolean getFavorite() {
-        return favorite;
+        return mFavoriteblo;
     }
     
     public void setFavorite(boolean status) {
     	if(status)
     		Log.d(TAG, "setFavorite song "+getKey()+" to "+status);
     	
-    	this.favorite = status;
+    	this.mFavoriteblo = status;
     }
     
     public String toString() {
-    	return String.format("%s (%s - %s)", title ,artist, album);
+    	return String.format("%s (%s - %s)", mTitleStr ,mArtistStr, mAlbumStr);
     }
     
     public String getNotificationText(){
@@ -82,20 +82,20 @@ public class SongItem implements Serializable, Comparable<SongItem> {
     }
 
     public String getKey(){
-    	return String.format("%s - %s", artist, title);
+    	return String.format("%s - %s", mArtistStr, mTitleStr);
     }
     
     public String getArtistTitle(){
-    	return String.format("%s - %s", artist, title);
+    	return String.format("%s - %s", mArtistStr, mTitleStr);
     }    
     
     public String toString2() {
-    	return String.format("%s - %s - %s)", artist, album, title);
+    	return String.format("%s - %s - %s)", mArtistStr, mAlbumStr, mTitleStr);
     }
     
     public Uri getURI() {
         return ContentUris.withAppendedId(
-                android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, id);
+                android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, mIdLog);
     }
 
 	public int compareTo(SongItem another) {
