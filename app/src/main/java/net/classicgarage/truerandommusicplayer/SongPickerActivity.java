@@ -32,10 +32,9 @@ import java.util.List;
  * song picker
  */
 public class SongPickerActivity extends ListActivity implements OnClickListener {
-	////a;slkdjf;alskdjf;laskjf;laskdjf
 	public static final String INTENT_EXTRA = "net.classicGarage.FilePicker";
 	
-	ArrayList<SongItem> songsCatalog;
+	ArrayList<SongItem> mSongsCatalog;
 	private ArrayAdapter<SongItem> songSelectorAdapter;
     private boolean onlyFavorites = false;
 
@@ -43,7 +42,7 @@ public class SongPickerActivity extends ListActivity implements OnClickListener 
     
 	CheckBox cbOnlyFavorites;
 	Button bDisplay;
-
+	private MusicEngine mMU;
     
 	private static final String TAG = "FilePickerActivity";
 	
@@ -96,7 +95,7 @@ public class SongPickerActivity extends ListActivity implements OnClickListener 
         super.onResume();
 
         // get a reference on the app music catalog
-        songsCatalog = musicEngine.getSongsCatalog();
+		mSongsCatalog = musicEngine.getSongsCatalog();
         
 		lv = getListView();	// gets the listview attached to the ListActivity
 		
@@ -175,9 +174,9 @@ public class SongPickerActivity extends ListActivity implements OnClickListener 
         protected Void doInBackground(Void... nothings) {
         	// sort catalog
      		if (newDisplayType.equals(MusicEngine.displayTypes.PATHDISPLAY)) 
-     			Collections.sort(songsCatalog, new SongItem.PathComparator());
+     			Collections.sort(mSongsCatalog, new SongItem.PathComparator());
      		else
-     			Collections.sort(songsCatalog, new SongItem.ArtistAlbumSongsComparator());
+     			Collections.sort(mSongsCatalog, new SongItem.ArtistAlbumSongsComparator());
             return (Void) null;
         }
         
@@ -210,12 +209,12 @@ public class SongPickerActivity extends ListActivity implements OnClickListener 
     	if (onlyFavorites) {
     		// filter to retain only favorites
     		catalog = new ArrayList<SongItem>();
-    		for (SongItem s:songsCatalog) {
+    		for (SongItem s:mSongsCatalog) {
     			if (s.getFavorite()) catalog.add(s);
     		}
     	}
     	else {
-    			catalog = songsCatalog;		// current catalog is already sorted 
+    			catalog = mSongsCatalog;		// current catalog is already sorted
     	}
     	
         try {
