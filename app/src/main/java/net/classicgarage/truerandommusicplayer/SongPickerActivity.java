@@ -35,14 +35,14 @@ public class SongPickerActivity extends ListActivity implements OnClickListener 
 	public static final String INTENT_EXTRA = "net.classicGarage.FilePicker";
 	
 	ArrayList<SongItem> mSongsCatalog;
-	private ArrayAdapter<SongItem> songSelectorAdapter;
-    private boolean onlyFavorites = false;
+	private ArrayAdapter<SongItem> mSongSelectorAdapter;
+    private boolean mOnlyFavorites = false;
 
-    private MusicEngine musicEngine;	// ref to application MusicEngine instance
+    private MusicEngine mMusicEngine;	// ref to application MusicEngine instance
     
-	CheckBox cbOnlyFavorites;
-	Button bDisplay;
-	private MusicEngine mMU;
+	CheckBox mOnlyFavoritesCb;
+	Button mDisplayBtn;
+	//private MusicEngine mMU;
     
 	private static final String TAG = "FilePickerActivity";
 	
@@ -59,15 +59,15 @@ public class SongPickerActivity extends ListActivity implements OnClickListener 
         setContentView(R.layout.songpicker);			// to override default ListView layout
         
         this.setTitle("Song Picker");
-		cbOnlyFavorites = (CheckBox) findViewById(R.id.checkBoxFavorite);
-		bDisplay = (Button) findViewById(R.id.buttonDisplay);
-				
-		musicEngine = PlayerApplication.getInstance().getMusicEngine();
-		currentDisplayType = musicEngine.getCatalogSortOrder();
+		mOnlyFavoritesCb = (CheckBox) findViewById(R.id.checkBoxFavorite);
+		mDisplayBtn = (Button) findViewById(R.id.buttonDisplay);
+
+		mMusicEngine = PlayerApplication.getInstance().getMusicEngine();
+		currentDisplayType = mMusicEngine.getCatalogSortOrder();
 		newDisplayType = currentDisplayType;
-		
-		bDisplay.setText((currentDisplayType == MusicEngine.displayTypes.PATHDISPLAY ? "display songs" : "display paths"));
-		bDisplay.setOnClickListener(this);
+
+		mDisplayBtn.setText((currentDisplayType == MusicEngine.displayTypes.PATHDISPLAY ? "display songs" : "display paths"));
+		mDisplayBtn.setOnClickListener(this);
 
         //get current song if any
         Intent intent = getIntent();
@@ -95,7 +95,7 @@ public class SongPickerActivity extends ListActivity implements OnClickListener 
         super.onResume();
 
         // get a reference on the app music catalog
-		mSongsCatalog = musicEngine.getSongsCatalog();
+		mSongsCatalog = mMusicEngine.getSongsCatalog();
         
 		lv = getListView();	// gets the listview attached to the ListActivity
 		
@@ -123,21 +123,21 @@ public class SongPickerActivity extends ListActivity implements OnClickListener 
 	            
 	            // update TRMP songs catalog with new sort order
 	            //musicEngine.setSongsCatalog(songsCatalog);
-	            musicEngine.setCatalogSortOrder(currentDisplayType);
+				mMusicEngine.setCatalogSortOrder(currentDisplayType);
 	            
 	            finish();	// activity is done	  
 		    }
 		  });
-		
-		cbOnlyFavorites.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+		mOnlyFavoritesCb.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				if (buttonView.isChecked()) {
 					// restrict songs displayed to favorite songs
-					onlyFavorites = true;
+					mOnlyFavorites = true;
 				}
 				else {
 					// no restrictions
-					onlyFavorites = false;
+					mOnlyFavorites = false;
 				}
 				// reload listView
 				fillData();
@@ -151,7 +151,7 @@ public class SongPickerActivity extends ListActivity implements OnClickListener 
     
     public void onClick(View target) {
  
-    	if (target == bDisplay) {
+    	if (target == mDisplayBtn) {
     		// change type
      		newDisplayType = (currentDisplayType == MusicEngine.displayTypes.PATHDISPLAY 
      				? MusicEngine.displayTypes.SONGDISPLAY 
@@ -187,7 +187,7 @@ public class SongPickerActivity extends ListActivity implements OnClickListener 
     		fillData();
     		
     		// change button text
-    		bDisplay.setText((newDisplayType == MusicEngine.displayTypes.PATHDISPLAY ? "display songs" : "display paths"));
+			mDisplayBtn.setText((newDisplayType == MusicEngine.displayTypes.PATHDISPLAY ? "display songs" : "display paths"));
     		
        		currentDisplayType = newDisplayType;
             
@@ -206,7 +206,7 @@ public class SongPickerActivity extends ListActivity implements OnClickListener 
     		return;
     	}
     	
-    	if (onlyFavorites) {
+    	if (mOnlyFavorites) {
     		// filter to retain only favorites
     		catalog = new ArrayList<SongItem>();
     		for (SongItem s:mSongsCatalog) {
@@ -218,14 +218,14 @@ public class SongPickerActivity extends ListActivity implements OnClickListener 
     	}
     	
         try {
-        	songSelectorAdapter = new SongsSelectorAdapter(this,  R.layout.songpicker_row, catalog);
+			mSongSelectorAdapter = new SongsSelectorAdapter(this,  R.layout.songpicker_row, catalog);
 
-            setListAdapter(songSelectorAdapter);
+            setListAdapter(mSongSelectorAdapter);
             //position on current song played
             if (idSongPlaying != -1) {
             	for (int p = 0; p<catalog.size(); p++) {
             		if (catalog.get(p).getId() == idSongPlaying) {
-            			lv.setSelection(songSelectorAdapter.getPosition(catalog.get(p)));
+            			lv.setSelection(mSongSelectorAdapter.getPosition(catalog.get(p)));
             			
             			Log.d(TAG, "fillData : moving to position "+p);
             			break;
