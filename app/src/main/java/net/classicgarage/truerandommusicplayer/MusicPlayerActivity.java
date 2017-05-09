@@ -54,7 +54,7 @@ public class MusicPlayerActivity extends Activity
     private PlayerServiceState mPlayerServiceState = PlayerServiceState.Inexistant;
     private PlaybackMode mPlaybackMode = PlaybackMode.RANDOM;
    
-	Resources res ;		// used to access button bitmaps
+	Resources res ;		// used to access button bitmaps 
 	   
     /** Called when the activity is first created. */
     @Override
