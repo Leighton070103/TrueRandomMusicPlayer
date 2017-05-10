@@ -21,6 +21,7 @@
             <intent-filter>
                 <action android:name="android.media.AudioManager.ACTION_AUDIO_BECOMING_NOISY">
                 </action>
+                <category android:name="android.intent.categoy.DEFAULT" />
             </intent-filter>
         </receiver>
     </application>

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="net.classicgarage.truerandommusicplayer.MainActivity">
+    tools:context="net.classicgarage.truerandommusicplayer.MusicPlayerActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -90,7 +90,11 @@
             android:src="@drawable/cirback" />
 
         <ImageView
+<<<<<<< HEAD
             android:id="@+id/cover_iv"
+=======
+            android:id="@+id/coverImg"
+>>>>>>> origin/master
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -102,7 +106,11 @@
             android:src="@drawable/cover2" />
 
         <TextView
+<<<<<<< HEAD
             android:id="@+id/title_tv"
+=======
+            android:id="@+id/TitleTf"
+>>>>>>> origin/master
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@+id/auther_tv"
@@ -123,7 +131,11 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentStart="true"
+<<<<<<< HEAD
             android:layout_below="@+id/title_tv"
+=======
+            android:layout_below="@+id/TitleTf"
+>>>>>>> origin/master
             android:layout_marginTop="18dp"
             android:gravity="center"
             android:text="Album"
@@ -157,7 +169,11 @@
             android:id="@+id/auther_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+<<<<<<< HEAD
             android:layout_alignBottom="@+id/cover_iv"
+=======
+            android:layout_alignBottom="@+id/coverImg"
+>>>>>>> origin/master
             android:layout_alignParentEnd="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
