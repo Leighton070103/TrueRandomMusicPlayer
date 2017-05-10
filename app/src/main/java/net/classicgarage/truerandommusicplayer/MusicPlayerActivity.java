@@ -18,13 +18,11 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import net.classicgarage.truerandommusicplayer.PlayerService.PlaybackMode;
 import net.classicgarage.truerandommusicplayer.PlayerService.PlayerServiceState;
-import net.classicgarage.truerandommusicplayer.R.id;
 
 public class MusicPlayerActivity extends Activity 
 	implements OnClickListener { 
@@ -106,7 +104,6 @@ public class MusicPlayerActivity extends Activity
 		Intent intent = new Intent(MusicPlayerActivity.this, PlayerService.class);
         intent.putExtra(PlayerService.BROADCAST_REQUEST_SONG_TITLE, (boolean) true);
         intent.putExtra(PlayerService.BROADCAST_REQUEST_ALBUM_ART, (boolean) true);
-
         startService(intent);          
     }
     

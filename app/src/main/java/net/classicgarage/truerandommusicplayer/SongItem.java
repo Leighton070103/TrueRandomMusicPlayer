@@ -12,7 +12,7 @@ public class SongItem implements Serializable, Comparable<SongItem> {
 	static final long serialVersionUID = 1;
 
 	private static final String TAG="SongItem"; 
-	
+
 	private long mIdLog;
 	private String mArtistStr;
 	private String mTitleStr;
