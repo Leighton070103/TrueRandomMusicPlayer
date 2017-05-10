@@ -16,9 +16,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,14 +36,14 @@ public class MusicPlayerActivity extends Activity
 	public static final int REQUEST_PICK_SONG = 0; 	// used for calling SongPicker activity
 	
 	PlayerStatusReceiver receiver ; 	// broadcast receiver to receive updates about player status
-	//hhhuhuhuh
-    Button mPlayPauseButton;
-    Button mRandomButton;
-    Button mSkipButton;
-    Button mRewButton;    
-    Button mStopButton;
-    Button mFavoriteButton;
-    Button mFilePickerButton;
+
+    ImageButton mPlayPauseButton;
+    ImageButton mRandomButton;
+    ImageButton mSkipButton;
+    ImageButton mRewButton;
+    ImageButton mStopButton;
+	ImageButton mFavoriteButton;
+	ImageButton mFilePickerButton;
     TextView mSongTitle;
     ImageView mAlbumArt;
     
@@ -66,29 +65,29 @@ public class MusicPlayerActivity extends Activity
         mSongTitle = (TextView) findViewById(R.id.TitleTf);
         mAlbumArt = (ImageView) findViewById(R.id.coverImg);
         
-        mPlayPauseButton = (Button) findViewById(R.id.pauseBtu);
-        mRandomButton = (Button) findViewById(R.id.randombutton);
-        mSkipButton = (Button) findViewById(R.id.skipbutton);
-        mRewButton = (Button) findViewById(R.id.rewbutton);
-        mStopButton = (Button) findViewById(R.id.stopbutton);
-        mFavoriteButton = (Button) findViewById(R.id.favoritebutton);
-        mFilePickerButton = (Button) findViewById(R.id.filepickerbutton);
+        mPlayPauseButton = (ImageButton) findViewById(R.id.pauseBtu);
+        mRandomButton = (ImageButton) findViewById(R.id.randomBtn);
+        mSkipButton = (ImageButton) findViewById(R.id.nextBtn);
+        mRewButton = (ImageButton) findViewById(R.id.preBtn);
+        //mStopButton = (ImageButton) findViewById(R.id.stopbutton);
+        //mFavoriteButton = (ImageButton) findViewById(R.id.favoritebutton);
+        //mFilePickerButton = (ImageButton) findViewById(R.id.filepickerbutton);
 
-        mRandomButton.setOnClickListener(this);
-        mFavoriteButton.setOnClickListener(this);
-        mPlayPauseButton.setOnClickListener(this);
-        mSkipButton.setOnClickListener(this);
-        mRewButton.setOnClickListener(this);
-        mStopButton.setOnClickListener(this);
-        mFilePickerButton.setOnClickListener(this);
+		mPlayPauseButton.setOnClickListener(this);
+		mSkipButton.setOnClickListener(this);
+		mRewButton.setOnClickListener(this);
+		mStopButton.setOnClickListener(this);
+		mRandomButton.setOnClickListener(this);
+        /*mFavoriteButton.setOnClickListener(this);
+        mFilePickerButton.setOnClickListener(this);*/
                         
         receiver = new PlayerStatusReceiver();	// broadcast receiver for status updates from PlayerService
         res = getResources();
 
         // manage swipe movements
-        ActivitySwipeDetector activitySwipeDetector = new ActivitySwipeDetector(this);
-        LinearLayout mainLayout = (LinearLayout)this.findViewById(R.id.mainlayout);
-        mainLayout.setOnTouchListener(activitySwipeDetector);
+        //ActivitySwipeDetector activitySwipeDetector = new ActivitySwipeDetector(this);
+        /*LinearLayout mainLayout = (LinearLayout)this.findViewById(R.id.mainlayout);
+        mainLayout.setOnTouchListener(activitySwipeDetector);*/
     }
     
     @Override
