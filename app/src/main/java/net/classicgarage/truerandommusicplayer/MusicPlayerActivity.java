@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,11 +63,11 @@ public class MusicPlayerActivity extends Activity
         
         Log.d(TAG, "onCreate");
         
-        /*mSongTitle = (TextView) findViewById(R.id.songplaying);
-        mAlbumArt = (ImageView) findViewById(R.id.albumart);   
+        mSongTitle = (TextView) findViewById(R.id.TitleTf);
+        mAlbumArt = (ImageView) findViewById(R.id.coverImg);
         
-        mPlayPauseButton = (Button) findViewById(R.id.playpausebutton);
-        mRandomButton = (Button) findViewById(id.randombutton);
+        mPlayPauseButton = (Button) findViewById(R.id.pauseBtu);
+        mRandomButton = (Button) findViewById(R.id.randombutton);
         mSkipButton = (Button) findViewById(R.id.skipbutton);
         mRewButton = (Button) findViewById(R.id.rewbutton);
         mStopButton = (Button) findViewById(R.id.stopbutton);
@@ -87,7 +88,7 @@ public class MusicPlayerActivity extends Activity
         // manage swipe movements
         ActivitySwipeDetector activitySwipeDetector = new ActivitySwipeDetector(this);
         LinearLayout mainLayout = (LinearLayout)this.findViewById(R.id.mainlayout);
-        mainLayout.setOnTouchListener(activitySwipeDetector);*/
+        mainLayout.setOnTouchListener(activitySwipeDetector);
     }
     
     @Override
