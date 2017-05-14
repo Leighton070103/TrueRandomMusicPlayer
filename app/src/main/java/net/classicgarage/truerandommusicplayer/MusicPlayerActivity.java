@@ -65,7 +65,7 @@ public class MusicPlayerActivity extends Activity
         mSongTitle = (TextView) findViewById(R.id.TitleTf);
         mAlbumArt = (ImageView) findViewById(R.id.coverImg);
         
-        mPlayPauseButton = (ImageButton) findViewById(R.id.pauseBtu);
+        /*mPlayPauseButton = (ImageButton) findViewById(R.id.pauseBtu);
         mRandomButton = (ImageButton) findViewById(R.id.randomBtn);
         mSkipButton = (ImageButton) findViewById(R.id.nextBtn);
         mRewButton = (ImageButton) findViewById(R.id.preBtn);
@@ -78,7 +78,7 @@ public class MusicPlayerActivity extends Activity
 		mRewButton.setOnClickListener(this);
 		mStopButton.setOnClickListener(this);
 		mRandomButton.setOnClickListener(this);
-        /*mFavoriteButton.setOnClickListener(this);
+        *//*mFavoriteButton.setOnClickListener(this);
         mFilePickerButton.setOnClickListener(this);*/
                         
         receiver = new PlayerStatusReceiver();	// broadcast receiver for status updates from PlayerService
@@ -86,8 +86,8 @@ public class MusicPlayerActivity extends Activity
 
         // manage swipe movements
         //ActivitySwipeDetector activitySwipeDetector = new ActivitySwipeDetector(this);
-        /*LinearLayout mainLayout = (LinearLayout)this.findViewById(R.id.mainlayout);
-        mainLayout.setOnTouchListener(activitySwipeDetector);*/
+        //LinearLayout mainLayout = (LinearLayout)this.findViewById(R.id.mainlayout);
+        //mainLayout.setOnTouchListener(activitySwipeDetector);
     }
     
     @Override
