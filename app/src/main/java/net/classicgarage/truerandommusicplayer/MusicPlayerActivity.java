@@ -62,29 +62,33 @@ public class MusicPlayerActivity extends Activity
         
         Log.d(TAG, "onCreate");
         
-        mSongTitle = (TextView) findViewById(R.id.TitleTf);
-        mAlbumArt = (ImageView) findViewById(R.id.coverImg);
+        mSongTitle = (TextView) findViewById(R.id.title_tv);
+        mAlbumArt = (ImageView) findViewById(R.id.cover_iv);
         
-        /*mPlayPauseButton = (ImageButton) findViewById(R.id.pauseBtu);
-        mRandomButton = (ImageButton) findViewById(R.id.randomBtn);
-        mSkipButton = (ImageButton) findViewById(R.id.nextBtn);
-        mRewButton = (ImageButton) findViewById(R.id.preBtn);
-        //mStopButton = (ImageButton) findViewById(R.id.stopbutton);
-        //mFavoriteButton = (ImageButton) findViewById(R.id.favoritebutton);
-        //mFilePickerButton = (ImageButton) findViewById(R.id.filepickerbutton);
+        mPlayPauseButton = (ImageButton) findViewById(R.id.pause_btn);
+        mRandomButton = (ImageButton) findViewById(R.id.random_btn);
+        mSkipButton = (ImageButton) findViewById(R.id.next_btn);
+        mRewButton = (ImageButton) findViewById(R.id.pre_btn);
+
+		// the below are the buttons that used in the previous xml layout.
+        /*mStopButton = (ImageButton) findViewById(R.id.stopbutton);
+        mFavoriteButton = (ImageButton) findViewById(R.id.favoritebutton);
+        mFilePickerButton = (ImageButton) findViewById(R.id.filepickerbutton);*/
 
 		mPlayPauseButton.setOnClickListener(this);
 		mSkipButton.setOnClickListener(this);
 		mRewButton.setOnClickListener(this);
-		mStopButton.setOnClickListener(this);
 		mRandomButton.setOnClickListener(this);
-        *//*mFavoriteButton.setOnClickListener(this);
+
+		// the below are the buttons that used in the previous xml layout.
+		/*mStopButton.setOnClickListener(this);
+        mFavoriteButton.setOnClickListener(this);
         mFilePickerButton.setOnClickListener(this);*/
                         
         receiver = new PlayerStatusReceiver();	// broadcast receiver for status updates from PlayerService
         res = getResources();
 
-        // manage swipe movements
+        // the below manages swipe movements
         //ActivitySwipeDetector activitySwipeDetector = new ActivitySwipeDetector(this);
         //LinearLayout mainLayout = (LinearLayout)this.findViewById(R.id.mainlayout);
         //mainLayout.setOnTouchListener(activitySwipeDetector);
