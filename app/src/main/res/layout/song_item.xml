@@ -17,11 +17,12 @@
             android:layout_weight="1"
             android:gravity="center_horizontal|center"
             android:text="1"
+            android:textColor="#000000"
             android:textSize="35sp" />
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="90dp"
+        android:layout_width="280dp"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
@@ -47,14 +48,22 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
         <ImageButton
-            android:id="@+id/imageButton2"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:id="@+id/fav_btn"
+            android:layout_width="20dp"
+            android:layout_height="50dp"
             android:background="#00000000"
             android:scaleType="centerInside"
-            app:srcCompat="@mipmap/fav_down" />
+            android:src="@mipmap/fav_off" />
+
+        <ImageButton
+            android:id="@+id/del_btn"
+            android:layout_width="35dp"
+            android:layout_height="50dp"
+            android:background="#00000000"
+            android:scaleType="centerInside"
+            android:src="@mipmap/delete1b" />
     </LinearLayout>
 </LinearLayout>
