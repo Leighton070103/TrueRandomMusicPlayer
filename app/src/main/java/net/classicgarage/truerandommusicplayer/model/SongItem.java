@@ -22,6 +22,8 @@ public class SongItem implements Serializable, Comparable<SongItem> {
 	private String mPathStr;
 	private boolean mFavoriteblo;
 
+    public SongItem(){}
+
     public SongItem(long id, String artist, String title, 
     		long albumId, String album, long duration, String path) {
         this.mIdLog = id;
@@ -117,7 +119,30 @@ public class SongItem implements Serializable, Comparable<SongItem> {
 			return s1.getPath().toLowerCase().compareTo(s2.getPath().toLowerCase());
 		}
 	}
-	   
+
+	public void setTitle(String title){
+        mTitleStr = title;
+    }
+
+    public void setId(long id){
+        mIdLog = id;
+    }
+
+    public void setPath(String path){
+        mPathStr = path;
+    }
+
+    public void setAlbum(String album){
+        mAlbumStr = album;
+    }
+
+    public void setAlbumId(long albumId){
+        mAlbumIdLog = albumId;
+    }
+
+    public void setArtist(String artist){
+        mArtistStr = artist;
+    }
 }
 
 
