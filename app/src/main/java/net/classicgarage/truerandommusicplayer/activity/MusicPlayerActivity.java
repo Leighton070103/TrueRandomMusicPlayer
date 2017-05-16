@@ -49,8 +49,10 @@ public class MusicPlayerActivity extends Activity
     ImageButton mStopButton;
 	ImageButton mFavoriteButton;
 	ImageButton mFilePickerButton;
+    ImageButton mPlayListButton;
     TextView mSongTitle;
     ImageView mAlbumArt;
+    MenuTabActivity mMenuTabActivity;
     
     SongItem songPlaying;
     
@@ -74,6 +76,8 @@ public class MusicPlayerActivity extends Activity
         mRandomButton = (ImageButton) findViewById(R.id.random_btn);
         mSkipButton = (ImageButton) findViewById(R.id.next_btn);
         mRewButton = (ImageButton) findViewById(R.id.pre_btn);
+        mPlayListButton = (ImageButton) findViewById(R.id.playlist_btn);
+
 
 		// the below are the buttons that used in the previous xml layout.
         /*mStopButton = (ImageButton) findViewById(R.id.stopbutton);
@@ -84,6 +88,7 @@ public class MusicPlayerActivity extends Activity
 		mSkipButton.setOnClickListener(this);
 		mRewButton.setOnClickListener(this);
 		mRandomButton.setOnClickListener(this);
+        mPlayListButton.setOnClickListener(this);
 
 		// the below are the buttons that used in the previous xml layout.
 		/*mStopButton.setOnClickListener(this);
@@ -158,7 +163,6 @@ public class MusicPlayerActivity extends Activity
         else if (target == mRandomButton) {
         	// select the next playing mode by rotation R, RF, S
             Intent i = getExplicitIntentForService(this,PlayerService.ACTION_PLAYBACK_MODE);
-        	
         	switch (mPlaybackMode) {
         	case RANDOM:
         		if (mPlayerServiceState == PlayerServiceState.Playing 
@@ -191,7 +195,10 @@ public class MusicPlayerActivity extends Activity
         		 i.putExtra(PlayerService.INTENT_EXTRA_PLAY_SONG_ID, songPlaying.getId());
         	 }
     	     startActivityForResult(i, REQUEST_PICK_SONG);
-        	
+        }
+        else if (target == mPlayListButton){
+            Intent i = new Intent(this,SongListActivity.class);
+            startActivity(i);
         }
     }
 

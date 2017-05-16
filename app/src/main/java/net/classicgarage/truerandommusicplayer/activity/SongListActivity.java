@@ -1,11 +1,11 @@
 package net.classicgarage.truerandommusicplayer.activity;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 import android.widget.TabHost;
 
 import net.classicgarage.truerandommusicplayer.R;
@@ -40,5 +40,8 @@ public class SongListActivity extends AppCompatActivity {
 
         mTabHost.addTab(allMusicTap);
         mTabHost.addTab(favoriteTap);
+        Intent updatesIntent = new Intent(this,);
+
+        allMusicTap.setContent(updatesIntent);
     }
 }

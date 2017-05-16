@@ -9,10 +9,6 @@ import android.widget.TextView;
 
 import net.classicgarage.truerandommusicplayer.R;
 import net.classicgarage.truerandommusicplayer.model.SongItem;
-
-import org.w3c.dom.Text;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 
