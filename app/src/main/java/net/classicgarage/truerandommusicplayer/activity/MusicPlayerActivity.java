@@ -37,6 +37,7 @@ public class MusicPlayerActivity extends Activity
 	
 	public static final int ALBUM_ART_HEIGHT = 150;
 	public static final int ALBUM_ART_WIDTH = 150;
+	public static final String REQUEST_CODE="070103";
 	
 	public static final int REQUEST_PICK_SONG = 0; 	// used for calling SongPicker activity
 	
@@ -57,6 +58,7 @@ public class MusicPlayerActivity extends Activity
     
     private PlayerServiceState mPlayerServiceState = PlayerServiceState.Inexistant;
     private PlaybackMode mPlaybackMode = PlaybackMode.RANDOM;
+
    
 	Resources res ;		// used to access button bitmaps
 	   

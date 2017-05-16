@@ -62,6 +62,7 @@ public class SongDataSource {
                     if( song != null ) mSongs.add(song);
                 }while(cursor.moveToNext());
             }
+            cursor.close();
         }
 
     }

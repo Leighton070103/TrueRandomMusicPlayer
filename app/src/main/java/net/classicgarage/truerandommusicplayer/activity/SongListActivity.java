@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.TabHost;
 
 import net.classicgarage.truerandommusicplayer.R;
@@ -23,6 +24,7 @@ public class SongListActivity extends AppCompatActivity {
     private SongAdapter mAdapter;
     private TabHost mTabHost;
     private SongDataSource mSongDataSource;
+    public static final String SONG_POSITION = "Song position";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +38,15 @@ public class SongListActivity extends AppCompatActivity {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         mSongListRv.setLayoutManager(mLayoutManager);
         mSongListRv.setItemAnimator(new DefaultItemAnimator());
+        mAdapter.setOnItemClickListener(new SongAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Intent intent = new Intent();
+                intent.putExtra(SONG_POSITION, position);
+                setResult(RESULT_OK, intent);
+                finish();
+            }
+        });
         mSongListRv.setAdapter(mAdapter);
 
 //        mTabHost = (TabHost) findViewById(R.id.tabHost);
