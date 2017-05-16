@@ -10,6 +10,7 @@ import android.widget.TabHost;
 
 import net.classicgarage.truerandommusicplayer.R;
 import net.classicgarage.truerandommusicplayer.adapter.SongAdapter;
+import net.classicgarage.truerandommusicplayer.db.SongDataSource;
 import net.classicgarage.truerandommusicplayer.model.SongItem;
 
 import java.util.ArrayList;
@@ -18,30 +19,30 @@ public class SongListActivity extends AppCompatActivity {
     private RecyclerView mSongListRv;
     private SongAdapter mAdapter;
     private TabHost mTabHost;
+    private SongDataSource mSongDataSource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mSongDataSource = new SongDataSource(this.getApplicationContext());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_song_list);
         mSongListRv = (RecyclerView) findViewById(R.id.song_list_rv);
-        mAdapter = new SongAdapter(this, new ArrayList<SongItem>());
+        mAdapter = new SongAdapter(this, mSongDataSource.getSongsFromSD());
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         mSongListRv.setLayoutManager(mLayoutManager);
         mSongListRv.setItemAnimator(new DefaultItemAnimator());
         mSongListRv.setAdapter(mAdapter);
 
-        mTabHost = (TabHost) findViewById(R.id.tabHost);
 
-        TabHost.TabSpec allMusicTap = mTabHost.newTabSpec("AllMusic");
-        TabHost.TabSpec favoriteTap = mTabHost.newTabSpec("Favorite");
-
-        allMusicTap.setIndicator("ALLMUSIC");
-        favoriteTap.setIndicator("FAVORITE");
-
-        mTabHost.addTab(allMusicTap);
-        mTabHost.addTab(favoriteTap);
-        Intent updatesIntent = new Intent(this,);
-
-        allMusicTap.setContent(updatesIntent);
+//        mTabHost = (TabHost) findViewById(R.id.tabHost);
+//
+//        TabHost.TabSpec allMusicTap = mTabHost.newTabSpec("AllMusic");
+//        TabHost.TabSpec favoriteTap = mTabHost.newTabSpec("Favorite");
+//
+//        allMusicTap.setIndicator("ALLMUSIC");
+//        favoriteTap.setIndicator("FAVORITE");
+//
+//        mTabHost.addTab(allMusicTap);
+//        mTabHost.addTab(favoriteTap);
     }
 }

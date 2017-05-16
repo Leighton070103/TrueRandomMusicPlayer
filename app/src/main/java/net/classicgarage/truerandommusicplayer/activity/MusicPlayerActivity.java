@@ -52,7 +52,6 @@ public class MusicPlayerActivity extends Activity
     ImageButton mPlayListButton;
     TextView mSongTitle;
     ImageView mAlbumArt;
-    MenuTabActivity mMenuTabActivity;
     
     SongItem songPlaying;
     
