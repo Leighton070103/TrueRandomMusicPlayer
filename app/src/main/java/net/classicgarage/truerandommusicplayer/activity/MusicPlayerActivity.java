@@ -29,8 +29,8 @@ import net.classicgarage.truerandommusicplayer.service.PlayerService.PlayerServi
 
 import static net.classicgarage.truerandommusicplayer.util.IntentHelper.getExplicitIntentForService;
 
-public class MusicPlayerActivity extends Activity 
-	implements OnClickListener { 
+public class MusicPlayerActivity extends Activity
+	implements OnClickListener{
 	//, OnSharedPreferenceChangeListener, SensorEventListener { 
 	
 	private static final String TAG = "MusicPlayerActivity";

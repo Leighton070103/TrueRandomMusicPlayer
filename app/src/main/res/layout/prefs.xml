@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+    <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"  android:layout_height="0dp" android:layout_width="0dp">
     <PreferenceCategory android:title="accelerometer">
         <CheckBoxPreference android:key="shakeToSkip" 
             android:summary="shake device to skip to next song" 
