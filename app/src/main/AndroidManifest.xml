@@ -2,8 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.classicgarage.truerandommusicplayer">
     <uses-permission
-        android:name="android.permission.READ_EXTERNAL_STORAGE"
-        android:maxSdkVersion="21" />
+        android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".activity.PlayerApplication"

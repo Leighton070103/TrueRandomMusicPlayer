@@ -21,12 +21,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import net.classicgarage.truerandommusicplayer.IntentWithPackage;
 import net.classicgarage.truerandommusicplayer.R;
 import net.classicgarage.truerandommusicplayer.model.SongItem;
 import net.classicgarage.truerandommusicplayer.service.PlayerService;
 import net.classicgarage.truerandommusicplayer.service.PlayerService.PlaybackMode;
 import net.classicgarage.truerandommusicplayer.service.PlayerService.PlayerServiceState;
+
+import static net.classicgarage.truerandommusicplayer.util.IntentHelper.getExplicitIntentForService;
 
 public class MusicPlayerActivity extends Activity 
 	implements OnClickListener { 
@@ -142,21 +143,21 @@ public class MusicPlayerActivity extends Activity
 
         if (target == mPlayPauseButton) {
         	if (mPlayerServiceState == PlayerServiceState.Playing)
-        		startService(new IntentWithPackage(this,PlayerService.ACTION_PAUSE));
+        		startService(getExplicitIntentForService(this,PlayerService.ACTION_PAUSE));
 
             else
-                startService(new IntentWithPackage(this,PlayerService.ACTION_PLAY));
+                startService(getExplicitIntentForService(this,PlayerService.ACTION_PLAY));
         // we will update the button bitmap and song title through a broadcast sent by service
         }
         else if (target == mSkipButton)
-            startService(new IntentWithPackage(this,PlayerService.ACTION_SKIP));
+            startService(getExplicitIntentForService(this,PlayerService.ACTION_SKIP));
         else if (target == mRewButton)
-            startService(new IntentWithPackage(this,PlayerService.ACTION_REW));
+            startService(getExplicitIntentForService(this,PlayerService.ACTION_REW));
         else if (target == mStopButton)
-            startService(new IntentWithPackage(this,PlayerService.ACTION_STOP));
+            startService(getExplicitIntentForService(this,PlayerService.ACTION_STOP));
         else if (target == mRandomButton) {
         	// select the next playing mode by rotation R, RF, S
-            IntentWithPackage i = new IntentWithPackage(this,PlayerService.ACTION_PLAYBACK_MODE);
+            Intent i = getExplicitIntentForService(this,PlayerService.ACTION_PLAYBACK_MODE);
         	
         	switch (mPlaybackMode) {
         	case RANDOM:
