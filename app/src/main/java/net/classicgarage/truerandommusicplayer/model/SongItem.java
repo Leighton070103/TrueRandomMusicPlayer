@@ -1,4 +1,4 @@
-package net.classicgarage.truerandommusicplayer;
+package net.classicgarage.truerandommusicplayer.model;
 
 import android.content.ContentUris;
 import android.net.Uri;

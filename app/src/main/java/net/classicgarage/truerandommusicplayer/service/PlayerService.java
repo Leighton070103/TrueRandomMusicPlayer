@@ -1,4 +1,4 @@
-package net.classicgarage.truerandommusicplayer;
+package net.classicgarage.truerandommusicplayer.service;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -28,6 +28,11 @@ import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.widget.Toast;
 
+import net.classicgarage.truerandommusicplayer.activity.MusicPlayerActivity;
+import net.classicgarage.truerandommusicplayer.activity.PlayerApplication;
+import net.classicgarage.truerandommusicplayer.R;
+import net.classicgarage.truerandommusicplayer.model.SongItem;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -47,7 +52,7 @@ implements OnCompletionListener, OnPreparedListener, OnErrorListener,
 	private ArrayList<SongItem> mPlaybackLog;		// songs played. Used by the REW button
 	
 	// player state
-    enum PlayerServiceState {
+    public enum PlayerServiceState {
         Inexistant,			// MediaPlayer doesn't exist
         Idle,    		// media player has no datasource
         initialized,  	// media player is preparing...
@@ -60,7 +65,7 @@ implements OnCompletionListener, OnPreparedListener, OnErrorListener,
     private PlayerServiceState mPlayerServiceState = PlayerServiceState.Inexistant;
 
     
-    enum PlaybackMode {
+    public enum PlaybackMode {
     	RANDOM, 
     	RANDOM_FAVORITE,
     	SEQUENTIAL
@@ -437,7 +442,7 @@ implements OnCompletionListener, OnPreparedListener, OnErrorListener,
         
         if (broadcastAlbumArt)
         	intent.putExtra(INTENT_EXTRA_ALBUM_ART, (mSong == null) ? null : application.getMusicEngine().getAlbumArt(mSong.getAlbumId(), 
-        		MusicPlayerActivity.ALBUM_ART_HEIGHT, 
+        		MusicPlayerActivity.ALBUM_ART_HEIGHT,
         		MusicPlayerActivity.ALBUM_ART_WIDTH));
               
         intent.putExtra(INTENT_EXTRA_PLAYBACK_MODE, mPlaybackMode);

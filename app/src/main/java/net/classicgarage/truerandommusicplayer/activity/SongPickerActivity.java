@@ -1,4 +1,4 @@
-package net.classicgarage.truerandommusicplayer;
+package net.classicgarage.truerandommusicplayer.activity;
 
 import android.app.ListActivity;
 import android.content.Context;
@@ -22,6 +22,11 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import net.classicgarage.truerandommusicplayer.MusicEngine;
+import net.classicgarage.truerandommusicplayer.service.PlayerService;
+import net.classicgarage.truerandommusicplayer.R;
+import net.classicgarage.truerandommusicplayer.model.SongItem;
 
 import java.io.File;
 import java.util.ArrayList;

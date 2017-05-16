@@ -9,6 +9,9 @@ import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 import android.util.Log;
 
+import net.classicgarage.truerandommusicplayer.activity.PlayerApplication;
+import net.classicgarage.truerandommusicplayer.model.SongItem;
+
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;

@@ -1,4 +1,4 @@
-package net.classicgarage.truerandommusicplayer;
+package net.classicgarage.truerandommusicplayer.activity;
 
 import android.app.Application;
 import android.content.Context;
@@ -11,6 +11,9 @@ import android.os.Message;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
+
+import net.classicgarage.truerandommusicplayer.MusicEngine;
+import net.classicgarage.truerandommusicplayer.service.PlayerService;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -156,7 +159,7 @@ implements OnSharedPreferenceChangeListener {
         	// when rebuilt, a copy will be saved on disk and current catalog will be replaced by new one
 //            Thread t3 = new MusicEngineBuilder(true);
 //            t3.start();  
-            startService(new Intent(PlayerService.ACTION_CATALOG_REBUILD));   
+            startService(new Intent(PlayerService.ACTION_CATALOG_REBUILD));
 		}
 	}
 	

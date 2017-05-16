@@ -1,4 +1,4 @@
-package net.classicgarage.truerandommusicplayer;
+package net.classicgarage.truerandommusicplayer.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -21,8 +21,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import net.classicgarage.truerandommusicplayer.PlayerService.PlaybackMode;
-import net.classicgarage.truerandommusicplayer.PlayerService.PlayerServiceState;
+import net.classicgarage.truerandommusicplayer.R;
+import net.classicgarage.truerandommusicplayer.service.PlayerService;
+import net.classicgarage.truerandommusicplayer.service.PlayerService.PlaybackMode;
+import net.classicgarage.truerandommusicplayer.service.PlayerService.PlayerServiceState;
+import net.classicgarage.truerandommusicplayer.model.SongItem;
 
 public class MusicPlayerActivity extends Activity 
 	implements OnClickListener { 
@@ -47,7 +50,7 @@ public class MusicPlayerActivity extends Activity
     TextView mSongTitle;
     ImageView mAlbumArt;
     
-    SongItem songPlaying; 
+    SongItem songPlaying;
     
     private PlayerServiceState mPlayerServiceState = PlayerServiceState.Inexistant;
     private PlaybackMode mPlaybackMode = PlaybackMode.RANDOM;

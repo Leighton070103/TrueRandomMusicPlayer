@@ -9,8 +9,11 @@ import android.content.Intent;
 import android.util.Log;
 import android.widget.RemoteViews;
 
-import net.classicgarage.truerandommusicplayer.PlayerService.PlaybackMode;
-import net.classicgarage.truerandommusicplayer.PlayerService.PlayerServiceState;
+import net.classicgarage.truerandommusicplayer.activity.MusicPlayerActivity;
+import net.classicgarage.truerandommusicplayer.service.PlayerService;
+import net.classicgarage.truerandommusicplayer.service.PlayerService.PlaybackMode;
+import net.classicgarage.truerandommusicplayer.service.PlayerService.PlayerServiceState;
+import net.classicgarage.truerandommusicplayer.model.SongItem;
 
 public class PlayerWidgetProvider extends AppWidgetProvider {
 	
@@ -34,13 +37,13 @@ public class PlayerWidgetProvider extends AppWidgetProvider {
         	RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.appwidget);
 
         	// launch MusicPlayerActivity when click on song playing or main frame                   	
-        	intent = new Intent(context, MusicPlayerActivity.class);           
+        	intent = new Intent(context, MusicPlayerActivity.class);
         	pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);          	
         	remoteViews.setOnClickPendingIntent(R.id.widgetsongplaying, pendingIntent);  
         	remoteViews.setOnClickPendingIntent(R.id.widgetmainframe, pendingIntent);  
         	
         	// sets intent for PLAY/PAUSE button        	
-        	intent = new Intent(context, PlayerService.class);     
+        	intent = new Intent(context, PlayerService.class);
         	if (mPlayerServiceState == PlayerServiceState.Playing)
         		intent.setAction(PlayerService.ACTION_PAUSE);
             else

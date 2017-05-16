@@ -1,7 +1,9 @@
-package net.classicgarage.truerandommusicplayer;
+package net.classicgarage.truerandommusicplayer.activity;
 
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+
+import net.classicgarage.truerandommusicplayer.R;
 
 
 public class PrefsActivity extends PreferenceActivity { 

@@ -14,13 +14,15 @@
  * limitations under the License.
  */
 
-package net.classicgarage.truerandommusicplayer;
+package net.classicgarage.truerandommusicplayer.broadcastreceiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
+
+import net.classicgarage.truerandommusicplayer.service.PlayerService;
 
 /**
  * Receives broadcasted intents. In particular, we are interested in the
