@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+import net.classicgarage.truerandommusicplayer.service.PlayerService;
+
 class ActivitySwipeDetector implements View.OnTouchListener {
 
 static final String TAG = "ActivitySwipeDetector";

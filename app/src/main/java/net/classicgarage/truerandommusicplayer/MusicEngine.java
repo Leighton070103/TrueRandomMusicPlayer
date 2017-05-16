@@ -9,6 +9,9 @@ import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 import android.util.Log;
 
+import net.classicgarage.truerandommusicplayer.activity.PlayerApplication;
+import net.classicgarage.truerandommusicplayer.model.SongItem;
+
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
@@ -25,7 +28,7 @@ import java.util.Random;
  * @author phid75
  *MediaMetadataCompat we dont need to use the songIETM
  */
-public class MusicEngine {
+public class MusicEngine{
 
 	private ContentResolver mContentResolver;	// will be queried to build catalog
 	private List<String> mMusicFileLocations;	// directories on SD card where songs are located
@@ -41,7 +44,7 @@ public class MusicEngine {
 	public enum displayTypes {
 		SONGDISPLAY,
 		PATHDISPLAY
-	};
+	}
 	
 	private static final String TAG="MusicEngine";
 	
