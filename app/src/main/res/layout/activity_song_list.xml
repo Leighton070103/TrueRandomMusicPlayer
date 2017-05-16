@@ -58,11 +58,12 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/song_list_rv"
-        android:layout_gravity="bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
         android:layout_weight="1"
-        android:elevation="1dp" />
+        android:elevation="1dp"
+        tools:listitem="@layout/song_item" />
 
 
 </LinearLayout>
