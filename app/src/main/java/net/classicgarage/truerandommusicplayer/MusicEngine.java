@@ -44,7 +44,7 @@ public class MusicEngine{
 	public enum displayTypes {
 		SONGDISPLAY,
 		PATHDISPLAY
-	};
+	}
 	
 	private static final String TAG="MusicEngine";
 	
