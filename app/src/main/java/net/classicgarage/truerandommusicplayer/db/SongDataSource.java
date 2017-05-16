@@ -1,11 +1,16 @@
 package net.classicgarage.truerandommusicplayer.db;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 
+import net.classicgarage.truerandommusicplayer.activity.SongListActivity;
 import net.classicgarage.truerandommusicplayer.model.SongItem;
 
 import java.util.ArrayList;
@@ -20,9 +25,20 @@ public class SongDataSource {
     private ArrayList<SongItem> mSongs = null;
     private Context mContext;
 
-    public SongDataSource(Context context){
-        mContext = context;
+    public SongDataSource(Context applicationContext, Activity activity){
+        mContext = applicationContext;
+        getPermissons(activity);
     }
+
+    private void getPermissons(Activity activity) {
+        int code = ActivityCompat.checkSelfPermission(
+                activity,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (code != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+        }
+     }
+
 
     public ArrayList<SongItem> getSongsFromSD(){
         if( mSongs != null) return mSongs;
