@@ -87,9 +87,9 @@ public class MusicPlayerActivity extends Activity
         mFilePickerButton = (ImageButton) findViewById(R.id.filepickerbutton);*/
 
 		mPlayPauseButton.setOnClickListener(this);
-		mSkipButton.setOnClickListener(this);
-		mRewButton.setOnClickListener(this);
-		mRandomButton.setOnClickListener(this);
+//		mSkipButton.setOnClickListener(this);
+//		mRewButton.setOnClickListener(this);
+//		mRandomButton.setOnClickListener(this);
         mPlayListButton.setOnClickListener(this);
 
 		// the below are the buttons that used in the previous xml layout.
