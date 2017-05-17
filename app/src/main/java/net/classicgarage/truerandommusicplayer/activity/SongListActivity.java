@@ -72,7 +72,6 @@ public class SongListActivity extends AppCompatActivity {
         mSongListRv.setAdapter(mAdapter);
 
 
-<<<<<<< HEAD
         TabHost.TabSpec allMusicTap = mTabHost.newTabSpec("AllMusic");
         TabHost.TabSpec favoriteTap = mTabHost.newTabSpec("Favorite");
 
@@ -81,7 +80,6 @@ public class SongListActivity extends AppCompatActivity {
 
         mTabHost.addTab(allMusicTap);
         mTabHost.addTab(favoriteTap);
-=======
     }
 
     private void getPermissons() {
@@ -91,6 +89,5 @@ public class SongListActivity extends AppCompatActivity {
         if (code != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(SongListActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
         }
->>>>>>> origin/master
     }
 }

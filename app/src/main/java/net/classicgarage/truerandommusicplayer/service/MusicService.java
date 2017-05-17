@@ -26,7 +26,7 @@ public class MusicService extends Service {
         //初始化mediaplayer
         mediaPlayer = new MediaPlayer();
         mDataSource = SongDataSource.getInstance(this.getApplicationContext());
-        //播放结束后，取消定时器
+
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
