@@ -40,8 +40,5 @@ public class SongListActivity extends AppCompatActivity {
 
         mTabHost.addTab(allMusicTap);
         mTabHost.addTab(favoriteTap);
-        Intent updatesIntent = new Intent(this,);
-
-        allMusicTap.setContent(updatesIntent);
     }
 }
