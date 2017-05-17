@@ -1,9 +1,12 @@
-package net.classicgarage.truerandommusicplayer.helper;
+package net.classicgarage.truerandommusicplayer.db;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import java.util.ArrayList;
 
 
 /**
@@ -17,20 +20,34 @@ public class SongDatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "favorite_songs";
     private static int DATABASE_VERSION = 1;
+    private static SongDatabaseHelper sInstance;
 
     public static final String TABLE_SONGS = "favorite_songs";
-    public static final String COLUMN_ID = "id";
+    public static final String COLUMN_ID = "_id";
     public static final String COLUMN_FAVORITE = "is_favorite";
+    public static final String COLUMN_MUSIC_ID = "music_id";
 
+    public static final String[] ALL_COLUMNS={COLUMN_ID, COLUMN_FAVORITE, COLUMN_FAVORITE};
     public static final String TABLE_CREATE =
             "CREATE TABLE" + TABLE_SONGS + "(" +
                     COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    COLUMN_FAVORITE + "BOOLEAN, " +
-                    ")";
+                    COLUMN_FAVORITE + "BOOLEAN, " + COLUMN_MUSIC_ID + "LONG"
+                    + ")";
 
     public SongDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null,DATABASE_VERSION);
 
+    }
+
+    public static synchronized SongDatabaseHelper getInstance(Context context) {
+
+        // Use the application context, which will ensure that you
+        // don't accidentally leak an Activity's context.
+
+        if ( sInstance == null ) {
+            sInstance = new SongDatabaseHelper(context);
+        }
+        return sInstance;
     }
 
     @Override
@@ -40,6 +57,13 @@ public class SongDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
+    }
+
+    public Cursor getAllFavoriteData(){
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query(TABLE_SONGS, ALL_COLUMNS, null, null, null, null, null);
+        return cursor;
 
     }
 

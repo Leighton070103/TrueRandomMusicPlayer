@@ -18,9 +18,11 @@ public class SongDataSource {
     private static SongDataSource sInstance;
     private ArrayList<SongItem> mSongs = null;
     private Context mContext;
+    private SongDatabaseHelper favoriteHelper;
 
     private SongDataSource(Context applicationContext){
         mContext = applicationContext;
+        favoriteHelper = SongDatabaseHelper.getInstance(mContext);
 //        getPermissons(activity);
     }
 
@@ -71,6 +73,7 @@ public class SongDataSource {
         }
 
     }
+
 
     private SongItem readSong(Cursor cursor){
         SongItem song = new SongItem();
