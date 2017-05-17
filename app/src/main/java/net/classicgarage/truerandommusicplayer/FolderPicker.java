@@ -94,7 +94,6 @@ implements OnItemClickListener {
 	 */
 	private void updateAdapter() {
 		Log.d(TAG, "updateAdapter");
-
 		mCurrentFolder.setText("current folder: "+mPath.getAbsolutePath());
 		mAdapter.clear();
 		if (!mPath.equals(mRootSDCard)) {
@@ -105,7 +104,6 @@ implements OnItemClickListener {
 		for (int i = 0; i < dirs.length; i++) {
 			mAdapter.add(new Folder(dirs[i]));
 		}
-
 		mAdapter.notifyDataSetChanged();
 		mFoldersListView.setSelection(0);
 		//mFoldersListView.startLayoutAnimation();

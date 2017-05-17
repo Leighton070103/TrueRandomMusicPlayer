@@ -3,6 +3,8 @@
     package="net.classicgarage.truerandommusicplayer">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MEDIA_CONTENT_CONTROL" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name=".activity.PlayerApplication"
@@ -12,6 +14,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <service android:name=".service.PlayerService" />
+
+        <activity android:name=".activity.SongListActivity">
+
+        </activity>
 
         <activity
             android:name=".activity.MusicPlayerActivity"
@@ -31,8 +37,6 @@
                 <category android:name="android.intent.categoy.DEFAULT" />
             </intent-filter>
         </receiver>
-
-        <activity android:name=".activity.SongListActivity"></activity>
     </application>
 
 </manifest>
