@@ -1,11 +1,16 @@
 package net.classicgarage.truerandommusicplayer.db;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 
+import net.classicgarage.truerandommusicplayer.activity.SongListActivity;
 import net.classicgarage.truerandommusicplayer.model.SongItem;
 
 import java.util.ArrayList;
@@ -17,12 +22,35 @@ import java.util.List;
 
 public class SongDataSource {
 
+    private static SongDataSource sInstance;
     private ArrayList<SongItem> mSongs = null;
     private Context mContext;
 
-    public SongDataSource(Context context){
-        mContext = context;
+    private SongDataSource(Context applicationContext){
+        mContext = applicationContext;
+//        getPermissons(activity);
     }
+
+    public static synchronized SongDataSource getInstance(Context context) {
+
+        // Use the application context, which will ensure that you
+        // don't accidentally leak an Activity's context.
+
+        if ( sInstance == null ) {
+            sInstance = new SongDataSource(context.getApplicationContext());
+        }
+        return sInstance;
+    }
+
+//    private void getPermissons(Activity activity) {
+//        int code = ActivityCompat.checkSelfPermission(
+//                activity,
+//                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+//        if (code != PackageManager.PERMISSION_GRANTED) {
+//            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+//        }
+//     }
+
 
     public ArrayList<SongItem> getSongsFromSD(){
         if( mSongs != null) return mSongs;
@@ -46,6 +74,7 @@ public class SongDataSource {
                     if( song != null ) mSongs.add(song);
                 }while(cursor.moveToNext());
             }
+            cursor.close();
         }
 
     }

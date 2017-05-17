@@ -2,7 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"     android:layout_width="match_parent"
+    app:theme="@style/AppTheme.NoActionBar"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="net.classicgarage.truerandommusicplayer.activity.MusicPlayerActivity">
     <RelativeLayout
@@ -48,20 +50,20 @@
 
         </LinearLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
+            android:gravity="center"
+            android:layout_marginTop="10dp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/searchlayout">
 
             <ImageButton
-                android:id="@+id/delete_btn"
+                android:id="@+id/activity_main_delete_btn"
                 android:layout_width="40dp"
                 android:layout_height="30dp"
-                android:layout_marginTop="10dp"
-                android:layout_weight="1"
+                android:layout_alignParentLeft="true"
                 android:background="#00000000"
-                android:paddingRight="120dp"
                 android:scaleType="centerInside"
                 android:src="@mipmap/delete1w" />
 
@@ -69,13 +71,11 @@
                 android:id="@+id/favorite_btn"
                 android:layout_width="40dp"
                 android:layout_height="30dp"
-                android:layout_marginTop="10dp"
-                android:layout_weight="1"
+                android:layout_alignParentRight="true"
                 android:background="#00000000"
-                android:paddingLeft="120dp"
                 android:scaleType="centerInside"
                 app:srcCompat="@mipmap/fav" />
-        </LinearLayout>
+        </RelativeLayout>
 
         <ImageView
             android:id="@+id/diskBackg"
@@ -208,7 +208,7 @@
                 android:src="@mipmap/pre" />
 
             <ImageButton
-                android:id="@+id/pause_btn"
+                android:id="@+id/play_pause_btn"
                 android:layout_width="45dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/timespend_tv"
@@ -216,7 +216,7 @@
                 android:layout_gravity="center_horizontal|center"
                 android:layout_weight="1"
                 android:background="#00000000"
-                android:src="@mipmap/pause_btn" />
+                android:src="@mipmap/play_btn" />
 
             <ImageButton
                 android:id="@+id/next_btn"
