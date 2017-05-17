@@ -10,6 +10,7 @@ import android.os.Message;
 
 import net.classicgarage.truerandommusicplayer.activity.MainActivity;
 import net.classicgarage.truerandommusicplayer.db.SongDataSource;
+import net.classicgarage.truerandommusicplayer.model.SongItem;
 
 import java.io.IOException;
 import java.util.Timer;
@@ -20,13 +21,21 @@ public class MusicService extends Service {
     private SongDataSource mDataSource;
     private Timer timer = null;
     private TimerTask task = null;
-    public MusicService() {}
+    private SongItem currentSong = null;
+
+    public MusicService() {
+    }
+
     @Override
     public void onCreate() {
         //初始化mediaplayer
         mediaPlayer = new MediaPlayer();
         mDataSource = SongDataSource.getInstance(this.getApplicationContext());
-        //播放结束后，取消定时器
+//        try {
+//            mediaPlayer.setDataSource(mDataSource.getSongsFromSD().get(0).getPath());
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
@@ -55,6 +64,9 @@ public class MusicService extends Service {
         refereshSeekBar();
     }
 
+/*    private String getSongFromList() {
+        String path;
+    }*/
     private void refereshSeekBar() {
         timer = new Timer();
         task = new TimerTask() {
@@ -88,6 +100,8 @@ public class MusicService extends Service {
         mediaPlayer.pause();
     }
 
+    private boolean isPlaying(){ return mediaPlayer.isPlaying(); }
+
     class MusicBinder extends Binder implements BaseService{
         @Override
         public void callPlay() {
@@ -113,5 +127,11 @@ public class MusicService extends Service {
         public void callSeekTo(int position) {
             seekTo(position);
         }
+
+        @Override
+        public boolean isPlaying() {
+            return mediaPlayer.isPlaying();
+        }
+
     }
 }

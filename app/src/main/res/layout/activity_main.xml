@@ -10,6 +10,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#37474f">
         android:background="@drawable/background_main">
 
         <LinearLayout
@@ -241,7 +242,6 @@
                 android:background="#00000000"
                 android:scaleType="centerInside"
                 android:src="@mipmap/replay1w" />
-            <!--asdfasdf-->
         </LinearLayout>
     </RelativeLayout>
 </LinearLayout>
