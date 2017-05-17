@@ -12,21 +12,27 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class SongDatabaseHelper extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "songs";
-    private static final int DATABASE_VERSION = 1;
+    private static final String DATABASE_NAME = "favorite_songs";
+    private static int DATABASE_VERSION = 1;
 
-    public static final String TABLE_SONGS = "songs";
-    public static final String COLUM_ID = "id";
-    public static final String COLUM_
+    public static final String TABLE_SONGS = "favorite_songs";
+    public static final String COLUMN_ID = "id";
+    public static final String COLUMN_FAVORITE = "is_favorite";
+
+    public static final String TABLE_CREATE =
+            "CREATE TABLE" + TABLE_SONGS + "(" +
+                    COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    COLUMN_FAVORITE + "BOOLEAN, " +
+                    ")";
 
     public SongDatabaseHelper(Context context) {
-        super(context, name, factory, );
+        super(context, DATABASE_NAME, null,DATABASE_VERSION);
 
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
+        db.execSQL(TABLE_CREATE);
     }
 
     @Override
