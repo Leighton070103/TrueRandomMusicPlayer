@@ -22,7 +22,7 @@ public class MusicService extends Service {
     private SongDataSource mDataSource;
     private Timer timer = null;
     private TimerTask task = null;
-    private int currentSongIndex = 0;
+    private SongItem currentSong = null;
 
     public MusicService() {
     }
@@ -56,13 +56,15 @@ public class MusicService extends Service {
     private void play() {
         try {
             mediaPlayer.reset();
-            mediaPlayer.setDataSource(getSongFromList().getPath());
+            mediaPlayer.setDataSource(mDataSource.getSongsFromSD().get(0).getPath());
             mediaPlayer.prepare();
         } catch (IOException e) {
             e.printStackTrace();
         }
         mediaPlayer.start();
         refereshSeekBar();
+        if(mediaPlayer.isPlaying()) mediaPlayer.pause();
+        else mediaPlayer.start();
     }
 
     private SongItem getSongFromList() {
@@ -143,9 +145,6 @@ public class MusicService extends Service {
         public boolean isPlaying() {
             return mediaPlayer.isPlaying();
         }
-
-        @Override
-        public void callPlayNextSong(){ playNextSong(); }
 
     }
 }
