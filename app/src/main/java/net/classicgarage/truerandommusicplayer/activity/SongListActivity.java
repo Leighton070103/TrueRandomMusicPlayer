@@ -29,8 +29,8 @@ public class SongListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-//        getPermissons();
-        mSongDataSource = new SongDataSource(this.getApplicationContext(), this);
+        getPermissons();
+        mSongDataSource = SongDataSource.getInstance(this.getApplicationContext());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_song_list);
         mSongListRv = (RecyclerView) findViewById(R.id.song_list_rv);
@@ -63,12 +63,12 @@ public class SongListActivity extends AppCompatActivity {
 
     }
 
-//    private void getPermissons() {
-//        int code = ActivityCompat.checkSelfPermission(
-//                SongListActivity.this,
-//                Manifest.permission.WRITE_EXTERNAL_STORAGE);
-//        if (code != PackageManager.PERMISSION_GRANTED) {
-//            ActivityCompat.requestPermissions(SongListActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-//        }
-//    }
+    private void getPermissons() {
+        int code = ActivityCompat.checkSelfPermission(
+                SongListActivity.this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (code != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(SongListActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+        }
+    }
 }

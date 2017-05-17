@@ -22,22 +22,34 @@ import java.util.List;
 
 public class SongDataSource {
 
+    private static SongDataSource sInstance;
     private ArrayList<SongItem> mSongs = null;
     private Context mContext;
 
-    public SongDataSource(Context applicationContext, Activity activity){
+    private SongDataSource(Context applicationContext){
         mContext = applicationContext;
-        getPermissons(activity);
+//        getPermissons(activity);
     }
 
-    private void getPermissons(Activity activity) {
-        int code = ActivityCompat.checkSelfPermission(
-                activity,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        if (code != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+    public static synchronized SongDataSource getInstance(Context context) {
+
+        // Use the application context, which will ensure that you
+        // don't accidentally leak an Activity's context.
+
+        if ( sInstance == null ) {
+            sInstance = new SongDataSource(context.getApplicationContext());
         }
-     }
+        return sInstance;
+    }
+
+//    private void getPermissons(Activity activity) {
+//        int code = ActivityCompat.checkSelfPermission(
+//                activity,
+//                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+//        if (code != PackageManager.PERMISSION_GRANTED) {
+//            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+//        }
+//     }
 
 
     public ArrayList<SongItem> getSongsFromSD(){
