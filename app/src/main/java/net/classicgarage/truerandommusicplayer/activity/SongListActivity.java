@@ -22,17 +22,39 @@ public class SongListActivity extends AppCompatActivity {
     private SongAdapter mAdapter;
     private TabHost mTabHost;
     private SongDataSource mSongDataSource;
+    //private TestSongTagHelper mTestSongTagHelper = new TestSongTagHelper();
+    //private ArrayList<SongItem> mTestSongs;
     public static final String SONG_POSITION = "Song position";
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
 
 //        getPermissons();
         mSongDataSource = new SongDataSource(this.getApplicationContext(), this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_song_list);
         mSongListRv = (RecyclerView) findViewById(R.id.song_list_rv);
-        mAdapter = new SongAdapter(this, mSongDataSource.getSongsFromSD());
+        mTabHost = (TabHost) findViewById(tabHost);
+        mTabHost.setup();
+        mTabHost.addTab(mTabHost.newTabSpec("ALLMUSIC").setIndicator("AllMusic").setContent(R.id.AllMusic));
+        mTabHost.addTab(mTabHost.newTabSpec("FAVORITE").setIndicator("Favorite").setContent(R.id.Favorite));
+        mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+            @Override
+            public void onTabChanged(String tabId) {
+                switch(mTabHost.getCurrentTab()){
+                    case AllMusic:
+
+                        break;
+                    case Favorite:
+                        ;
+                        break;
+                    default:
+
+                }
+            }
+        });
+        mAdapter = new SongAdapter(this,mSongDataSource.getSongsFromSD());
+        //mAdapter = new SongAdapter(this, mSongDataSource.getSongsFromSD());
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         mSongListRv.setLayoutManager(mLayoutManager);
         mSongListRv.setItemAnimator(new DefaultItemAnimator());
@@ -47,21 +69,6 @@ public class SongListActivity extends AppCompatActivity {
         });
         mSongListRv.setAdapter(mAdapter);
 
-        mTabHost = (TabHost) findViewById(tabHost);
-        mTabHost.setup();
-        mTabHost.addTab(mTabHost.newTabSpec("ALLMUSIC").setIndicator("AllMusic").setContent(R.id.AllMusic));
-        mTabHost.addTab(mTabHost.newTabSpec("FAVORITE").setIndicator("Favorite").setContent(R.id.Favorite));
-        mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
-            @Override
-            public void onTabChanged(String tabId) {
-                switch(mTabHost.getCurrentTab()){
-                    case AllMusic:
-                        break;
-                    case Favorite:
-                        break;
-                }
-            }
-        });
 
     }
 
