@@ -16,6 +16,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -53,7 +55,11 @@ public class MusicPlayerActivity extends Activity
     ImageButton mPlayListButton;
     TextView mSongTitle;
     ImageView mAlbumArt;
+<<<<<<< HEAD
+    ImageButton mMenuTabActivity;
+=======
     //MenuTabActivity mMenuTabActivity;
+>>>>>>> origin/master
     
     SongItem songPlaying;
     
@@ -87,9 +93,9 @@ public class MusicPlayerActivity extends Activity
         mFilePickerButton = (ImageButton) findViewById(R.id.filepickerbutton);*/
 
 		mPlayPauseButton.setOnClickListener(this);
-		mSkipButton.setOnClickListener(this);
-		mRewButton.setOnClickListener(this);
-		mRandomButton.setOnClickListener(this);
+//		mSkipButton.setOnClickListener(this);
+//		mRewButton.setOnClickListener(this);
+//		mRandomButton.setOnClickListener(this);
         mPlayListButton.setOnClickListener(this);
 
 		// the below are the buttons that used in the previous xml layout.
@@ -104,6 +110,12 @@ public class MusicPlayerActivity extends Activity
         //ActivitySwipeDetector activitySwipeDetector = new ActivitySwipeDetector(this);
         //LinearLayout mainLayout = (LinearLayout)this.findViewById(R.id.mainlayout);
         //mainLayout.setOnTouchListener(activitySwipeDetector);
+		/*int code = ActivityCompat.checkSelfPermission(
+				this,
+				Manifest.permission.WRITE_EXTERNAL_STORAGE);
+		if (code != PackageManager.PERMISSION_GRANTED) {
+			ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+		}*/
     }
     
     @Override

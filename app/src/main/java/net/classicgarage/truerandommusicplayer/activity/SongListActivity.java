@@ -1,7 +1,10 @@
 package net.classicgarage.truerandommusicplayer.activity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -29,8 +32,8 @@ public class SongListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
 
-//        getPermissons();
-        mSongDataSource = new SongDataSource(this.getApplicationContext(), this);
+        getPermissons();
+        mSongDataSource = SongDataSource.getInstance(this.getApplicationContext());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_song_list);
         mSongListRv = (RecyclerView) findViewById(R.id.song_list_rv);
@@ -46,10 +49,9 @@ public class SongListActivity extends AppCompatActivity {
 
                         break;
                     case Favorite:
-                        ;
+
                         break;
                     default:
-
                 }
             }
         });
@@ -70,14 +72,25 @@ public class SongListActivity extends AppCompatActivity {
         mSongListRv.setAdapter(mAdapter);
 
 
+<<<<<<< HEAD
+        TabHost.TabSpec allMusicTap = mTabHost.newTabSpec("AllMusic");
+        TabHost.TabSpec favoriteTap = mTabHost.newTabSpec("Favorite");
+
+        allMusicTap.setIndicator("ALLMUSIC");
+        favoriteTap.setIndicator("FAVORITE");
+
+        mTabHost.addTab(allMusicTap);
+        mTabHost.addTab(favoriteTap);
+=======
     }
 
-//    private void getPermissons() {
-//        int code = ActivityCompat.checkSelfPermission(
-//                SongListActivity.this,
-//                Manifest.permission.WRITE_EXTERNAL_STORAGE);
-//        if (code != PackageManager.PERMISSION_GRANTED) {
-//            ActivityCompat.requestPermissions(SongListActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-//        }
-//    }
+    private void getPermissons() {
+        int code = ActivityCompat.checkSelfPermission(
+                SongListActivity.this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (code != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(SongListActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+        }
+>>>>>>> origin/master
+    }
 }
