@@ -50,19 +50,6 @@ public class SongListActivity extends AppCompatActivity {
         mTabHost.addTab(mTabHost.newTabSpec("ALLMUSIC").setIndicator("AllMusic").setContent(R.id.AllMusic));
         mTabHost.addTab(mTabHost.newTabSpec("FAVORITE").setIndicator("Favorite").setContent(R.id.Favorite));
 
-
-//        mTabHost = (TabHost) findViewById(R.id.tabHost);
-//
-//        TabHost.TabSpec allMusicTap = mTabHost.newTabSpec("AllMusic");
-//        TabHost.TabSpec favoriteTap = mTabHost.newTabSpec("Favorite");
-//
-//        allMusicTap.setIndicator("ALLMUSIC");
-//        favoriteTap.setIndicator("FAVORITE");
-//
-//        mTabHost.addTab(allMusicTap);
-//        mTabHost.addTab(favoriteTap);
-//
-
     }
 
 //    private void getPermissons() {
