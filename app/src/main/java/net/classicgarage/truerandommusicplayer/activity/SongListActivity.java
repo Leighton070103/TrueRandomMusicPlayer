@@ -46,10 +46,9 @@ public class SongListActivity extends AppCompatActivity {
 
                         break;
                     case Favorite:
-                        ;
+
                         break;
                     default:
-
                 }
             }
         });
