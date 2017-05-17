@@ -1,6 +1,7 @@
 package net.classicgarage.truerandommusicplayer.activity;
 
 import android.Manifest;
+import android.app.TabActivity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -20,7 +21,7 @@ import static net.classicgarage.truerandommusicplayer.R.id.AllMusic;
 import static net.classicgarage.truerandommusicplayer.R.id.Favorite;
 import static net.classicgarage.truerandommusicplayer.R.id.tabHost;
 
-public class SongListActivity extends AppCompatActivity {
+public class SongListActivity extends TabActivity {
     private RecyclerView mSongListRv;
     private SongAdapter mAdapter;
     private TabHost mTabHost;

@@ -26,7 +26,11 @@ public class MusicService extends Service {
         //初始化mediaplayer
         mediaPlayer = new MediaPlayer();
         mDataSource = SongDataSource.getInstance(this.getApplicationContext());
-
+//        try {
+//            mediaPlayer.setDataSource(mDataSource.getSongsFromSD().get(0).getPath());
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
@@ -88,6 +92,8 @@ public class MusicService extends Service {
         mediaPlayer.pause();
     }
 
+    private boolean isPlaying(){ return mediaPlayer.isPlaying(); }
+
     class MusicBinder extends Binder implements BaseService{
         @Override
         public void callPlay() {
@@ -112,6 +118,11 @@ public class MusicService extends Service {
         @Override
         public void callSeekTo(int position) {
             seekTo(position);
+        }
+
+        @Override
+        public boolean isPlaying() {
+            return mediaPlayer.isPlaying();
         }
     }
 }

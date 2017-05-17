@@ -138,7 +138,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         switch (v.getId()){
             case R.id.play_pause_btn:
-                mBaseService.callPlay();
+                if(mBaseService.isPlaying()){
+                    mBaseService.callPause();
+                    mPlayPauseBtn.setImageDrawable(getResources().getDrawable(R.mipmap.play_btn));
+                }
+                else {
+                    mBaseService.callPlay();
+                    mPlayPauseBtn.setImageDrawable(getResources().getDrawable(R.mipmap.pause_btn));
+                }
                 break;
             case R.id.playlist_btn:
                 Intent i = new Intent(this,SongListActivity.class);
