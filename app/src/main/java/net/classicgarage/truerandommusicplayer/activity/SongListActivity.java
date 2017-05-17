@@ -1,10 +1,7 @@
 package net.classicgarage.truerandommusicplayer.activity;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,26 +12,49 @@ import android.widget.TabHost;
 import net.classicgarage.truerandommusicplayer.R;
 import net.classicgarage.truerandommusicplayer.adapter.SongAdapter;
 import net.classicgarage.truerandommusicplayer.db.SongDataSource;
-import net.classicgarage.truerandommusicplayer.model.SongItem;
 
-import java.util.ArrayList;
+import static net.classicgarage.truerandommusicplayer.R.id.AllMusic;
+import static net.classicgarage.truerandommusicplayer.R.id.Favorite;
+import static net.classicgarage.truerandommusicplayer.R.id.tabHost;
 
 public class SongListActivity extends AppCompatActivity {
     private RecyclerView mSongListRv;
     private SongAdapter mAdapter;
     private TabHost mTabHost;
     private SongDataSource mSongDataSource;
+    //private TestSongTagHelper mTestSongTagHelper = new TestSongTagHelper();
+    //private ArrayList<SongItem> mTestSongs;
     public static final String SONG_POSITION = "Song position";
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
 
         getPermissons();
         mSongDataSource = SongDataSource.getInstance(this.getApplicationContext());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_song_list);
         mSongListRv = (RecyclerView) findViewById(R.id.song_list_rv);
-        mAdapter = new SongAdapter(this, mSongDataSource.getSongsFromSD());
+        mTabHost = (TabHost) findViewById(tabHost);
+        mTabHost.setup();
+        mTabHost.addTab(mTabHost.newTabSpec("ALLMUSIC").setIndicator("AllMusic").setContent(R.id.AllMusic));
+        mTabHost.addTab(mTabHost.newTabSpec("FAVORITE").setIndicator("Favorite").setContent(R.id.Favorite));
+        mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+            @Override
+            public void onTabChanged(String tabId) {
+                switch(mTabHost.getCurrentTab()){
+                    case AllMusic:
+
+                        break;
+                    case Favorite:
+                        ;
+                        break;
+                    default:
+
+                }
+            }
+        });
+        mAdapter = new SongAdapter(this,mSongDataSource.getSongsFromSD());
+        //mAdapter = new SongAdapter(this, mSongDataSource.getSongsFromSD());
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         mSongListRv.setLayoutManager(mLayoutManager);
         mSongListRv.setItemAnimator(new DefaultItemAnimator());
@@ -49,17 +69,6 @@ public class SongListActivity extends AppCompatActivity {
         });
         mSongListRv.setAdapter(mAdapter);
 
-//        mTabHost = (TabHost) findViewById(R.id.tabHost);
-//
-//        TabHost.TabSpec allMusicTap = mTabHost.newTabSpec("AllMusic");
-//        TabHost.TabSpec favoriteTap = mTabHost.newTabSpec("Favorite");
-//
-//        allMusicTap.setIndicator("ALLMUSIC");
-//        favoriteTap.setIndicator("FAVORITE");
-//
-//        mTabHost.addTab(allMusicTap);
-//        mTabHost.addTab(favoriteTap);
-//
 
     }
 

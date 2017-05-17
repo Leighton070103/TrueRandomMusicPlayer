@@ -53,6 +53,7 @@ public class MusicPlayerActivity extends Activity
     ImageButton mPlayListButton;
     TextView mSongTitle;
     ImageView mAlbumArt;
+    //MenuTabActivity mMenuTabActivity;
     
     SongItem songPlaying;
     
@@ -103,6 +104,12 @@ public class MusicPlayerActivity extends Activity
         //ActivitySwipeDetector activitySwipeDetector = new ActivitySwipeDetector(this);
         //LinearLayout mainLayout = (LinearLayout)this.findViewById(R.id.mainlayout);
         //mainLayout.setOnTouchListener(activitySwipeDetector);
+		/*int code = ActivityCompat.checkSelfPermission(
+				this,
+				Manifest.permission.WRITE_EXTERNAL_STORAGE);
+		if (code != PackageManager.PERMISSION_GRANTED) {
+			ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+		}*/
     }
     
     @Override

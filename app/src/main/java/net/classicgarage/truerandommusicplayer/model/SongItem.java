@@ -11,7 +11,7 @@ public class SongItem implements Serializable, Comparable<SongItem> {
     //variable not used
 	static final long serialVersionUID = 1;
 
-	private static final String TAG="SongItem"; 
+	private static final String TAG="SongItem";
 
 	private long mIdLog;
 	private String mArtistStr;
@@ -23,6 +23,13 @@ public class SongItem implements Serializable, Comparable<SongItem> {
 	private boolean mFavoriteblo;
 
     public SongItem(){}
+
+    public SongItem(String title, boolean favorite){
+
+        this.mTitleStr = title;
+        this.mFavoriteblo = favorite;
+
+    }
 
     public SongItem(long id, String artist, String title, 
     		long albumId, String album, long duration, String path) {
@@ -143,6 +150,7 @@ public class SongItem implements Serializable, Comparable<SongItem> {
     public void setArtist(String artist){
         mArtistStr = artist;
     }
+
 }
 
 

@@ -5,12 +5,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import net.classicgarage.truerandommusicplayer.R;
 import net.classicgarage.truerandommusicplayer.model.SongItem;
+
 import java.util.ArrayList;
 
 
@@ -87,7 +87,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
 
         public ViewHolder(View itemView) {
             super(itemView);
-            mSongTitleTv = (TextView) itemView.findViewById(R.id.item_song_title_tv);
+            mSongTitleTv = (TextView) itemView.findViewById(R.id.song_title_tv);
             mSongItemLlayout = (LinearLayout) itemView.findViewById(R.id.song_item_llayout);
         }
     }
