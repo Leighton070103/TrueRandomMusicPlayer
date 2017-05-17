@@ -1,10 +1,7 @@
 package net.classicgarage.truerandommusicplayer.activity;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,9 +12,8 @@ import android.widget.TabHost;
 import net.classicgarage.truerandommusicplayer.R;
 import net.classicgarage.truerandommusicplayer.adapter.SongAdapter;
 import net.classicgarage.truerandommusicplayer.db.SongDataSource;
-import net.classicgarage.truerandommusicplayer.model.SongItem;
 
-import java.util.ArrayList;
+import static net.classicgarage.truerandommusicplayer.R.id.tabHost;
 
 public class SongListActivity extends AppCompatActivity {
     private RecyclerView mSongListRv;
@@ -48,6 +44,12 @@ public class SongListActivity extends AppCompatActivity {
             }
         });
         mSongListRv.setAdapter(mAdapter);
+
+        mTabHost = (TabHost) findViewById(tabHost);
+        mTabHost.setup();
+        mTabHost.addTab(mTabHost.newTabSpec("ALLMUSIC").setIndicator("AllMusic").setContent(R.id.AllMusic));
+        mTabHost.addTab(mTabHost.newTabSpec("FAVORITE").setIndicator("Favorite").setContent(R.id.Favorite));
+
 
 //        mTabHost = (TabHost) findViewById(R.id.tabHost);
 //
