@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,9 +16,10 @@ import net.classicgarage.truerandommusicplayer.R;
 import net.classicgarage.truerandommusicplayer.adapter.SongAdapter;
 import net.classicgarage.truerandommusicplayer.db.SongDataSource;
 
+import static android.R.id.tabhost;
 import static net.classicgarage.truerandommusicplayer.R.id.AllMusic;
 import static net.classicgarage.truerandommusicplayer.R.id.Favorite;
-import static net.classicgarage.truerandommusicplayer.R.id.tabHost;
+//import static net.classicgarage.truerandommusicplayer.R.id.tabHost;
 
 public class SongListActivity extends TabActivity {
     private RecyclerView mSongListRv;
@@ -38,7 +38,7 @@ public class SongListActivity extends TabActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_song_list);
         mSongListRv = (RecyclerView) findViewById(R.id.song_list_rv);
-        mTabHost = (TabHost) findViewById(tabHost);
+        mTabHost = (TabHost) findViewById(tabhost);
         mTabHost.setup();
         mTabHost.addTab(mTabHost.newTabSpec("ALLMUSIC").setIndicator("AllMusic").setContent(R.id.AllMusic));
         mTabHost.addTab(mTabHost.newTabSpec("FAVORITE").setIndicator("Favorite").setContent(R.id.Favorite));
@@ -78,9 +78,6 @@ public class SongListActivity extends TabActivity {
 
         allMusicTap.setIndicator("ALLMUSIC");
         favoriteTap.setIndicator("FAVORITE");
-
-        mTabHost.addTab(allMusicTap);
-        mTabHost.addTab(favoriteTap);
     }
 
     private void getPermissons() {

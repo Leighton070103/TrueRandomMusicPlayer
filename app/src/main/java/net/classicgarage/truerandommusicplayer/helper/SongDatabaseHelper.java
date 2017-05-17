@@ -1,5 +1,6 @@
 package net.classicgarage.truerandommusicplayer.helper;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -11,6 +12,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 
 public class SongDatabaseHelper extends SQLiteOpenHelper {
+
+    SQLiteDatabase db = this.getWritableDatabase();
 
     private static final String DATABASE_NAME = "favorite_songs";
     private static int DATABASE_VERSION = 1;
@@ -39,4 +42,17 @@ public class SongDatabaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
     }
+
+    public void updateFavoriteSong(){
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SongDatabaseHelper.COLUMN_FAVORITE, "is_favorite");
+
+        String selection = SongDatabaseHelper.COLUMN_FAVORITE + "like ?";
+        //String[] selectionArgs = {""}
+
+        /*int count = db.update(
+                TABLE_SONGS,contentValues
+        );*/
+    }
+
 }

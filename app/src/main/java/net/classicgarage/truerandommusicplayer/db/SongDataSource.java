@@ -1,20 +1,13 @@
 package net.classicgarage.truerandommusicplayer.db;
 
-import android.Manifest;
-import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.net.Uri;
 import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
 
-import net.classicgarage.truerandommusicplayer.activity.SongListActivity;
 import net.classicgarage.truerandommusicplayer.model.SongItem;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Tong on 2017/5/16.
