@@ -11,4 +11,5 @@ public interface BaseService {
     void callContinueMusic();
     void callSeekTo(int position);
     boolean isPlaying();
+    void callPlayNextSong();
 }

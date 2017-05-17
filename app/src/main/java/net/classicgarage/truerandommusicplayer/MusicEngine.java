@@ -268,11 +268,12 @@ public class MusicEngine{
 		 synchronized (mSongsCatalog) {
 			 thisSong = mSongsCatalog.get(0);
 
-			 for (SongItem s: mSongsCatalog)
-				 if (s.getId() == id) {
+			 for (SongItem s: mSongsCatalog) {
+				 if (s.getId()== id) {
 					 thisSong = s;
 					 break;
 				 }
+			 }
 		 }
 
 		 Log.d(TAG, "getSongAt id="+id+" song=" +thisSong);	

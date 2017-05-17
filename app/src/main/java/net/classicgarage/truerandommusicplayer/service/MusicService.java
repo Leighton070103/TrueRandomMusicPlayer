@@ -13,6 +13,7 @@ import net.classicgarage.truerandommusicplayer.db.SongDataSource;
 import net.classicgarage.truerandommusicplayer.model.SongItem;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -21,7 +22,7 @@ public class MusicService extends Service {
     private SongDataSource mDataSource;
     private Timer timer = null;
     private TimerTask task = null;
-    private SongItem currentSong = null;
+    private int currentSongIndex = 0;
 
     public MusicService() {
     }
@@ -55,7 +56,7 @@ public class MusicService extends Service {
     private void play() {
         try {
             mediaPlayer.reset();
-            mediaPlayer.setDataSource(mDataSource.getSongsFromSD().get(0).getPath());
+            mediaPlayer.setDataSource(getSongFromList().getPath());
             mediaPlayer.prepare();
         } catch (IOException e) {
             e.printStackTrace();
@@ -64,9 +65,19 @@ public class MusicService extends Service {
         refereshSeekBar();
     }
 
-/*    private String getSongFromList() {
-        String path;
-    }*/
+    private SongItem getSongFromList() {
+        ArrayList<SongItem> songlist = mDataSource.getSongsFromSD();
+        if(currentSongIndex >= songlist.size()){
+            currentSongIndex = 0;
+        }
+        SongItem songItem = songlist.get(currentSongIndex);
+        return songItem;
+    }
+
+    public void playNextSong(){
+        currentSongIndex++;
+        play();
+    }
     private void refereshSeekBar() {
         timer = new Timer();
         task = new TimerTask() {
@@ -132,6 +143,9 @@ public class MusicService extends Service {
         public boolean isPlaying() {
             return mediaPlayer.isPlaying();
         }
+
+        @Override
+        public void callPlayNextSong(){ playNextSong(); }
 
     }
 }
