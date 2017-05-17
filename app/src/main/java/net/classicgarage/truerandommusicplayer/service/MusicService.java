@@ -10,6 +10,7 @@ import android.os.Message;
 
 import net.classicgarage.truerandommusicplayer.activity.MainActivity;
 import net.classicgarage.truerandommusicplayer.db.SongDataSource;
+import net.classicgarage.truerandommusicplayer.model.SongItem;
 
 import java.io.IOException;
 import java.util.Timer;
@@ -20,7 +21,11 @@ public class MusicService extends Service {
     private SongDataSource mDataSource;
     private Timer timer = null;
     private TimerTask task = null;
-    public MusicService() {}
+    private SongItem currentSong = null;
+
+    public MusicService() {
+    }
+
     @Override
     public void onCreate() {
         //初始化mediaplayer
@@ -59,6 +64,9 @@ public class MusicService extends Service {
         refereshSeekBar();
     }
 
+/*    private String getSongFromList() {
+        String path;
+    }*/
     private void refereshSeekBar() {
         timer = new Timer();
         task = new TimerTask() {
