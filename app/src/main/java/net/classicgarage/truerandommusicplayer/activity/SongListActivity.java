@@ -13,6 +13,8 @@ import net.classicgarage.truerandommusicplayer.R;
 import net.classicgarage.truerandommusicplayer.adapter.SongAdapter;
 import net.classicgarage.truerandommusicplayer.db.SongDataSource;
 
+import static net.classicgarage.truerandommusicplayer.R.id.AllMusic;
+import static net.classicgarage.truerandommusicplayer.R.id.Favorite;
 import static net.classicgarage.truerandommusicplayer.R.id.tabHost;
 
 public class SongListActivity extends AppCompatActivity {
@@ -49,6 +51,17 @@ public class SongListActivity extends AppCompatActivity {
         mTabHost.setup();
         mTabHost.addTab(mTabHost.newTabSpec("ALLMUSIC").setIndicator("AllMusic").setContent(R.id.AllMusic));
         mTabHost.addTab(mTabHost.newTabSpec("FAVORITE").setIndicator("Favorite").setContent(R.id.Favorite));
+        mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+            @Override
+            public void onTabChanged(String tabId) {
+                switch(mTabHost.getCurrentTab()){
+                    case AllMusic:
+                        break;
+                    case Favorite:
+                        break;
+                }
+            }
+        });
 
     }
 
