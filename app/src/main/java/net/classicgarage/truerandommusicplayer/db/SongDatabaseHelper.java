@@ -1,4 +1,4 @@
-package net.classicgarage.truerandommusicplayer.helper;
+package net.classicgarage.truerandommusicplayer.db;
 
 import android.content.ContentValues;
 import android.content.Context;

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.provider.MediaStore;
 
-import net.classicgarage.truerandommusicplayer.helper.SongDatabaseHelper;
 import net.classicgarage.truerandommusicplayer.model.SongItem;
 
 import java.util.ArrayList;
