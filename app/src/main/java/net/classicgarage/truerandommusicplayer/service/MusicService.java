@@ -71,8 +71,12 @@ public class MusicService extends Service {
             currentSongIndex = 0;
         }
         SongItem songItem = songlist.get(currentSongIndex);
+        //return songItem;
+        //return songItem;
         return songItem;
     }
+
+
 
     public void playNextSong(){
         currentSongIndex++;
