@@ -62,7 +62,6 @@ public class SongDatabaseHelper extends SQLiteOpenHelper {
         //SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.query(TABLE_SONGS, ALL_COLUMNS, null, null, null, null, null);
         return cursor;
-
     }
 
     public void updateFavoriteSong(){
