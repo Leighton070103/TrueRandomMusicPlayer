@@ -7,6 +7,7 @@ import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Message;
+import android.util.Log;
 
 import net.classicgarage.truerandommusicplayer.activity.MainActivity;
 import net.classicgarage.truerandommusicplayer.db.SongDataSource;
@@ -22,7 +23,7 @@ public class MusicService extends Service {
     private SongDataSource mDataSource;
     private Timer timer = null;
     private TimerTask task = null;
-    private SongItem currentSong = null;
+    private int currentSongIndex = 0;
 
     public MusicService() {
     }
@@ -57,14 +58,15 @@ public class MusicService extends Service {
         try {
             mediaPlayer.reset();
             mediaPlayer.setDataSource(mDataSource.getSongsFromSD().get(0).getPath());
+            Log.d("======play=====", mDataSource.getSongsFromSD().toString());
             mediaPlayer.prepare();
         } catch (IOException e) {
             e.printStackTrace();
         }
         mediaPlayer.start();
         refereshSeekBar();
-        if(mediaPlayer.isPlaying()) mediaPlayer.pause();
-        else mediaPlayer.start();
+//        if(mediaPlayer.isPlaying()) mediaPlayer.pause();
+//        else mediaPlayer.start();
     }
 
     private SongItem getSongFromList() {
@@ -119,6 +121,18 @@ public class MusicService extends Service {
 
     private boolean isPlaying(){ return mediaPlayer.isPlaying(); }
 
+    private void playSongAtPosition(int position) {
+        Log.d("===playAtPosition===", mDataSource.getSongsFromSD().size()+" pos:"+position);
+        try {
+            // TODO: fix the crush when trying to get song at position
+            mediaPlayer.setDataSource(mDataSource.getSongsFromSD().get(0).getPath());
+            mediaPlayer.prepare();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        mediaPlayer.start();
+    }
+
     class MusicBinder extends Binder implements BaseService{
         @Override
         public void callPlay() {
@@ -149,6 +163,15 @@ public class MusicService extends Service {
         public boolean isPlaying() {
             return mediaPlayer.isPlaying();
         }
+
+        @Override
+        public void callPlayNextSong() {} {
+            playNextSong();
+        }
+
+        @Override
+        public void callPlaySongAtPosition(int position) { playSongAtPosition(position);}
+
 
     }
 }

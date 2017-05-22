@@ -75,6 +75,16 @@ public class SongDataSource {
 
     }
 
+    // get song item from specific position
+    public SongItem getSongAtPosition(int position) {
+        return  mSongs.get(position);
+    }
+
+    // change song item's favorite statu at certain position
+    public void setSongItemFavStatuAtPosition(Boolean statu, int position) {
+        mSongs.get(position).setFavorite(statu);
+    }
+
 
     private SongItem readSong(Cursor cursor){
         SongItem song = new SongItem();

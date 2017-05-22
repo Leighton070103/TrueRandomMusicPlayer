@@ -64,6 +64,7 @@
         android:layout_gravity="bottom"
         android:layout_weight="1"
         android:elevation="1dp"
+        android:descendantFocusability="blocksDescendants"
         tools:listitem="@layout/song_item" />
 
 
