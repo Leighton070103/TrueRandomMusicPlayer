@@ -19,7 +19,6 @@ import net.classicgarage.truerandommusicplayer.db.SongDataSource;
 import static android.R.id.tabhost;
 import static net.classicgarage.truerandommusicplayer.R.id.AllMusic;
 import static net.classicgarage.truerandommusicplayer.R.id.Favorite;
-//import static net.classicgarage.truerandommusicplayer.R.id.tabHost;
 
 public class SongListActivity extends TabActivity {
     private RecyclerView mSongListRv;

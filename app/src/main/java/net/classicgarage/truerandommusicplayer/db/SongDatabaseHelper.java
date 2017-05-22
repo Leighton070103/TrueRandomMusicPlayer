@@ -6,8 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import java.util.ArrayList;
-
 
 /**
  * Created by tomat on 2017-05-17.
@@ -29,10 +27,10 @@ public class SongDatabaseHelper extends SQLiteOpenHelper {
 
     public static final String[] ALL_COLUMNS={COLUMN_ID, COLUMN_FAVORITE, COLUMN_FAVORITE};
     public static final String TABLE_CREATE =
-            "CREATE TABLE" + TABLE_SONGS + "(" +
+            " CREATE TABLE " + TABLE_SONGS + "( " +
                     COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    COLUMN_FAVORITE + "BOOLEAN, " + COLUMN_MUSIC_ID + "LONG"
-                    + ")";
+                    COLUMN_FAVORITE + " BOOLEAN, " + COLUMN_MUSIC_ID + " LONG"
+                    + " )";
 
     public SongDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null,DATABASE_VERSION);
@@ -61,10 +59,9 @@ public class SongDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public Cursor getAllFavoriteData(){
-        SQLiteDatabase db = getReadableDatabase();
+        //SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.query(TABLE_SONGS, ALL_COLUMNS, null, null, null, null, null);
         return cursor;
-
     }
 
     public void updateFavoriteSong(){
