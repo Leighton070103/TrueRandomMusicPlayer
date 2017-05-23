@@ -61,15 +61,11 @@ public class SongDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public LinkedList<SongItem> updateFavoriteForSongs(LinkedList<SongItem> songs){
-        SQLiteDatabase db = getWritableDatabase();
-        //Get favorite record from the database.
-        LinkedList<SongFavItem> songFavItems = new LinkedList<SongFavItem>();
-        Cursor cursor = db.query(
-                TABLE_SONGS, ALL_COLUMNS, null, null, null, null, null);
 
+        //Get favorite record from the database.
         getAllFavoriteData();
 
-        if( mSongFavItems == null || songFavItems.size() == 0){
+        if( mSongFavItems == null || mSongFavItems.size() == 0){
             for ( SongItem song: songs ){
                 addSongFav(song);
             }
