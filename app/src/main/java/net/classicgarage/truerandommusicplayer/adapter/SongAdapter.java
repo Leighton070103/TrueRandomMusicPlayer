@@ -101,6 +101,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
             @Override
             public void onClick(View v) {
                 mSongDataSource.setSongFavorite( songId );
+                notifyDataSetChanged();
             }
         });
 //        holder.songNameLLayout.setOnClickListener(new View.OnClickListener() {
@@ -157,8 +158,8 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
         public ViewHolder(View itemView) {
             super(itemView);
             mSongTitleTv = (TextView) itemView.findViewById(R.id.song_title_tv);
-            mSongItemLlayout = (LinearLayout) itemView.findViewById(R.id.song_item_llayout);
-            songNameLLayout = (LinearLayout) itemView.findViewById(R.id.some_name);
+//            mSongItemLlayout = (LinearLayout) itemView.findViewById(R.id.song_item_llayout);
+//            songNameLLayout = (LinearLayout) itemView.findViewById(R.id.some_name);
             mFavBtn = (ImageButton) itemView.findViewById(R.id.song_item_fav_btn);
             mDelBtn = (ImageButton) itemView.findViewById(R.id.song_item_del_btn);
         }
