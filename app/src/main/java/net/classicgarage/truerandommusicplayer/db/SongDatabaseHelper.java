@@ -5,11 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.widget.ImageButton;
 
 import net.classicgarage.truerandommusicplayer.model.SongItem;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 
 
@@ -83,7 +81,6 @@ public class SongDatabaseHelper extends SQLiteOpenHelper {
                 }
             }
         }
-
         return songs;
     }
 
