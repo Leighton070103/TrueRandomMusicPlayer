@@ -117,6 +117,14 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
 
     }
 
+    public void deletSong(SongItem songDeleting){
+
+    }
+
+    public void findSong(SongItem song){
+
+    }
+
     @Override
     public int getItemCount() {
         return mSongs.size();

@@ -23,14 +23,12 @@ import static android.R.id.tabhost;
 import static net.classicgarage.truerandommusicplayer.R.id.AllMusic;
 import static net.classicgarage.truerandommusicplayer.R.id.Favorite;
 
-public class SongListActivity extends TabActivity {
+public class SongListActivity extends TabActivity{
     private RecyclerView mSongListRv;
     private SongAdapter mAdapter;
     private TabHost mTabHost;
     private SongDataSource mSongDataSource;
     private SongDatabaseHelper mSongDataBase;
-    //private TestSongTagHelper mTestSongTagHelper = new TestSongTagHelper();
-    //private ArrayList<SongItem> mTestSongs;
     public static final String SONG_POSITION = "songPosition";
 
     @Override
@@ -51,10 +49,8 @@ public class SongListActivity extends TabActivity {
             public void onTabChanged(String tabId) {
                 switch(mTabHost.getCurrentTab()){
                     case AllMusic:
-
                         break;
                     case Favorite:
-
                         break;
                     default:
                 }
@@ -105,6 +101,7 @@ public class SongListActivity extends TabActivity {
                 Log.d("===songlist===", "favBtn clicked");
                 // TODO: do something when DelBtn be clicked
                 SongItem delItem = mSongDataSource.getSongAtPosition(position);
+                deletSong(delItem);
             }
 
         });
@@ -116,6 +113,11 @@ public class SongListActivity extends TabActivity {
 
         allMusicTap.setIndicator("ALLMUSIC");
         favoriteTap.setIndicator("FAVORITE");
+    }
+
+    private void deletSong(SongItem song) {
+        mAdapter.deletSong(song);
+        mSongDataBase.deleteSong(song);
     }
 
     private void getPermissons() {

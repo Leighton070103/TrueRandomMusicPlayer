@@ -53,7 +53,6 @@ public class SongDataSource {
         if( mSongs != null) return mSongs;
         initializeSongs();
         return mSongs;
-
     }
 
     private void initializeSongs(){
@@ -77,6 +76,7 @@ public class SongDataSource {
 
     }
 
+
     // get song item from specific position
     public SongItem getSongAtPosition(int position) {
         return  mSongs.get(position);
@@ -86,6 +86,8 @@ public class SongDataSource {
     public void setSongItemFavStatuAtPosition(Boolean statu, int position) {
         mSongs.get(position).setFavorite(statu);
     }
+
+
 
 
     private SongItem readSong(Cursor cursor){
