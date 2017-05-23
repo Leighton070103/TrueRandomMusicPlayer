@@ -24,20 +24,23 @@ public class SongDatabaseHelper extends SQLiteOpenHelper {
 
     public static final String TABLE_SONGS = "favorite_songs";
     public static final String COLUMN_ID = "_id";
+    public static final String COLUMN_SONG_NAME = "song_name";
     public static final String COLUMN_FAVORITE = "is_favorite";
     public static final String COLUMN_MUSIC_ID = "music_id";
 
     public static final String[] ALL_COLUMNS={COLUMN_ID, COLUMN_FAVORITE, COLUMN_FAVORITE};
     public static final String TABLE_CREATE =
-            "CREATE TABLE" + TABLE_SONGS + "(" +
+            "CREATE TABLE " + TABLE_SONGS + " ( " +
                     COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    COLUMN_FAVORITE + "BOOLEAN, " + COLUMN_MUSIC_ID + "LONG"
+                    COLUMN_SONG_NAME + " STRING, " +
+                    COLUMN_FAVORITE + " BOOLEAN, " + COLUMN_MUSIC_ID + " LONG "
                     + ")";
 
     public SongDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null,DATABASE_VERSION);
 
     }
+
 
     public static synchronized SongDatabaseHelper getInstance(Context context) {
 
@@ -57,24 +60,28 @@ public class SongDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
     }
 
     public void addFavoriteSong(SongItem favItem) {
-        SQLiteDatabase db = getWritableDatabase();
+
         ContentValues contentValues = new ContentValues();
-        // contentValues.put(SongDatabaseHelper.COLUMN_FAVORITE, );
         // TODO: insert favorite song to database
     }
-    public void deleteFavoriteSong(String n) {
-        // TODO: delete favorite song from database
+
+    public void deleteSong(SongItem delItem) {
+
+        String songName = delItem.getTitle();
+        String selection = COLUMN_SONG_NAME + " LIKE ?";
+        // Specify arguments in placeholder order.
+        String[] selectionArgs = { songName };
+        // Issue SQL statement.
+        db.delete(TABLE_SONGS, selection, selectionArgs);
     }
 
     public Cursor getAllFavoriteData(){
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.query(TABLE_SONGS, ALL_COLUMNS, null, null, null, null, null);
         return cursor;
-
     }
 
     public void updateFavoriteSong(){
