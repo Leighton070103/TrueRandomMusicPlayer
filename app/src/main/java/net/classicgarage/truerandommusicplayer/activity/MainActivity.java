@@ -1,24 +1,18 @@
 package net.classicgarage.truerandommusicplayer.activity;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -27,15 +21,12 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import net.classicgarage.truerandommusicplayer.R;
 import net.classicgarage.truerandommusicplayer.model.SongItem;
 import net.classicgarage.truerandommusicplayer.service.BaseService;
 import net.classicgarage.truerandommusicplayer.service.MusicService;
 import net.classicgarage.truerandommusicplayer.service.PlayerService;
-
-import static net.classicgarage.truerandommusicplayer.util.IntentHelper.getExplicitIntentForService;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     //, OnSharedPreferenceChangeListener, SensorEventListener {
@@ -102,6 +93,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        mRandomBtn.setOnClickListener(this);
         mPlayListBtn.setOnClickListener(this);
         mSkipBtn.setOnClickListener(this);
+
 
         Intent intent = new Intent(MainActivity.this, MusicService.class);
         startService(intent);
@@ -180,6 +172,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if (resultCode == RESULT_CANCELED) return;
         Bundle extras = intent.getExtras();
+        int position = extras.getInt("songPosition");
+        mBaseService.callPlaySongAtPosition(position);
 
         if (requestCode == REQUEST_CODE) {
 

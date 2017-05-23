@@ -58,7 +58,8 @@ public class SongDataSource {
         mSongs = new ArrayList<SongItem>();
         ContentResolver cr = mContext.getContentResolver();
         if(cr != null){
-            Cursor cursor = cr.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null, null,
+            Cursor cursor = cr.query(
+                    MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null, null,
                     null, MediaStore.Audio.Media.DEFAULT_SORT_ORDER);
             if(null == cursor){
                 mSongs = null;
@@ -74,13 +75,23 @@ public class SongDataSource {
 
     }
 
+    // get song item from specific position
+    public SongItem getSongAtPosition(int position) {
+        return  mSongs.get(position);
+    }
+
+    // change song item's favorite statu at certain position
+    public void setSongItemFavStatuAtPosition(Boolean statu, int position) {
+        mSongs.get(position).setFavorite(statu);
+    }
+
 
     private SongItem readSong(Cursor cursor){
         SongItem song = new SongItem();
         song.setTitle(cursor.getString(cursor
                 .getColumnIndex(MediaStore.Audio.Media.TITLE)));
 
-        String song_name = cursor
+        String song_name = cursor// whrrtszt
                 .getString( cursor
                         .getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME));
         song.setId( cursor.getLong(cursor

@@ -2,9 +2,11 @@ package net.classicgarage.truerandommusicplayer.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -21,7 +23,9 @@ import java.util.ArrayList;
 public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
 
     private ArrayList<SongItem> mSongs;
-    private OnItemClickListener mOnItemClickListener;
+    private OnSongNameClickListener mOnSongNameClickListener;
+    private OnFavBtnClickListener mOnFavBtnClickListener;
+    private OnDelBtnClickListener mOnDelBtnClickListener;
     private View mItemView;
     private Context mContext;
 
@@ -34,22 +38,40 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
      *  Used for defining method that used when items in the recycler view is clicked.
      */
 
-    public interface OnItemClickListener {
+
+    // create three interface for each item need ClickListener
+    public interface OnSongNameClickListener {
         /**
          * Called when the item is clicked.
          * @param view
          * @param position
          */
-        void onItemClick(View view, int position);
+        void onSongNameClick(View view, int position);
+    }
+    public interface OnFavBtnClickListener {
+        void onFavBtnClick(View view, int position);
+    }
+    public interface OnDelBtnClickListener {
+        void onDelBtnClick(View view, int position);
+
     }
 
+
     /**
-     * Set the value of mOnItemClickListner.
+     * Set the value of mOnSongNameClickListener, mOnFavBtnClickListener, mOnDelBtnClickListener.
      * @param listener
      */
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        mOnItemClickListener = listener;
+    public void setOnSongNameClickListener(OnSongNameClickListener listener) {
+        mOnSongNameClickListener = listener;
+
     }
+    public void setmOnFavBtnClickListener(OnFavBtnClickListener listener) {
+        mOnFavBtnClickListener = listener;
+    }
+    public void setmOnDelBtnClickListener(OnDelBtnClickListener listener) {
+        mOnDelBtnClickListener = listener;
+    }
+
 
 
 
@@ -65,11 +87,30 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
     public void onBindViewHolder(final SongAdapter.ViewHolder holder, final int position) {
         SongItem song = mSongs.get(position);
         holder.mSongTitleTv.setText( song.getTitle() );
-        holder.mSongItemLlayout.setOnClickListener(new View.OnClickListener() {
+        holder.songNameLLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if( mOnItemClickListener != null){
-                    mOnItemClickListener.onItemClick(holder.itemView, position);
+                if( mOnSongNameClickListener != null){
+                    Log.d("====songname==", position+"");
+                    mOnSongNameClickListener.onSongNameClick(holder.itemView, position);
+                }
+            }
+        });
+        holder.delBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if( mOnDelBtnClickListener != null){
+                    Log.d("====del==", position+"");
+                    mOnDelBtnClickListener.onDelBtnClick(holder.itemView, position);
+                }
+            }
+        });
+        holder.favBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if( mOnFavBtnClickListener != null){
+                    Log.d("===fav===", position+"");
+                    mOnFavBtnClickListener.onFavBtnClick(holder.itemView, position);
                 }
             }
         });
@@ -80,15 +121,22 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
         return mSongs.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder{
 
         private TextView mSongTitleTv;
         private LinearLayout mSongItemLlayout;
+        private LinearLayout songNameLLayout;
+        private ImageButton favBtn;
+        private ImageButton delBtn;
 
         public ViewHolder(View itemView) {
             super(itemView);
             mSongTitleTv = (TextView) itemView.findViewById(R.id.song_title_tv);
             mSongItemLlayout = (LinearLayout) itemView.findViewById(R.id.song_item_llayout);
+            songNameLLayout = (LinearLayout) itemView.findViewById(R.id.some_name);
+            favBtn = (ImageButton) itemView.findViewById(R.id.fav_btn);
+            delBtn = (ImageButton) itemView.findViewById(R.id.del_btn);
         }
+
     }
 }

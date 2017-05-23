@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import java.util.ArrayList;
+import net.classicgarage.truerandommusicplayer.model.SongItem;
 
 
 /**
@@ -58,6 +58,16 @@ public class SongDatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
+    }
+
+    public void addFavoriteSong(SongItem favItem) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        // contentValues.put(SongDatabaseHelper.COLUMN_FAVORITE, );
+        // TODO: insert favorite song to database
+    }
+    public void deleteFavoriteSong(String n) {
+        // TODO: delete favorite song from database
     }
 
     public Cursor getAllFavoriteData(){
