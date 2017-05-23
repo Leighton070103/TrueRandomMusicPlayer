@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mNextBtn = (ImageButton) findViewById(R.id.next_btn);
 
         mPlayPauseBtn.setOnClickListener(this);
-//        mSkipBtn.setOnClickListener(this);
+        mPreBtn.setOnClickListener(this);
 //        mRewBtn.setOnClickListener(this);
 //        mRandomBtn.setOnClickListener(this);
         mPlayListBtn.setOnClickListener(this);
@@ -130,6 +130,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         switch (v.getId()){
             case R.id.play_pause_btn:
+                mSongTitleTv.setText(mBaseService.getPlayingSong().getTitle());
                 if(mBaseService.isPlaying()){
                     mBaseService.callPause();
                     mPlayPauseBtn.setImageDrawable(getResources().getDrawable(R.mipmap.play_btn));
@@ -146,6 +147,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.next_btn:
                 mBaseService.callPause();
                 mBaseService.callPlayNextSong();
+                mSongTitleTv.setText(mBaseService.getPlayingSong().getTitle());
+                break;
+            case R.id.pre_btn:
+                mBaseService.callPause();
+                mBaseService.callPlayLastSong();
                 mSongTitleTv.setText(mBaseService.getPlayingSong().getTitle());
                 break;
         }

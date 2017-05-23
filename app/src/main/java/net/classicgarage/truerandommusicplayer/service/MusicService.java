@@ -84,7 +84,11 @@ public class MusicService extends Service {
 
 
     public void playNextSong(){
-        updateCurrentSongIndex();
+        updateCurrentSongIndex(1);
+        play();
+    }
+    public void playLastSOng(){
+        updateCurrentSongIndex(0);
         play();
     }
     private void refereshSeekBar() {
@@ -124,9 +128,10 @@ public class MusicService extends Service {
         return getSongFromListByIndex();
     }
 
-    public void updateCurrentSongIndex(){
-        if( mCurrentSongIndex >= mDataSource.getSongsFromSD().size() - 1) mCurrentSongIndex = 0;
-        else mCurrentSongIndex++;
+    public void updateCurrentSongIndex(int action){
+        if( mCurrentSongIndex > mDataSource.getSongsFromSD().size() - 1 || mCurrentSongIndex < 0) mCurrentSongIndex = 0;
+        else if(action == 1)mCurrentSongIndex++;
+        else if(action == 0)mCurrentSongIndex--;
     }
 
     public void setCurrentSongIndex(int index){
@@ -187,5 +192,7 @@ public class MusicService extends Service {
             return getCurrentPlayingSong();
         }
 
+        @Override
+        public void callPlayLastSong(){playLastSOng();}
     }
 }
