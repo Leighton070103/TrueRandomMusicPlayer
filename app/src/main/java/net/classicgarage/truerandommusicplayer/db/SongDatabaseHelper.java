@@ -77,7 +77,7 @@ public class SongDatabaseHelper extends SQLiteOpenHelper {
         }
         else {
             for( SongItem song: songs){
-                SongFavItem songFavItem = getSongFavBySongId( song.getId(), songFavItems);
+                SongFavItem songFavItem = getSongFavBySongId( song.getId() );
                 if( songFavItem != null){
                     song.setFavorite( songFavItem.getIsFavorite() );
                 }
@@ -91,14 +91,22 @@ public class SongDatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-
-    public SongFavItem getSongFavBySongId(Long id, LinkedList<SongFavItem> favItems){
-        for( SongFavItem item: favItems){
+    /**
+     * Get the favorite record by song id.
+     * @param id
+     * @return
+     */
+    public SongFavItem getSongFavBySongId(Long id){
+        for( SongFavItem item: mSongFavItems){
             if( id == item.getSongId() ) return item;
         }
         return null;
     }
 
+    /**
+     * Add a favorite record to the song favorite database.
+     * @param song
+     */
     public void addSongFav(SongItem song) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -113,10 +121,19 @@ public class SongDatabaseHelper extends SQLiteOpenHelper {
         if( mSongFavItems == null) mSongFavItems = new LinkedList<SongFavItem>();
         mSongFavItems.add(item);
     }
-    public void deleteFavoriteSong(String n) {
-        // TODO: delete favorite song from database
+
+    public void deleteSongFav(long songId) {
+        SQLiteDatabase db = getWritableDatabase();
+        String[] args = { String.valueOf(songId) };
+        db.delete(TABLE_SONGS, COLUMN_FAVORITE + "=?" , args );
+        mSongFavItems.remove(getSongFavBySongId(songId));
+
     }
 
+    /**
+     * Get the song favorite information prepared from database.
+     * @return
+     */
     public LinkedList<SongFavItem> getAllFavoriteData(){
         if( mSongFavItems != null) return mSongFavItems;
         mSongFavItems = new LinkedList<SongFavItem>();
@@ -133,6 +150,11 @@ public class SongDatabaseHelper extends SQLiteOpenHelper {
     }
 
 
+    /**
+     * Read the favorite data from the cursor.
+     * @param cursor
+     * @return
+     */
     private SongFavItem readSongFav(Cursor cursor){
         SongFavItem songFavItem = new SongFavItem();
         songFavItem.setFavorite(cursor.getInt(cursor.getColumnIndex( COLUMN_FAVORITE )));
@@ -152,6 +174,11 @@ public class SongDatabaseHelper extends SQLiteOpenHelper {
         );*/
     }
 
+    /**
+     * This class is used for a template to store song and its favorite information,
+     * and used as a transformation of the integer favorite value to boolean value
+     * (SQlite does not allow boolean values).
+     */
     class SongFavItem{
         private Long mId;
         private Integer mFavorite;

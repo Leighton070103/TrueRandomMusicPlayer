@@ -63,48 +63,48 @@ public class SongListActivity extends TabActivity{
         mSongListRv.setItemAnimator(new DefaultItemAnimator());
 
         // set three click listner for:song name, favBtn, Delbtn
-        mAdapter.setOnSongNameClickListener(new SongAdapter.OnSongNameClickListener() {
-            @Override
-            public void onSongNameClick(View view, int position) {
-                Intent intent = new Intent();
-                intent.putExtra(SONG_POSITION, position);
-                setResult(RESULT_OK, intent);
-                finish();
-                Log.d("===songlist===", "song clicked");
-
-                // direct to MainActivity with song position
-//                Intent intent = new Intent(SongListActivity.this, MainActivity.class);
-//                Bundle bundle = new Bundle();
-//                bundle.putInt("songPosition", position);
-//                intent.putExtras(bundle);
-//                startActivity(intent);
-            }
-
-        });
-        mAdapter.setmOnFavBtnClickListener(new SongAdapter.OnFavBtnClickListener() {
-            @Override
-            public void onFavBtnClick(View view, int position) {
-                Log.d("===songlist===", "favBtn clicked");
-
-                // change clicked item statu in datasource
-                mSongDataSource.setSongItemFavStatuAtPosition(true, position);
-                //add songItem to favDataBase
-                SongItem favItem = mSongDataSource.getSongAtPosition(position);
-                mSongDataBase.addFavoriteSong(favItem);
-                // TODO: change favBtn image
-            }
-
-        });
-        mAdapter.setmOnDelBtnClickListener(new SongAdapter.OnDelBtnClickListener() {
-            @Override
-            public void onDelBtnClick(View view, int position) {
-                Log.d("===songlist===", "favBtn clicked");
-                // TODO: do something when DelBtn be clicked
-                SongItem delItem = mSongDataSource.getSongAtPosition(position);
-                deletSong(delItem);
-            }
-
-        });
+//        mAdapter.setOnSongNameClickListener(new SongAdapter.OnSongNameClickListener() {
+//            @Override
+//            public void onSongNameClick(View view, int position) {
+//                Intent intent = new Intent();
+//                intent.putExtra(SONG_POSITION, position);
+//                setResult(RESULT_OK, intent);
+//                finish();
+//                Log.d("===songlist===", "song clicked");
+//
+//                // direct to MainActivity with song position
+////                Intent intent = new Intent(SongListActivity.this, MainActivity.class);
+////                Bundle bundle = new Bundle();
+////                bundle.putInt("songPosition", position);
+////                intent.putExtras(bundle);
+////                startActivity(intent);
+//            }
+//
+//        });
+//        mAdapter.setmOnFavBtnClickListener(new SongAdapter.OnFavBtnClickListener() {
+//            @Override
+//            public void onFavBtnClick(View view, int position) {
+//                Log.d("===songlist===", "favBtn clicked");
+//
+//                // change clicked item statu in datasource
+//                mSongDataSource.setSongItemFavStatuAtPosition(true, position);
+//                //add songItem to favDataBase
+//                SongItem favItem = mSongDataSource.getSongAtPosition(position);
+//                mSongDataBase.addFavoriteSong(favItem);
+//                // TODO: change favBtn image
+//            }
+//
+//        });
+//        mAdapter.setmOnDelBtnClickListener(new SongAdapter.OnDelBtnClickListener() {
+//            @Override
+//            public void onDelBtnClick(View view, int position) {
+//                Log.d("===songlist===", "favBtn clicked");
+//                // TODO: do something when DelBtn be clicked
+//                SongItem delItem = mSongDataSource.getSongAtPosition(position);
+//                deletSong(delItem);
+//            }
+//
+//        });
         mSongListRv.setAdapter(mAdapter);
 
 
@@ -117,7 +117,7 @@ public class SongListActivity extends TabActivity{
 
     private void deletSong(SongItem song) {
         mAdapter.deletSong(song);
-        mSongDataBase.deleteSong(song);
+//        mSongDataBase.deleteSong(song);
     }
 
     private void getPermissons() {

@@ -14,6 +14,7 @@ import net.classicgarage.truerandommusicplayer.R;
 import net.classicgarage.truerandommusicplayer.model.SongItem;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 
 /**
@@ -22,14 +23,14 @@ import java.util.ArrayList;
 
 public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
 
-    private ArrayList<SongItem> mSongs;
+    private LinkedList<SongItem> mSongs;
 //    private OnSongNameClickListener mOnSongNameClickListener;
 //    private OnFavBtnClickListener mOnFavBtnClickListener;
 //    private OnDelBtnClickListener mOnDelBtnClickListener;
     private View mItemView;
     private Context mContext;
 
-    public SongAdapter(Context context, ArrayList<SongItem> songs){
+    public SongAdapter(Context context, LinkedList<SongItem> songs){
         mSongs = songs;
         mContext = context;
     }
