@@ -23,9 +23,9 @@ import java.util.ArrayList;
 public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
 
     private ArrayList<SongItem> mSongs;
-    private OnSongNameClickListener mOnSongNameClickListener;
-    private OnFavBtnClickListener mOnFavBtnClickListener;
-    private OnDelBtnClickListener mOnDelBtnClickListener;
+//    private OnSongNameClickListener mOnSongNameClickListener;
+//    private OnFavBtnClickListener mOnFavBtnClickListener;
+//    private OnDelBtnClickListener mOnDelBtnClickListener;
     private View mItemView;
     private Context mContext;
 
@@ -33,44 +33,44 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
         mSongs = songs;
         mContext = context;
     }
+//
+//    /**
+//     *  Used for defining method that used when items in the recycler view is clicked.
+//     */
+//
+//
+//    // create three interface for each item need ClickListener
+//    public interface OnSongNameClickListener {
+//        /**
+//         * Called when the item is clicked.
+//         * @param view
+//         * @param position
+//         */
+//        void onSongNameClick(View view, int position);
+//    }
+//    public interface OnFavBtnClickListener {
+//        void onFavBtnClick(View view, int position);
+//    }
+//    public interface OnDelBtnClickListener {
+//        void onDelBtnClick(View view, int position);
+//
+//    }
 
-    /**
-     *  Used for defining method that used when items in the recycler view is clicked.
-     */
 
-
-    // create three interface for each item need ClickListener
-    public interface OnSongNameClickListener {
-        /**
-         * Called when the item is clicked.
-         * @param view
-         * @param position
-         */
-        void onSongNameClick(View view, int position);
-    }
-    public interface OnFavBtnClickListener {
-        void onFavBtnClick(View view, int position);
-    }
-    public interface OnDelBtnClickListener {
-        void onDelBtnClick(View view, int position);
-
-    }
-
-
-    /**
-     * Set the value of mOnSongNameClickListener, mOnFavBtnClickListener, mOnDelBtnClickListener.
-     * @param listener
-     */
-    public void setOnSongNameClickListener(OnSongNameClickListener listener) {
-        mOnSongNameClickListener = listener;
-
-    }
-    public void setmOnFavBtnClickListener(OnFavBtnClickListener listener) {
-        mOnFavBtnClickListener = listener;
-    }
-    public void setmOnDelBtnClickListener(OnDelBtnClickListener listener) {
-        mOnDelBtnClickListener = listener;
-    }
+//    /**
+//     * Set the value of mOnSongNameClickListener, mOnFavBtnClickListener, mOnDelBtnClickListener.
+//     * @param listener
+//     */
+//    public void setOnSongNameClickListener(OnSongNameClickListener listener) {
+//        mOnSongNameClickListener = listener;
+//
+//    }
+//    public void setmOnFavBtnClickListener(OnFavBtnClickListener listener) {
+//        mOnFavBtnClickListener = listener;
+//    }
+//    public void setmOnDelBtnClickListener(OnDelBtnClickListener listener) {
+//        mOnDelBtnClickListener = listener;
+//    }
 
 
 
@@ -87,33 +87,34 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
     public void onBindViewHolder(final SongAdapter.ViewHolder holder, final int position) {
         SongItem song = mSongs.get(position);
         holder.mSongTitleTv.setText( song.getTitle() );
-        holder.songNameLLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if( mOnSongNameClickListener != null){
-                    Log.d("====songname==", position+"");
-                    mOnSongNameClickListener.onSongNameClick(holder.itemView, position);
-                }
-            }
-        });
-        holder.delBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if( mOnDelBtnClickListener != null){
-                    Log.d("====del==", position+"");
-                    mOnDelBtnClickListener.onDelBtnClick(holder.itemView, position);
-                }
-            }
-        });
-        holder.favBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if( mOnFavBtnClickListener != null){
-                    Log.d("===fav===", position+"");
-                    mOnFavBtnClickListener.onFavBtnClick(holder.itemView, position);
-                }
-            }
-        });
+//        holder.songNameLLayout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if( mOnSongNameClickListener != null){
+//                    Log.d("====songname==", position+"");
+//                    mOnSongNameClickListener.onSongNameClick(holder.itemView, position);
+//                }
+//            }
+//        });
+//        holder.delBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if( mOnDelBtnClickListener != null){
+//                    Log.d("====del==", position+"");
+//                    mOnDelBtnClickListener.onDelBtnClick(holder.itemView, position);
+//                }
+//            }
+//        });
+//        holder.favBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if( mOnFavBtnClickListener != null){
+//                    Log.d("===fav===", position+"");
+//                    mOnFavBtnClickListener.onFavBtnClick(holder.itemView, position);
+//                }
+//            }
+//        });
+
     }
 
     @Override
