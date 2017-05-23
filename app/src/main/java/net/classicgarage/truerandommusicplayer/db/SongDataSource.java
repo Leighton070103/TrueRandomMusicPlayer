@@ -3,12 +3,12 @@ package net.classicgarage.truerandommusicplayer.db;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.provider.MediaStore;
-import android.widget.LinearLayout;
+import android.util.Log;
 
 import net.classicgarage.truerandommusicplayer.model.SongItem;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 /**
@@ -153,6 +153,31 @@ public class SongDataSource {
                 return song;
         }
         return null;
+    }
+
+    public void deletSong(long songId){
+        for (int i = 0; i < mSongs.size();i++){
+            if(mSongs.get(i).getId() == songId){
+                mSongs.remove(i);
+                deletePlaylistTracks(mContext,mSongs.get(i));
+            }
+        }
+    }
+
+    public int deletePlaylistTracks(Context context, SongItem song){
+        ContentResolver resolver = context.getContentResolver();
+        int countDel = 0;
+        try{
+            Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+            String where = MediaStore.Audio.Playlists.Members._ID + "=?";
+            String[] whereArgs = new String[] {Long.toString(song.getId())};
+            Log.d("TAG", "tracks deleted=" + countDel);
+            int rowsDeleted = resolver.delete(uri,where,whereArgs);
+            return rowsDeleted;
+        }catch (Exception e){
+            Log.d("Error", "Error");
+        }
+        return 0;
     }
 //    public List<String> getMusicData(Context context){
 //        List<String> list = new ArrayList<String>();
