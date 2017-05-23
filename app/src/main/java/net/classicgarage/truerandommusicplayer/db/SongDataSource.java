@@ -108,6 +108,14 @@ public class SongDataSource {
 
 
     }
+
+    public SongItem getSongWithPath(String path){
+        for( SongItem song: mSongs ){
+            if(song.getPath().equals(path))
+                return song;
+        }
+        return null;
+    }
 //    public List<String> getMusicData(Context context){
 //        List<String> list = new ArrayList<String>();
 //        ContentResolver cr = context.getContentResolver();

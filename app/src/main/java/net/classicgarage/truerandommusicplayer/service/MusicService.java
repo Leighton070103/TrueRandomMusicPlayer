@@ -111,6 +111,10 @@ public class MusicService extends Service {
         mediaPlayer.pause();
     }
 
+    private SongItem getCurrentPlayingSong(){
+        return getSongFromList();
+    }
+
     private boolean isPlaying(){ return mediaPlayer.isPlaying(); }
 
     class MusicBinder extends Binder implements BaseService{
@@ -146,6 +150,11 @@ public class MusicService extends Service {
 
         @Override
         public void callPlayNextSong(){ playNextSong(); }
+
+        @Override
+        public SongItem getPlayingSong() {
+            return getCurrentPlayingSong();
+        }
 
     }
 }

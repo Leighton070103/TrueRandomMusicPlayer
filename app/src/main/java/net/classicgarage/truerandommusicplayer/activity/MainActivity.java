@@ -85,7 +85,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         getPermissons();
-//        mSongTitleTv = (TextView) findViewById(R.id.title_tv);
+        mSongTitleTv = (TextView) findViewById(R.id.title_tv);
+        mSongTitleTv.setText(mBaseService.getPlayingSong().getTitle());
 //        mAlbumArtIv = (ImageView) findViewById(R.id.cover_iv);
         mPlayPauseBtn = (ImageButton) findViewById(R.id.play_pause_btn);
 //        mRandomBtn = (ImageButton) findViewById(R.id.random_btn);
@@ -156,6 +157,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.next_btn:
                 mBaseService.callPause();
                 mBaseService.callPlayNextSong();
+                mSongTitleTv.setText(mBaseService.getPlayingSong().getTitle());
                 break;
         }
     }
