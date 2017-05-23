@@ -142,6 +142,8 @@ public class SongDataSource {
 
         song.setArtist( cursor.getString(cursor
                 .getColumnIndex(MediaStore.Audio.Media.ARTIST)));
+        song.setDuration(cursor.getLong(cursor
+                .getColumnIndex(MediaStore.Audio.Media.DURATION)));
 
         String name = cursor
                 .getString(cursor

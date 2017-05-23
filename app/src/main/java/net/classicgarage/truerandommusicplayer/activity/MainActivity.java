@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TextView mAuthorTv;
     TextView mAlbumTv;
     ImageView mAlbumArtIv;
-
+    TextView mSongTimeTv;
     SongItem songPlaying;
 
     private ServiceConnection mMusicConn;
@@ -89,6 +89,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mPlayListBtn = (ImageButton) findViewById(R.id.playlist_btn);
         sProgressBar = (ProgressBar) findViewById(R.id.procress_bar);
         mNextBtn = (ImageButton) findViewById(R.id.next_btn);
+        mSongTimeTv = (TextView) findViewById(R.id.timeleft_tv);
+
 
         mPlayPauseBtn.setOnClickListener(this);
         mPreBtn.setOnClickListener(this);
@@ -160,8 +162,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void onClick(View v) {
+        mSongTimeTv.setText(mBaseService.getPlayingSong().getSongTime());
         switch (v.getId()){
             case R.id.play_pause_btn:
+
                 mSongTitleTv.setText(mBaseService.getPlayingSong().getTitle());
                 if(mBaseService.isPlaying()){
                     mBaseService.callPause();

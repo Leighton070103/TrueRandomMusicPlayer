@@ -173,7 +173,7 @@
                         android:layout_below="@+id/procress_bar"
                         android:layout_weight="1"
                         android:gravity="right"
-                        android:text="TextView"
+                        android:text="00:00"
                         android:textColor="#ffffff"
                         android:textSize="9sp" />
                 </LinearLayout>
