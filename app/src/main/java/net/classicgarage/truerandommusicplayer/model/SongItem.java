@@ -20,7 +20,7 @@ public class SongItem implements Serializable, Comparable<SongItem> {
 	private long mAlbumIdLog;
 	private long mDurationLog;
 	private String mPathStr;
-	private boolean mFavoriteblo;
+	private boolean mFavoriteblo = false;
 
     public SongItem(){}
 

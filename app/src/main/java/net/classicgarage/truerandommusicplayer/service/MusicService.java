@@ -119,6 +119,10 @@ public class MusicService extends Service {
         mediaPlayer.pause();
     }
 
+    private SongItem getCurrentPlayingSong(){
+        return getSongFromList();
+    }
+
     private boolean isPlaying(){ return mediaPlayer.isPlaying(); }
 
     private void playSongAtPosition(int position) {
@@ -172,6 +176,11 @@ public class MusicService extends Service {
         @Override
         public void callPlaySongAtPosition(int position) { playSongAtPosition(position);}
 
+
+        @Override
+        public SongItem getPlayingSong() {
+            return getCurrentPlayingSong();
+        }
 
     }
 }
