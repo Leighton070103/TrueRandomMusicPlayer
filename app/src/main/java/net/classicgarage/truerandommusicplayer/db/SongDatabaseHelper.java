@@ -30,15 +30,15 @@ public class SongDatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_FAVORITE = "is_favorite";
     public static final String COLUMN_MUSIC_ID = "music_id";
 
-    public static final String[] ALL_COLUMNS={COLUMN_ID, COLUMN_FAVORITE, COLUMN_FAVORITE};
+    public static final String[] ALL_COLUMNS={COLUMN_ID, COLUMN_FAVORITE, COLUMN_MUSIC_ID};
     public static final String TABLE_CREATE =
             "CREATE TABLE " + TABLE_SONGS + "( " +
                     COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    COLUMN_FAVORITE + "INTEGER, " + COLUMN_MUSIC_ID + "LONG "
+                    COLUMN_FAVORITE + " INTEGER, " + COLUMN_MUSIC_ID + " LONG "
                     + ")";
 
     public SongDatabaseHelper(Context context) {
-        super(context, DATABASE_NAME, null,DATABASE_VERSION);
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
 
     }
 

@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         getPermissons();
         mSongTitleTv = (TextView) findViewById(R.id.title_tv);
-        mSongTitleTv.setText(mBaseService.getPlayingSong().getTitle());
+//        mSongTitleTv.setText(mBaseService.getPlayingSong().getTitle());
 //        mAlbumArtIv = (ImageView) findViewById(R.id.cover_iv);
         mPlayPauseBtn = (ImageButton) findViewById(R.id.play_pause_btn);
 //        mRandomBtn = (ImageButton) findViewById(R.id.random_btn);

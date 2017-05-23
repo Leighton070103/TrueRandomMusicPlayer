@@ -15,6 +15,7 @@ import net.classicgarage.truerandommusicplayer.model.SongItem;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -70,7 +71,7 @@ public class MusicService extends Service {
     }
 
     private SongItem getSongFromList() {
-        ArrayList<SongItem> songlist = mDataSource.getSongsFromSD();
+        LinkedList<SongItem> songlist = mDataSource.getSongsFromSD();
         if(currentSongIndex >= songlist.size()){
             currentSongIndex = 0;
         }

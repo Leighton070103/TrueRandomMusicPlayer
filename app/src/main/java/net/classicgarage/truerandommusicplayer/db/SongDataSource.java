@@ -73,6 +73,7 @@ public class SongDataSource {
             }
             cursor.close();
         }
+        mSongs = favoriteHelper.updateFavoriteForSongs(mSongs);
 
     }
 
