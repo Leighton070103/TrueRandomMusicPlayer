@@ -1,7 +1,11 @@
 package net.classicgarage.truerandommusicplayer.adapter;
 
+import android.content.ContentResolver;
 import android.content.Context;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -127,6 +131,33 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
 //            }
 //        });
 
+    }
+
+    public void deletSong(SongItem songDeleting){
+        for (int i = 0; i < mSongs.size();i++){
+            if(mSongs.get(i) == songDeleting){
+                mSongs.remove(i);
+
+                //deletePlaylistTracks(this,)
+            }
+        }
+    }
+
+    public int deletePlaylistTracks(Context context, long playlistId, long audioId){
+        ContentResolver resolver = context.getContentResolver();
+        int countDel = 0;
+        try{
+            Uri uri = MediaStore.Audio.Playlists.Members.getContentUri(
+                    "external",playlistId);
+            String where = MediaStore.Audio.Playlists.Members._ID + "=?";
+            String audioId1 = Long.toString(audioId);
+            String[] whereVal = { audioId1 };
+            countDel = resolver.delete(uri,where,whereVal);
+            Log.d("TAG", "tracks deleted=" + countDel);
+        }catch (Exception e){
+            Log.d("Error", "Error");
+        }
+        return countDel;
     }
 
 
