@@ -24,6 +24,7 @@ public class SongDatabaseHelper extends SQLiteOpenHelper {
     private static int DATABASE_VERSION = 1;
     private static SongDatabaseHelper sInstance;
 
+    private LinkedList<SongFavItem> mSongFavItems = null;
     public static final String TABLE_SONGS = "favorite_songs";
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_FAVORITE = "is_favorite";
@@ -61,50 +62,76 @@ public class SongDatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public LinkedList<SongFavItem> updateFavoriteForSongs(LinkedList<SongItem> songs){
+    public LinkedList<SongItem> updateFavoriteForSongs(LinkedList<SongItem> songs){
         SQLiteDatabase db = getWritableDatabase();
+        //Get favorite record from the database.
         LinkedList<SongFavItem> songFavItems = new LinkedList<SongFavItem>();
         Cursor cursor = db.query(
                 TABLE_SONGS, ALL_COLUMNS, null, null, null, null, null);
 
-        if( cursor.getCount() != songs.size() ){
-            if( cursor.moveToFirst() ){
-                do{
-                    songFavItems.add( readSongFav(cursor) );
-                }while (cursor.moveToNext());
+        getAllFavoriteData();
+        if( mSongFavItems == null || songFavItems.size() == 0){
+            for ( SongItem song: songs ){
+                addSongFav(song);
             }
-            for( SongItem:)
+        }
+        else {
+            for( SongItem song: songs){
+                SongFavItem songFavItem = getSongFavBySongId( song.getId(), songFavItems);
+                if( songFavItem != null){
+                    song.setFavorite( songFavItem.getIsFavorite() );
+                }
+                else{
+                    addSongFav(song);
+                }
+            }
         }
 
-
+        return songs;
     }
 
-    public SongFavItem findSongById(Long id, LinkedList<SongFavItem> favItems){
+
+
+    public SongFavItem getSongFavBySongId(Long id, LinkedList<SongFavItem> favItems){
         for( SongFavItem item: favItems){
             if( id == item.getSongId() ) return item;
         }
         return null;
     }
 
-    public void addFavoriteSong(SongItem song) {
+    public void addSongFav(SongItem song) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(COLUMN_FAVORITE, song.getFavorite());
+        if(song.getFavorite()) values.put(COLUMN_FAVORITE, 1);
+        else values.put(COLUMN_FAVORITE, 0);
         values.put(COLUMN_MUSIC_ID, song.getId());
         db.insert(TABLE_SONGS, null, values);
-        // contentValues.put(SongDatabaseHelper.COLUMN_FAVORITE, );
-        // TODO: insert favorite song to database
+
+        SongFavItem item = new SongFavItem();
+        item.setSongId(song.getId());
+        item.setIsFavorite(song.getFavorite());
+        if( mSongFavItems == null) mSongFavItems = new LinkedList<SongFavItem>();
+        mSongFavItems.add(item);
     }
     public void deleteFavoriteSong(String n) {
         // TODO: delete favorite song from database
     }
 
-    public Cursor getAllFavoriteData(){
+    public LinkedList<SongFavItem> getAllFavoriteData(){
+        if( mSongFavItems != null) return mSongFavItems;
+        mSongFavItems = new LinkedList<SongFavItem>();
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.query(TABLE_SONGS, ALL_COLUMNS, null, null, null, null, null);
-        return cursor;
+        if( cursor.moveToFirst() ){
+            do{
+                mSongFavItems.add( readSongFav(cursor) );
+            }while (cursor.moveToNext());
+        }
+        cursor.close();
+        return mSongFavItems;
 
     }
+
 
     private SongFavItem readSongFav(Cursor cursor){
         SongFavItem songFavItem = new SongFavItem();
@@ -125,7 +152,7 @@ public class SongDatabaseHelper extends SQLiteOpenHelper {
         );*/
     }
 
-    private class SongFavItem{
+    class SongFavItem{
         private Long mId;
         private Integer mFavorite;
         private Long mSongId;
@@ -153,6 +180,15 @@ public class SongDatabaseHelper extends SQLiteOpenHelper {
 
         public void setSongId(Long songId) {
             this.mSongId = songId;
+        }
+
+        public void setIsFavorite(boolean isFavorite){
+            if( isFavorite) mFavorite = 1;
+            else mFavorite = 0;
+        }
+
+        public boolean getIsFavorite(){
+            return mFavorite == 1;
         }
     }
 }
