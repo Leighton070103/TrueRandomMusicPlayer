@@ -151,6 +151,11 @@ public class SongItem implements Serializable, Comparable<SongItem> {
         mArtistStr = artist;
     }
 
+    public void resetIsFavorite(){
+        if( mFavoriteblo ) mFavoriteblo = false;
+        else mFavoriteblo = true;
+    }
+
 }
 
 

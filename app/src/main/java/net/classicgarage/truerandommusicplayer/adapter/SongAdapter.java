@@ -11,10 +11,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import net.classicgarage.truerandommusicplayer.R;
+import net.classicgarage.truerandommusicplayer.db.SongDataSource;
+import net.classicgarage.truerandommusicplayer.db.SongDatabaseHelper;
 import net.classicgarage.truerandommusicplayer.model.SongItem;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+
+import javax.sql.DataSource;
 
 
 /**
@@ -27,12 +31,14 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
 //    private OnSongNameClickListener mOnSongNameClickListener;
 //    private OnFavBtnClickListener mOnFavBtnClickListener;
 //    private OnDelBtnClickListener mOnDelBtnClickListener;
+    private SongDataSource mSongDataSource;
     private View mItemView;
     private Context mContext;
 
     public SongAdapter(Context context, LinkedList<SongItem> songs){
         mSongs = songs;
         mContext = context;
+        mSongDataSource = SongDataSource.getInstance(context);
     }
 //
 //    /**
@@ -85,9 +91,18 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(final SongAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final SongAdapter.ViewHolder holder, int position) {
         SongItem song = mSongs.get(position);
+        final long songId = song.getId();
         holder.mSongTitleTv.setText( song.getTitle() );
+        if(song.getFavorite()) holder.mFavBtn.setImageResource(R.mipmap.fav_on);
+        else holder.mFavBtn.setImageResource(R.mipmap.fav_off);
+        holder.mFavBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSongDataSource.setSongFavorite( songId );
+            }
+        });
 //        holder.songNameLLayout.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -136,16 +151,16 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
         private TextView mSongTitleTv;
         private LinearLayout mSongItemLlayout;
         private LinearLayout songNameLLayout;
-        private ImageButton favBtn;
-        private ImageButton delBtn;
+        private ImageButton mFavBtn;
+        private ImageButton mDelBtn;
 
         public ViewHolder(View itemView) {
             super(itemView);
             mSongTitleTv = (TextView) itemView.findViewById(R.id.song_title_tv);
             mSongItemLlayout = (LinearLayout) itemView.findViewById(R.id.song_item_llayout);
             songNameLLayout = (LinearLayout) itemView.findViewById(R.id.some_name);
-            favBtn = (ImageButton) itemView.findViewById(R.id.fav_btn);
-            delBtn = (ImageButton) itemView.findViewById(R.id.del_btn);
+            mFavBtn = (ImageButton) itemView.findViewById(R.id.song_item_fav_btn);
+            mDelBtn = (ImageButton) itemView.findViewById(R.id.song_item_del_btn);
         }
 
     }

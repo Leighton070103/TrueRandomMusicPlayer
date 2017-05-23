@@ -55,6 +55,24 @@ public class SongDataSource {
         return mSongs;
     }
 
+    public void setSongFavorite(long songId){
+
+        SongItem song = findSongItemById(songId);
+        if( song != null ) {
+            song.resetIsFavorite();
+            favoriteHelper.updateFavoriteSong(songId);
+        }
+
+    }
+
+    public SongItem findSongItemById(long songId){
+        if( mSongs == null ) mSongs = new LinkedList<SongItem>();
+        for(SongItem song: mSongs){
+            if( song.getId() == songId ) return song;
+        }
+        return null;
+    }
+
     private void initializeSongs(){
         mSongs = new LinkedList<SongItem>();
         ContentResolver cr = mContext.getContentResolver();

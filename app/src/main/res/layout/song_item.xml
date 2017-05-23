@@ -67,7 +67,7 @@
             android:orientation="horizontal">
 
             <ImageButton
-                android:id="@+id/fav_btn"
+                android:id="@+id/song_item_fav_btn"
                 android:layout_width="20dp"
                 android:layout_height="50dp"
                 android:background="#00000000"
@@ -75,7 +75,7 @@
                 android:src="@mipmap/fav_off" />
 
             <ImageButton
-                android:id="@+id/del_btn"
+                android:id="@+id/song_item_del_btn"
                 android:layout_width="35dp"
                 android:layout_height="50dp"
                 android:background="#00000000"

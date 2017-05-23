@@ -70,6 +70,7 @@ public class SongDatabaseHelper extends SQLiteOpenHelper {
                 TABLE_SONGS, ALL_COLUMNS, null, null, null, null, null);
 
         getAllFavoriteData();
+
         if( mSongFavItems == null || songFavItems.size() == 0){
             for ( SongItem song: songs ){
                 addSongFav(song);
@@ -122,6 +123,10 @@ public class SongDatabaseHelper extends SQLiteOpenHelper {
         mSongFavItems.add(item);
     }
 
+    /**
+     * Delete song favorite infomration
+     * @param songId
+     */
     public void deleteSongFav(long songId) {
         SQLiteDatabase db = getWritableDatabase();
         String[] args = { String.valueOf(songId) };
@@ -162,16 +167,14 @@ public class SongDatabaseHelper extends SQLiteOpenHelper {
         return songFavItem;
     }
 
-    public void updateFavoriteSong(){
+    public void updateFavoriteSong(long songId){
+        SQLiteDatabase db = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(SongDatabaseHelper.COLUMN_FAVORITE, "is_favorite");
-
-        String selection = SongDatabaseHelper.COLUMN_FAVORITE + "like ?";
-        //String[] selectionArgs = {""}
-
-        /*int count = db.update(
-                TABLE_SONGS,contentValues
-        );*/
+        SongFavItem item = getSongFavBySongId(songId);
+        item.updateFavorite();
+        contentValues.put(SongDatabaseHelper.COLUMN_FAVORITE, item.getFavorite());
+        String[] args = { String.valueOf(songId) };
+        db.update( TABLE_SONGS, contentValues, COLUMN_MUSIC_ID + "=?",args);
     }
 
     /**
@@ -212,6 +215,11 @@ public class SongDatabaseHelper extends SQLiteOpenHelper {
         public void setIsFavorite(boolean isFavorite){
             if( isFavorite) mFavorite = 1;
             else mFavorite = 0;
+        }
+
+        public void updateFavorite(){
+            if( mFavorite == 1) mFavorite = 0;
+            else mFavorite = 1;
         }
 
         public boolean getIsFavorite(){
