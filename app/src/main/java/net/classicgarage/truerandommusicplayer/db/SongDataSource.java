@@ -96,9 +96,13 @@ public class SongDataSource {
     }
 
 
-    // get song item from specific position
+    /**
+     *get song item from a specific position.
+     */
     public SongItem getSongAtPosition(int position) {
-        return  mSongs.get(position);
+        if( mSongs != null) return  mSongs.get(position);
+        initializeSongs();
+        return mSongs.get(position);
     }
 
     // change song item's favorite statu at certain position

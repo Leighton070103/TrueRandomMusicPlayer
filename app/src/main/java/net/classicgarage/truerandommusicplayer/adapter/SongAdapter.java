@@ -28,7 +28,7 @@ import javax.sql.DataSource;
 public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
 
     private LinkedList<SongItem> mSongs;
-//    private OnSongNameClickListener mOnSongNameClickListener;
+    private OnSongItemNameClickListener mOnSongItemNameClickListener;
 //    private OnFavBtnClickListener mOnFavBtnClickListener;
 //    private OnDelBtnClickListener mOnDelBtnClickListener;
     private SongDataSource mSongDataSource;
@@ -47,14 +47,14 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
 //
 //
 //    // create three interface for each item need ClickListener
-//    public interface OnSongNameClickListener {
-//        /**
-//         * Called when the item is clicked.
-//         * @param view
-//         * @param position
-//         */
-//        void onSongNameClick(View view, int position);
-//    }
+    public interface OnSongItemNameClickListener {
+        /**
+         * Called when the item is clicked.
+         * @param view
+         * @param position
+         */
+        void onSongItemNameClick(View view, int position);
+    }
 //    public interface OnFavBtnClickListener {
 //        void onFavBtnClick(View view, int position);
 //    }
@@ -64,14 +64,14 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
 //    }
 
 
-//    /**
-//     * Set the value of mOnSongNameClickListener, mOnFavBtnClickListener, mOnDelBtnClickListener.
-//     * @param listener
-//     */
-//    public void setOnSongNameClickListener(OnSongNameClickListener listener) {
-//        mOnSongNameClickListener = listener;
-//
-//    }
+    /**
+     * Set the value of mOnSongNameClickListener, mOnFavBtnClickListener, mOnDelBtnClickListener.
+     * @param listener
+     */
+    public void setOnSongItemNameClickListener(OnSongItemNameClickListener listener) {
+        mOnSongItemNameClickListener = listener;
+
+    }
 //    public void setmOnFavBtnClickListener(OnFavBtnClickListener listener) {
 //        mOnFavBtnClickListener = listener;
 //    }
@@ -91,7 +91,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(final SongAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(final SongAdapter.ViewHolder holder, final int position) {
         SongItem song = mSongs.get(position);
         final long songId = song.getId();
         holder.mSongTitleTv.setText( song.getTitle() );
@@ -104,15 +104,15 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
                 notifyDataSetChanged();
             }
         });
-//        holder.songNameLLayout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if( mOnSongNameClickListener != null){
-//                    Log.d("====songname==", position+"");
-//                    mOnSongNameClickListener.onSongNameClick(holder.itemView, position);
-//                }
-//            }
-//        });
+        holder.mSongItemNameLLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if( mOnSongItemNameClickListener != null){
+                    Log.d("====songname==", position+"");
+                    mOnSongItemNameClickListener.onSongItemNameClick(holder.itemView, position);
+                }
+            }
+        });
 //        holder.delBtn.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -151,7 +151,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
 
         private TextView mSongTitleTv;
         private LinearLayout mSongItemLlayout;
-        private LinearLayout songNameLLayout;
+        private LinearLayout mSongItemNameLLayout;
         private ImageButton mFavBtn;
         private ImageButton mDelBtn;
 
@@ -159,7 +159,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
             super(itemView);
             mSongTitleTv = (TextView) itemView.findViewById(R.id.song_title_tv);
 //            mSongItemLlayout = (LinearLayout) itemView.findViewById(R.id.song_item_llayout);
-//            songNameLLayout = (LinearLayout) itemView.findViewById(R.id.some_name);
+            mSongItemNameLLayout = (LinearLayout) itemView.findViewById(R.id.song_item_name_llayout);
             mFavBtn = (ImageButton) itemView.findViewById(R.id.song_item_fav_btn);
             mDelBtn = (ImageButton) itemView.findViewById(R.id.song_item_del_btn);
         }

@@ -2,9 +2,12 @@ package net.classicgarage.truerandommusicplayer.activity;
 
 import android.Manifest;
 import android.app.TabActivity;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,17 +21,20 @@ import net.classicgarage.truerandommusicplayer.adapter.SongAdapter;
 import net.classicgarage.truerandommusicplayer.db.SongDataSource;
 import net.classicgarage.truerandommusicplayer.db.SongDatabaseHelper;
 import net.classicgarage.truerandommusicplayer.model.SongItem;
+import net.classicgarage.truerandommusicplayer.service.BaseService;
+import net.classicgarage.truerandommusicplayer.service.MusicService;
 
 import static android.R.id.tabhost;
 import static net.classicgarage.truerandommusicplayer.R.id.AllMusic;
 import static net.classicgarage.truerandommusicplayer.R.id.Favorite;
 
-public class SongListActivity extends TabActivity{
+public class SongListActivity extends TabActivity {
     private RecyclerView mSongListRv;
     private SongAdapter mAdapter;
     private TabHost mTabHost;
     private SongDataSource mSongDataSource;
-    private SongDatabaseHelper mSongDataBase;
+    private ServiceConnection mMusicConn;
+    private BaseService mBaseService;
     public static final String SONG_POSITION = "songPosition";
 
     @Override
@@ -36,7 +42,6 @@ public class SongListActivity extends TabActivity{
 
         getPermissons();
         mSongDataSource = SongDataSource.getInstance(this.getApplicationContext());
-        mSongDataBase = SongDatabaseHelper.getInstance(this.getApplicationContext());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_song_list);
         mSongListRv = (RecyclerView) findViewById(R.id.song_list_rv);
@@ -62,23 +67,36 @@ public class SongListActivity extends TabActivity{
         mSongListRv.setLayoutManager(mLayoutManager);
         mSongListRv.setItemAnimator(new DefaultItemAnimator());
 
+        Intent intent = new Intent(SongListActivity.this, MusicService.class);
+        startService(intent);
+        mMusicConn = new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                mBaseService = (BaseService) service;
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+
+            }
+        };
+        getApplicationContext().bindService(intent, mMusicConn, BIND_AUTO_CREATE);
+
         // set three click listner for:song name, favBtn, Delbtn
-//        mAdapter.setOnSongNameClickListener(new SongAdapter.OnSongNameClickListener() {
-//            @Override
-//            public void onSongNameClick(View view, int position) {
-//                Intent intent = new Intent();
-//                intent.putExtra(SONG_POSITION, position);
-//                setResult(RESULT_OK, intent);
-//                finish();
-//                Log.d("===songlist===", "song clicked");
-//
-//                // direct to MainActivity with song position
-////                Intent intent = new Intent(SongListActivity.this, MainActivity.class);
-////                Bundle bundle = new Bundle();
-////                bundle.putInt("songPosition", position);
-////                intent.putExtras(bundle);
-////                startActivity(intent);
-//            }
+        mAdapter.setOnSongItemNameClickListener(new SongAdapter.OnSongItemNameClickListener() {
+            @Override
+            public void onSongItemNameClick(View view, int position) {
+                mBaseService.callPlaySongAtPosition(position);
+                Log.d("===songlist===", "song clicked");
+
+                // direct to MainActivity with song position
+//                Intent intent = new Intent(SongListActivity.this, MainActivity.class);
+//                Bundle bundle = new Bundle();
+//                bundle.putInt("songPosition", position);
+//                intent.putExtras(bundle);
+//                startActivity(intent);
+            }
+        });
 //
 //        });
 //        mAdapter.setmOnFavBtnClickListener(new SongAdapter.OnFavBtnClickListener() {
@@ -127,5 +145,11 @@ public class SongListActivity extends TabActivity{
         if (code != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(SongListActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        getApplicationContext().unbindService(mMusicConn);
+        super.onDestroy();
     }
 }

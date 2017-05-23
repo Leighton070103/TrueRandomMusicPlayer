@@ -55,9 +55,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ServiceConnection mMusicConn;
     private BaseService mBaseService;
 
-    private PlayerService.PlayerServiceState mPlayerServiceState = PlayerService.PlayerServiceState.Inexistant;
-    private PlayerService.PlaybackMode mPlaybackMode = PlayerService.PlaybackMode.RANDOM;
-
 
     public static Handler handler = new Handler(){
         @Override
@@ -184,31 +181,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /*
      * inner broadcast receiver class
      */
-    class PlayerStatusReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive (Context context, Intent intent) {
-        }
-    }
+//    class PlayerStatusReceiver extends BroadcastReceiver {
+//        @Override
+//        public void onReceive (Context context, Intent intent) {
+//        }
+//    }
 
     // start menu first time user press on the "menu" touch
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater ();
-        inflater.inflate(R.menu.menu_main, menu);
-        return true;
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        MenuInflater inflater = getMenuInflater ();
+//        inflater.inflate(R.menu.menu_main, menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onPrepareOptionsMenu(Menu menu) {
+//
+//        return true;
+//    }
 
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-
-        return true;
-    }
-
-    //handle menu options
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return true;
-    }
+//    //handle menu options
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        return true;
+//    }
 
     private void getPermissons() {
         int code = ActivityCompat.checkSelfPermission(

@@ -58,7 +58,7 @@ public class MusicService extends Service {
     private void play() {
         try {
             mediaPlayer.reset();
-            mediaPlayer.setDataSource(mDataSource.getSongsFromSD().get(0).getPath());
+            mediaPlayer.setDataSource( getSongFromList().getPath() );
             Log.d("======play=====", mDataSource.getSongsFromSD().toString());
             mediaPlayer.prepare();
         } catch (IOException e) {
@@ -84,7 +84,7 @@ public class MusicService extends Service {
 
 
     public void playNextSong(){
-        currentSongIndex++;
+        currentSongIndex ++;
         play();
     }
     private void refereshSeekBar() {
@@ -130,7 +130,8 @@ public class MusicService extends Service {
         Log.d("===playAtPosition===", mDataSource.getSongsFromSD().size()+" pos:"+position);
         try {
             // TODO: fix the crush when trying to get song at position
-            mediaPlayer.setDataSource(mDataSource.getSongsFromSD().get(0).getPath());
+            mediaPlayer.reset();
+            mediaPlayer.setDataSource(mDataSource.getSongAtPosition(position).getPath());
             mediaPlayer.prepare();
         } catch (IOException e) {
             e.printStackTrace();
