@@ -70,6 +70,10 @@ public class SongItem implements Serializable, Comparable<SongItem> {
 
     public String getSongTime(){
         long time = getDuration();
+        String formatedTime = formateTime(time);
+        return formatedTime;
+    }
+    public static String formateTime(long time){
         String min = time / (1000 * 60) + "";
         String sec = time % (1000 * 60) + "";
         if (min.length() < 2) {

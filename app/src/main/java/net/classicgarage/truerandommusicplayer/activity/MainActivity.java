@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static final int REQUEST_CODE = 070103;
 
     public static final int REQUEST_PICK_SONG = 0; 	// used for calling SongPicker activity
-
+    public boolean musicFlag = false; // use for music running or not
     ImageButton mPlayPauseBtn;
     ImageButton mRandomBtn;
     ImageButton mNextBtn;
@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ImageView mAlbumArtIv;
     TextView mSongTimeTv;
     SongItem songPlaying;
+    static TextView mSongLeftTimeTv;
 
     private ServiceConnection mMusicConn;
     private BaseService mBaseService;
@@ -65,8 +66,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             int position = bundle.getInt("position");
             sProgressBar.setMax(duration);
             sProgressBar.setProgress(position);
+            mSongLeftTimeTv.setText(SongItem.formateTime(position)+"");
         }
     };
+
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -74,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         getPermissons();
+        mSongLeftTimeTv = (TextView) findViewById(R.id.timespend_tv);
         mSongTitleTv = (TextView) findViewById(R.id.title_tv);
         mAuthorTv = (TextView) findViewById(R.id.author_tv);
         mAlbumTv = (TextView) findViewById(R.id.album_tv);
@@ -99,7 +103,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mPlayListBtn.setOnClickListener(this);
         mNextBtn.setOnClickListener(this);
         mDeleteBtn.setOnClickListener(this);
-
         mFavoriteBtn.setOnClickListener(this);
 
 
@@ -165,12 +168,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mSongTimeTv.setText(mBaseService.getPlayingSong().getSongTime());
         switch (v.getId()){
             case R.id.play_pause_btn:
-
                 mSongTitleTv.setText(mBaseService.getPlayingSong().getTitle());
                 if(mBaseService.isPlaying()){
                     mBaseService.callPause();
                 }
-                else {
+                else if(musicFlag){
+                    mBaseService.callContinueMusic();
+                }
+                else{
+                    musicFlag = true;
                     mBaseService.callPlay();
                 }
                 updateButtonDisplay();
