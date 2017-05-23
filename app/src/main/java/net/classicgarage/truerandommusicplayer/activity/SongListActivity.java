@@ -2,22 +2,18 @@ package net.classicgarage.truerandommusicplayer.activity;
 
 import android.Manifest;
 import android.app.TabActivity;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.View;
 import android.widget.TabHost;
 
 import net.classicgarage.truerandommusicplayer.R;
 import net.classicgarage.truerandommusicplayer.adapter.SongAdapter;
 import net.classicgarage.truerandommusicplayer.db.SongDataSource;
 import net.classicgarage.truerandommusicplayer.db.SongDatabaseHelper;
-import net.classicgarage.truerandommusicplayer.model.SongItem;
 
 import static android.R.id.tabhost;
 import static net.classicgarage.truerandommusicplayer.R.id.AllMusic;
@@ -56,7 +52,7 @@ public class SongListActivity extends TabActivity{
                 }
             }
         });
-        mAdapter = new SongAdapter(this,mSongDataSource.getSongsFromSD());
+        mAdapter = new SongAdapter(this, mSongDataSource.getSongsFromSD());
         //mAdapter = new SongAdapter(this, mSongDataSource.getSongsFromSD());
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         mSongListRv.setLayoutManager(mLayoutManager);
@@ -107,7 +103,6 @@ public class SongListActivity extends TabActivity{
 //        });
         mSongListRv.setAdapter(mAdapter);
 
-
         TabHost.TabSpec allMusicTap = mTabHost.newTabSpec("AllMusic");
         TabHost.TabSpec favoriteTap = mTabHost.newTabSpec("Favorite");
 
@@ -115,10 +110,10 @@ public class SongListActivity extends TabActivity{
         favoriteTap.setIndicator("FAVORITE");
     }
 
-    private void deletSong(SongItem song) {
+    /*private void deletSong(SongItem song) {
         mAdapter.deletSong(song);
 //        mSongDataBase.deleteSong(song);
-    }
+    }*/
 
     private void getPermissons() {
         int code = ActivityCompat.checkSelfPermission(

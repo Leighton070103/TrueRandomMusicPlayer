@@ -2,7 +2,6 @@ package net.classicgarage.truerandommusicplayer.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,13 +11,9 @@ import android.widget.TextView;
 
 import net.classicgarage.truerandommusicplayer.R;
 import net.classicgarage.truerandommusicplayer.db.SongDataSource;
-import net.classicgarage.truerandommusicplayer.db.SongDatabaseHelper;
 import net.classicgarage.truerandommusicplayer.model.SongItem;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
-
-import javax.sql.DataSource;
 
 
 /**
@@ -133,13 +128,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
 
     }
 
-    public void deletSong(SongItem songDeleting){
 
-    }
-
-    public void findSong(SongItem song){
-
-    }
 
     @Override
     public int getItemCount() {
