@@ -4,10 +4,12 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.MediaStore;
+import android.widget.LinearLayout;
 
 import net.classicgarage.truerandommusicplayer.model.SongItem;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 /**
  * Created by Tong on 2017/5/16.
@@ -16,7 +18,7 @@ import java.util.ArrayList;
 public class SongDataSource {
 
     private static SongDataSource sInstance;
-    private ArrayList<SongItem> mSongs = null;
+    private LinkedList<SongItem> mSongs = null;
     private Context mContext;
     private SongDatabaseHelper favoriteHelper;
 
@@ -47,7 +49,7 @@ public class SongDataSource {
 //     }
 
 
-    public ArrayList<SongItem> getSongsFromSD(){
+    public LinkedList<SongItem> getSongsFromSD(){
         if( mSongs != null) return mSongs;
         initializeSongs();
         return mSongs;
@@ -55,7 +57,7 @@ public class SongDataSource {
     }
 
     private void initializeSongs(){
-        mSongs = new ArrayList<SongItem>();
+        mSongs = new LinkedList<SongItem>();
         ContentResolver cr = mContext.getContentResolver();
         if(cr != null){
             Cursor cursor = cr.query(
