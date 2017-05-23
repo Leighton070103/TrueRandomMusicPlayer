@@ -39,8 +39,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     ImageButton mPlayPauseBtn;
     ImageButton mRandomBtn;
-    ImageButton mSkipBtn;
-    ImageButton mRewBtn;
+    ImageButton mNextBtn;
+    ImageButton mPreBtn;
     ImageButton mStopBtn;
     ImageButton mFavoriteBtn;
     ImageButton mFilePickerBtn;
@@ -79,17 +79,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mPlayPauseBtn = (ImageButton) findViewById(R.id.play_pause_btn);
 //        mRandomBtn = (ImageButton) findViewById(R.id.random_btn);
 //        mSkipBtn = (ImageButton) findViewById(R.id.next_btn);
-//        mRewBtn = (ImageButton) findViewById(R.id.pre_btn);
+        mPreBtn = (ImageButton) findViewById(R.id.pre_btn);
         mPlayListBtn = (ImageButton) findViewById(R.id.playlist_btn);
         sProgressBar = (ProgressBar) findViewById(R.id.procress_bar);
-        mSkipBtn = (ImageButton) findViewById(R.id.next_btn);
+        mNextBtn = (ImageButton) findViewById(R.id.next_btn);
 
         mPlayPauseBtn.setOnClickListener(this);
 //        mSkipBtn.setOnClickListener(this);
 //        mRewBtn.setOnClickListener(this);
 //        mRandomBtn.setOnClickListener(this);
         mPlayListBtn.setOnClickListener(this);
-        mSkipBtn.setOnClickListener(this);
+        mNextBtn.setOnClickListener(this);
 
 
         Intent intent = new Intent(MainActivity.this, MusicService.class);
