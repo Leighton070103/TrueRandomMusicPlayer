@@ -7,20 +7,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="net.classicgarage.truerandommusicplayer.activity.MusicPlayerActivity">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#37474f">
-        android:background="@drawable/background_main">
 
         <LinearLayout
+            android:id="@+id/searchlayout"
             android:layout_width="match_parent"
+            android:layout_height="40dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:background="#e6e6e6"
-            android:id="@+id/searchlayout"
-            android:layout_height="40dp">
+            android:background="#e6e6e6">
 
             <LinearLayout
                 android:id="@+id/SearchbarLayout"
@@ -33,6 +33,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
                     android:background="#00000000"
                     android:src="@mipmap/menu" />
 
@@ -52,18 +53,20 @@
         </LinearLayout>
 
         <RelativeLayout
-            android:orientation="horizontal"
+            android:id="@+id/delete_fav_layout"
             android:layout_width="match_parent"
-            android:gravity="center"
-            android:layout_marginTop="10dp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/searchlayout">
+            android:layout_below="@+id/searchlayout"
+            android:gravity="center"
+            android:orientation="horizontal">
 
             <ImageButton
                 android:id="@+id/activity_main_delete_btn"
                 android:layout_width="40dp"
                 android:layout_height="30dp"
                 android:layout_alignParentLeft="true"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
                 android:background="#00000000"
                 android:scaleType="centerInside"
                 android:src="@mipmap/delete1w" />
@@ -73,112 +76,137 @@
                 android:layout_width="40dp"
                 android:layout_height="30dp"
                 android:layout_alignParentRight="true"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
                 android:background="#00000000"
                 android:scaleType="centerInside"
                 app:srcCompat="@mipmap/fav" />
         </RelativeLayout>
 
-        <ImageView
-            android:id="@+id/diskBackg"
+        <RelativeLayout
+            android:id="@+id/cover_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_margin="30dp"
-            android:layout_marginBottom="97dp"
-            android:paddingBottom="90dp"
-            android:src="@drawable/cirback" />
+            android:layout_below="@+id/delete_fav_layout">
 
-        <ImageView
-            android:id="@+id/cover_iv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_margin="45dp"
-            android:paddingBottom="90dp"
-            android:paddingTop="0dp"
-            android:src="@drawable/cover2" />
+            <ImageView
+                android:id="@+id/diskBackg"
+                android:layout_width="325dp"
+                android:layout_height="325dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:scaleType="centerInside"
+                android:src="@drawable/cirback" />
 
-        <TextView
-            android:id="@+id/title_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/author_tv"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentStart="true"
-            android:gravity="center"
-            android:text="Title"
-            android:textColor="#ffffff"
-            android:textSize="28sp" />
+            <ImageView
+                android:id="@+id/cover_iv"
+                android:layout_width="226dp"
+                android:layout_height="226dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:scaleType="centerInside"
+                android:src="@drawable/cover2" />
 
-        <TextView
-            android:id="@+id/album_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/title_tv"
-            android:layout_marginTop="18dp"
-            android:gravity="center"
-            android:text="Album"
-            android:textColor="#ffffff" />
+        </RelativeLayout>
 
-        <ProgressBar
-            android:id="@+id/procress_bar"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/album_tv" />
 
-        <TextView
-            android:id="@+id/timespend_tv"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/title_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/procress_bar"
-            android:layout_marginLeft="12dp"
-            android:layout_marginStart="12dp"
-            android:text="TextView"
-            android:textColor="#ffffff"
-            android:textSize="9sp" />
+            android:layout_below="@+id/cover_layout"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/author_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/cover_iv"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginBottom="67dp"
-            android:gravity="center"
-            android:text="Author"
-            android:textColor="#ffffff" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/timeleft_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/procress_bar"
-            android:layout_marginEnd="11dp"
-            android:layout_marginRight="11dp"
-            android:text="TextView"
-            android:textColor="#ffffff"
-            android:textSize="9sp" />
+                <ProgressBar
+                    android:id="@+id/procress_bar"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/album_tv"
+                    android:layout_weight="1" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/timespend_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@+id/procress_bar"
+                        android:layout_weight="1"
+                        android:text="TextView"
+                        android:textColor="#ffffff"
+                        android:textSize="9sp" />
+
+                    <TextView
+                        android:id="@+id/timeleft_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@+id/procress_bar"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:text="TextView"
+                        android:textColor="#ffffff"
+                        android:textSize="9sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/title_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/auther_tv"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentStart="true"
+                android:gravity="center"
+                android:text="Title"
+                android:textColor="#ffffff"
+                android:textSize="28sp" />
+
+            <TextView
+                android:id="@+id/auther_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/cover_iv"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentStart="true"
+                android:gravity="center"
+                android:text="Author"
+                android:textColor="#ffffff" />
+
+            <TextView
+                android:id="@+id/album_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/title_tv"
+                android:gravity="center"
+                android:text="Album"
+                android:textColor="#ffffff" />
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/btn_layout5"
@@ -186,7 +214,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/timespend_tv"
+            android:layout_below="@+id/title_layout"
             android:orientation="horizontal"
             android:paddingTop="5dp">
 
