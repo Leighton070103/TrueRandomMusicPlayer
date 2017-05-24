@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         };
         getApplicationContext().bindService(intent, mMusicConn, BIND_AUTO_CREATE);
 
-        //updateMainPage();
+//        updateMainPage();
 
     }
 
@@ -120,20 +120,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     public void updateMainPage(){
-        SongItem song = mBaseService.getPlayingSong();
-        if(  song != null) {
-            mSongTitleTv.setText( song.getTitle());
-            mAuthorTv.setText( song.getArtist());
-            mAlbumTv.setText( song.getAlbum() );
+        if( mBaseService != null){
+            SongItem song = mBaseService.getPlayingSong();
+            if(  song != null) {
+                mSongTitleTv.setText( song.getTitle());
+                mAuthorTv.setText( song.getArtist());
+                mAlbumTv.setText( song.getAlbum() );
+            }
+            else mSongTitleTv.setText("No music stored in this phone.");
+            updateButtonDisplay();
         }
-        else mSongTitleTv.setText("No music stored in this phone.");
-        updateButtonDisplay();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
+        updateMainPage();
     }
 
 
