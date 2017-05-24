@@ -40,10 +40,12 @@ public class SongListActivity extends TabActivity {
         mTabHost.setup();
         TabHost.TabSpec allMusicTab = mTabHost.newTabSpec("All music");
         TabHost.TabSpec favoriteTab = mTabHost.newTabSpec("Favorite");
+
         allMusicTab.setIndicator("AllMusic");
         allMusicTab.setContent(new Intent(this,AllMusicTabActivity.class));
         favoriteTab.setIndicator("Favorite");
         favoriteTab.setContent(new Intent(this,FavoriteActivity.class));
+
         mTabHost.addTab(allMusicTab);
         mTabHost.addTab(favoriteTab);
 
@@ -61,10 +63,8 @@ public class SongListActivity extends TabActivity {
             public void onServiceConnected(ComponentName name, IBinder service) {
                 mBaseService = (BaseService) service;
             }
-
             @Override
             public void onServiceDisconnected(ComponentName name) {
-
             }
         };
         getApplicationContext().bindService(intent, mMusicConn, BIND_AUTO_CREATE);
@@ -80,11 +80,11 @@ public class SongListActivity extends TabActivity {
 
         mSongListRv.setAdapter(mAdapter);
 
-        TabHost.TabSpec allMusicTap = mTabHost.newTabSpec("AllMusic");
+        /*TabHost.TabSpec allMusicTap = mTabHost.newTabSpec("AllMusic");
         TabHost.TabSpec favoriteTap = mTabHost.newTabSpec("Favorite");
 
         allMusicTap.setIndicator("ALLMUSIC");
-        favoriteTap.setIndicator("FAVORITE");
+        favoriteTap.setIndicator("FAVORITE");*/
     }
 
     @Override

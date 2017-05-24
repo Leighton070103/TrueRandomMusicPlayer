@@ -13,6 +13,7 @@ public class SongItem implements Serializable, Comparable<SongItem> {
 
 	private static final String TAG="SongItem";
 
+    private int mSequenceLog;
 	private long mIdLog;
 	private String mArtistStr;
 	private String mTitleStr;
@@ -112,8 +113,16 @@ public class SongItem implements Serializable, Comparable<SongItem> {
         return this.toString2().compareTo(another.toString2());
 	}
 
+    public int getSequenceLog() {
+        return mSequenceLog;
+    }
 
-	public static class ArtistAlbumSongsComparator implements Comparator<SongItem>{
+    public void setSequenceLog(int mSequenceLog) {
+        this.mSequenceLog = mSequenceLog;
+    }
+
+
+    public static class ArtistAlbumSongsComparator implements Comparator<SongItem>{
 
 		public int compare(SongItem s1, SongItem s2) {
 			return s1.toString2().toLowerCase().compareTo(s2.toString2().toLowerCase());
