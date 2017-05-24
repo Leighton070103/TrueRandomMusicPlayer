@@ -39,6 +39,7 @@ public class FavoriteActivity extends AppCompatActivity {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         mSongListRv.setLayoutManager(mLayoutManager);
         mSongListRv.setItemAnimator(new DefaultItemAnimator());
+        mSongListRv.setAdapter(mAdapter);
 
         Intent intent = new Intent(FavoriteActivity.this, MusicService.class);
         startService(intent);
