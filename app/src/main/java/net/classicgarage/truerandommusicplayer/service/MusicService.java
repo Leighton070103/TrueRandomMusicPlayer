@@ -172,6 +172,10 @@ public class MusicService extends Service {
 
     }
 
+    private void setCurrentSongFavorite(){
+        mDataSource.setSongFavorite(getCurrentPlayingSong().getId());
+    }
+
     class MusicBinder extends Binder implements BaseService{
         @Override
         public void callPlay() {
@@ -220,6 +224,11 @@ public class MusicService extends Service {
         @Override
         public void deleteCurrentSong() {
             deleteCurrentPlayingSong();
+        }
+
+        @Override
+        public void setCurrentSongFavorite() {
+            MusicService.this.setCurrentSongFavorite();
         }
 
         @Override

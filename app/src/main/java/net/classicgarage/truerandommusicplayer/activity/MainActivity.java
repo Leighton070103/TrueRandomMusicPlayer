@@ -18,11 +18,14 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import net.classicgarage.truerandommusicplayer.R;
 import net.classicgarage.truerandommusicplayer.model.SongItem;
 import net.classicgarage.truerandommusicplayer.service.BaseService;
 import net.classicgarage.truerandommusicplayer.service.MusicService;
+
+import javax.sql.DataSource;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     //, OnSharedPreferenceChangeListener, SensorEventListener {
@@ -38,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ImageButton mNextBtn;
     ImageButton mPreBtn;
     ImageButton mStopBtn;
-    ImageButton mFavoriteBtn;
+    ToggleButton mFavoriteBtn;
     ImageButton mFilePickerBtn;
     ImageButton mPlayListBtn;
     ImageButton mDeleteBtn;
@@ -76,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mAlbumTv = (TextView) findViewById(R.id.album_tv);
         mAuthorTv = (TextView) findViewById(R.id.author_tv);
         mDeleteBtn = (ImageButton) findViewById(R.id.activity_main_delete_btn);
+        mFavoriteBtn = (ToggleButton) findViewById(R.id.favorite_btn);
 //        mSongTitleTv.setText(mBaseService.getPlayingSong().getTitle());
 //        mAlbumArtIv = (ImageView) findViewById(R.id.cover_iv);
         mPlayPauseBtn = (ImageButton) findViewById(R.id.play_pause_btn);
@@ -94,6 +98,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mNextBtn.setOnClickListener(this);
         mDeleteBtn.setOnClickListener(this);
 
+        mFavoriteBtn.setOnClickListener(this);
 
 
         Intent intent = new Intent(MainActivity.this, MusicService.class);
@@ -183,6 +188,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.activity_main_delete_btn:
                 deleteDialog();
                 break;
+            case R.id.favorite_btn:
+                mBaseService.setCurrentSongFavorite();
+
 
         }
     }
