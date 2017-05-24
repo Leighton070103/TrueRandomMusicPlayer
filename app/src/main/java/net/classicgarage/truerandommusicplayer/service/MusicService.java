@@ -129,9 +129,10 @@ public class MusicService extends Service {
     }
 
     public void updateCurrentSongIndex(int action){
-        if( mCurrentSongIndex > mDataSource.getSongsFromSD().size() - 1 || mCurrentSongIndex < 0) mCurrentSongIndex = 0;
-        else if(action == 1)mCurrentSongIndex++;
-        else if(action == 0)mCurrentSongIndex--;
+        if(action == 1)mCurrentSongIndex++;
+        if(action == 0)mCurrentSongIndex--;
+        if( mCurrentSongIndex > mDataSource.getSongsFromSD().size() - 1) mCurrentSongIndex = 0;
+        if( mCurrentSongIndex < 0) mCurrentSongIndex = mDataSource.getSongsFromSD().size() - 1;
     }
 
     public void setCurrentSongIndex(int index){
