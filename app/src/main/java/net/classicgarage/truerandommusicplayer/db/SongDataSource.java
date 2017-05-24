@@ -167,6 +167,7 @@ public class SongDataSource {
         for (int i = 0; i < mSongs.size();i++){
             if(mSongs.get(i).getId() == songId){
                 deletePlaylistTracks(mContext,mSongs.get(i));
+                favoriteHelper.deleteSongFav(songId);
                 mSongs.remove(i);
             }
         }
@@ -175,7 +176,7 @@ public class SongDataSource {
     private int deletePlaylistTracks(Context context, SongItem song){
         ContentResolver resolver = context.getContentResolver();
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        String where = MediaStore.Audio.Playlists.Members.AUDIO_ID + "=?";
+        String where = MediaStore.Audio.Playlists.Members._ID + "=?";
         String[] whereArgs = new String[] {Long.toString(song.getId())};
         int rowsDeleted = resolver.delete(uri,where,whereArgs);
         Log.d("TAG", "tracks deleted=" + rowsDeleted);
