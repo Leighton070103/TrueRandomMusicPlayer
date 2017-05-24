@@ -93,8 +93,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
     public void onBindViewHolder(final SongAdapter.ViewHolder holder, final int position) {
         SongItem song = mSongs.get(position);
         final long songId = song.getId();
-        song.setId(position + 1);
-        holder.mSongSequenceNumberTv.setText( Long.toString(song.getId()));
+        holder.mSongSequenceNumberTv.setText(Long.toString(song.getId()));
         holder.mSongTitleTv.setText( song.getTitle());
         if(song.getFavorite()) holder.mFavBtn.setImageResource(R.mipmap.fav_on);
         else holder.mFavBtn.setImageResource(R.mipmap.fav_off);
