@@ -134,7 +134,7 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <ProgressBar
+                <SeekBar
                     android:id="@+id/procress_bar"
                     style="?android:attr/progressBarStyleHorizontal"
                     android:layout_width="match_parent"
