@@ -1,4 +1,4 @@
-package net.classicgarage.truerandommusicplayer;
+package net.classicgarage.truerandommusicplayer.activity;
 
 import android.content.ComponentName;
 import android.content.Intent;
@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 
+import net.classicgarage.truerandommusicplayer.R;
 import net.classicgarage.truerandommusicplayer.adapter.SongAdapter;
 import net.classicgarage.truerandommusicplayer.db.SongDataSource;
 import net.classicgarage.truerandommusicplayer.service.BaseService;

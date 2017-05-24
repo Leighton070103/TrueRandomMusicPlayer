@@ -65,6 +65,14 @@ public class SongDataSource {
 
     }
 
+    public LinkedList<SongItem> getFavoriteSongs(){
+        LinkedList<SongItem> favoriteSongs = new LinkedList<SongItem>();
+        for(SongItem song: getSongsFromSD()){
+            if(song.getFavorite()) favoriteSongs.add(song);
+        }
+        return favoriteSongs;
+    }
+
     public SongItem findSongItemById(long songId){
         if( mSongs == null ) mSongs = new LinkedList<SongItem>();
         for(SongItem song: mSongs){

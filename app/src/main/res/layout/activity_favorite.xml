@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#e1e1e1"
-    tools:context="net.classicgarage.truerandommusicplayer.FavoriteActivity">
+    tools:context="net.classicgarage.truerandommusicplayer.activity.FavoriteActivity">
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -58,7 +58,7 @@
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/song_list_rv"
+        android:id="@+id/fav_song_list_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"

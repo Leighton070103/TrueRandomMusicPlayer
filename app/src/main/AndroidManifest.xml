@@ -37,8 +37,8 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".AllMusicTabActivity" />
-        <activity android:name=".FavoriteActivity"></activity>
+        <activity android:name=".activity.AllMusicTabActivity" />
+        <activity android:name=".activity.FavoriteActivity"></activity>
     </application>
 
 </manifest>
