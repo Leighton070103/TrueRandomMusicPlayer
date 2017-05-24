@@ -167,17 +167,12 @@ public class SongDataSource {
     public int deletePlaylistTracks(Context context, SongItem song){
         ContentResolver resolver = context.getContentResolver();
         int countDel = 0;
-        try{
-            Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-            String where = MediaStore.Audio.Playlists.Members._ID + "=?";
-            String[] whereArgs = new String[] {Long.toString(song.getId())};
-            Log.d("TAG", "tracks deleted=" + countDel);
-            int rowsDeleted = resolver.delete(uri,where,whereArgs);
-            return rowsDeleted;
-        }catch (Exception e){
-            Log.d("Error", "Error");
-        }
-        return 0;
+        Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+        String where = MediaStore.Audio.Playlists.Members._ID + "=?";
+        String[] whereArgs = new String[] {Long.toString(song.getId())};
+        Log.d("TAG", "tracks deleted=" + countDel);
+        int rowsDeleted = resolver.delete(uri,where,whereArgs);
+        return rowsDeleted;
     }
 //    public List<String> getMusicData(Context context){
 //        List<String> list = new ArrayList<String>();
