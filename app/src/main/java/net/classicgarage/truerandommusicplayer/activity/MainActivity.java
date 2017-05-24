@@ -177,7 +177,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Bundle extras = intent.getExtras();
         int position = extras.getInt("songPosition");
         mBaseService.callPlaySongAtPosition(position);
-
         if (requestCode == REQUEST_CODE) {
 
         }
