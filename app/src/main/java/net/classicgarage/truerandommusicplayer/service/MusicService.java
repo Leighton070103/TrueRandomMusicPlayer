@@ -20,7 +20,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class MusicService extends Service {
-    private MediaPlayer mediaPlayer;
+    private MediaPlayer mMediaPlayer;
     private SongDataSource mDataSource;
     private Timer timer = null;
     private TimerTask task = null;
@@ -32,14 +32,14 @@ public class MusicService extends Service {
     @Override
     public void onCreate() {
         //初始化mediaplayer
-        mediaPlayer = new MediaPlayer();
+        mMediaPlayer = new MediaPlayer();
         mDataSource = SongDataSource.getInstance(this.getApplicationContext());
 //        try {
 //            mediaPlayer.setDataSource(mDataSource.getSongsFromSD().get(0).getPath());
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
-        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+        mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
                 task.cancel();
@@ -57,14 +57,14 @@ public class MusicService extends Service {
 
     private void play() {
         try {
-            mediaPlayer.reset();
-            mediaPlayer.setDataSource( getSongFromListByIndex().getPath() );
+            mMediaPlayer.reset();
+            mMediaPlayer.setDataSource( getSongFromListByIndex().getPath() );
             Log.d("======play=====", mDataSource.getSongsFromSD().toString());
-            mediaPlayer.prepare();
+            mMediaPlayer.prepare();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        mediaPlayer.start();
+        mMediaPlayer.start();
         refereshSeekBar();
 //        if(mediaPlayer.isPlaying()) mediaPlayer.pause();
 //        else mediaPlayer.start();
@@ -87,7 +87,7 @@ public class MusicService extends Service {
         updateCurrentSongIndex(1);
         play();
     }
-    public void playLastSOng(){
+    public void playLastSong(){
         updateCurrentSongIndex(0);
         play();
     }
@@ -96,8 +96,8 @@ public class MusicService extends Service {
         task = new TimerTask() {
             @Override
             public void run() {
-                int position = mediaPlayer.getCurrentPosition();
-                int duration = mediaPlayer.getDuration();
+                int position = mMediaPlayer.getCurrentPosition();
+                int duration = mMediaPlayer.getDuration();
                 Message msg = new Message();
                 Bundle data = new Bundle();
                 data.putInt("duration",duration);
@@ -110,18 +110,18 @@ public class MusicService extends Service {
     }
 
     public void seekTo(int position) {
-        mediaPlayer.seekTo(position);
+        mMediaPlayer.seekTo(position);
     }
 
     private void stop(){
-        mediaPlayer.stop();
+        mMediaPlayer.stop();
     }
     private void continueMusic() {
-        mediaPlayer.start();
+        mMediaPlayer.start();
     }
 
     private void pause() {
-        mediaPlayer.pause();
+        mMediaPlayer.pause();
     }
 
     private SongItem getCurrentPlayingSong(){
@@ -129,8 +129,8 @@ public class MusicService extends Service {
     }
 
     public void updateCurrentSongIndex(int action){
-        if(action == 1)mCurrentSongIndex++;
-        if(action == 0)mCurrentSongIndex--;
+        if(action == 1) mCurrentSongIndex++;
+        if(action == 0) mCurrentSongIndex--;
         if( mCurrentSongIndex > mDataSource.getSongsFromSD().size() - 1) mCurrentSongIndex = 0;
         if( mCurrentSongIndex < 0) mCurrentSongIndex = mDataSource.getSongsFromSD().size() - 1;
     }
@@ -139,7 +139,7 @@ public class MusicService extends Service {
         mCurrentSongIndex = index;
     }
 
-    private boolean isPlaying(){ return mediaPlayer.isPlaying(); }
+    private boolean isPlaying(){ return mMediaPlayer.isPlaying(); }
 
     private void playSongAtPosition(int position) {
         Log.d("===playAtPosition===", mDataSource.getSongsFromSD().size()+" pos:"+position);
@@ -176,7 +176,7 @@ public class MusicService extends Service {
 
         @Override
         public boolean isPlaying() {
-            return mediaPlayer.isPlaying();
+            return mMediaPlayer.isPlaying();
         }
 
         @Override
@@ -194,6 +194,6 @@ public class MusicService extends Service {
         }
 
         @Override
-        public void callPlayLastSong(){playLastSOng();}
+        public void callPlayLastSong(){playLastSong();}
     }
 }
