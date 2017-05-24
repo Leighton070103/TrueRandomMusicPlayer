@@ -17,4 +17,5 @@ public interface BaseService {
     void callPlayNextSong();
     void callPlayLastSong();
     SongItem getPlayingSong();
+    void deleteCurrentSong();
 }
