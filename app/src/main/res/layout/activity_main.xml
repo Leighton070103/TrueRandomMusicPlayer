@@ -105,7 +105,7 @@
             android:id="@+id/title_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/auther_tv"
+            android:layout_above="@+id/author_tv"
             android:layout_alignParentEnd="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
@@ -154,7 +154,7 @@
             android:textSize="9sp" />
 
         <TextView
-            android:id="@+id/auther_tv"
+            android:id="@+id/author_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/cover_iv"

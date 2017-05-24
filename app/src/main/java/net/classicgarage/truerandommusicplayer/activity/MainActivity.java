@@ -42,6 +42,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ImageButton mDeleteBtn;
     static ProgressBar sProgressBar;
     TextView mSongTitleTv;
+    TextView mAuthorTv;
+    TextView mAlbumTv;
     ImageView mAlbumArtIv;
 
     SongItem songPlaying;
@@ -68,6 +70,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         getPermissons();
         mSongTitleTv = (TextView) findViewById(R.id.title_tv);
+        mAuthorTv = (TextView) findViewById(R.id.author_tv);
+        mAlbumTv = (TextView) findViewById(R.id.album_tv);
+        mAuthorTv = (TextView) findViewById(R.id.author_tv);
 //        mSongTitleTv.setText(mBaseService.getPlayingSong().getTitle());
 //        mAlbumArtIv = (ImageView) findViewById(R.id.cover_iv);
         mPlayPauseBtn = (ImageButton) findViewById(R.id.play_pause_btn);
@@ -92,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
                 mBaseService = (BaseService) service;
+                updateMainPage();
             }
 
             @Override
@@ -101,6 +107,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         };
         getApplicationContext().bindService(intent, mMusicConn, BIND_AUTO_CREATE);
 
+        //updateMainPage();
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+
+
+
+    public void updateMainPage(){
+        SongItem song = mBaseService.getPlayingSong();
+        if(  song != null) {
+            mSongTitleTv.setText( song.getTitle());
+            mAuthorTv.setText( song.getArtist());
+            mAlbumTv.setText( song.getAlbum() );
+        }
+        else mSongTitleTv.setText("No music stored in this phone.");
+        updateButtonDisplay();
     }
 
     @Override
@@ -126,12 +153,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mSongTitleTv.setText(mBaseService.getPlayingSong().getTitle());
                 if(mBaseService.isPlaying()){
                     mBaseService.callPause();
-                    mPlayPauseBtn.setImageDrawable(getResources().getDrawable(R.mipmap.play_btn));
                 }
                 else {
                     mBaseService.callPlay();
-                    mPlayPauseBtn.setImageDrawable(getResources().getDrawable(R.mipmap.pause_btn));
                 }
+                updateButtonDisplay();
                 break;
             case R.id.playlist_btn:
                 Intent i = new Intent(this,SongListActivity.class);
@@ -140,12 +166,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.next_btn:
                 mBaseService.callPause();
                 mBaseService.callPlayNextSong();
-                mSongTitleTv.setText(mBaseService.getPlayingSong().getTitle());
+                updateMainPage();
                 break;
             case R.id.pre_btn:
                 mBaseService.callPause();
                 mBaseService.callPlayLastSong();
-                mSongTitleTv.setText(mBaseService.getPlayingSong().getTitle());
+                updateMainPage();
                 break;
         }
     }
@@ -154,6 +180,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * update buttons
      */
     private void updateButtonDisplay () {
+        if( ! mBaseService.isPlaying()){
+            mPlayPauseBtn.setImageDrawable(getResources().getDrawable(R.mipmap.play_btn));
+        }
+        else {
+            mPlayPauseBtn.setImageDrawable(getResources().getDrawable(R.mipmap.pause_btn));
+        }
 
     }
 

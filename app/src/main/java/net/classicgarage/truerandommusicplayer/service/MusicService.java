@@ -57,6 +57,9 @@ public class MusicService extends Service {
 
     private void play() {
         try {
+//            if(mMediaPlayer.isPlaying()){
+//
+//            }
             mMediaPlayer.reset();
             mMediaPlayer.setDataSource( getSongFromListByIndex().getPath() );
             Log.d("======play=====", mDataSource.getSongsFromSD().toString());
@@ -64,8 +67,19 @@ public class MusicService extends Service {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        catch (IllegalStateException e){
+            mMediaPlayer = null;
+            mMediaPlayer = new MediaPlayer();
+            e.printStackTrace();
+        }
         mMediaPlayer.start();
         refereshSeekBar();
+        mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                playNextSong();
+            }
+        });
 //        if(mediaPlayer.isPlaying()) mediaPlayer.pause();
 //        else mediaPlayer.start();
     }
