@@ -39,6 +39,7 @@ public class AllMusicTabActivity extends AppCompatActivity {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         mSongListRv.setLayoutManager(mLayoutManager);
         mSongListRv.setItemAnimator(new DefaultItemAnimator());
+        mSongListRv.setAdapter(mAdapter);
 
         Intent intent = new Intent(AllMusicTabActivity.this, MusicService.class);
         startService(intent);

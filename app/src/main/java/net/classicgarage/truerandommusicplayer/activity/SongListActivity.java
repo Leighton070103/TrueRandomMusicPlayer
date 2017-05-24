@@ -78,13 +78,8 @@ public class SongListActivity extends TabActivity {
             }
         });
 
-        mSongListRv.setAdapter(mAdapter);
 
-        /*TabHost.TabSpec allMusicTap = mTabHost.newTabSpec("AllMusic");
-        TabHost.TabSpec favoriteTap = mTabHost.newTabSpec("Favorite");
 
-        allMusicTap.setIndicator("ALLMUSIC");
-        favoriteTap.setIndicator("FAVORITE");*/
     }
 
     @Override
