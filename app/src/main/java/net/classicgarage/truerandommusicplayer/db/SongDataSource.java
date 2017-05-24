@@ -164,7 +164,7 @@ public class SongDataSource {
         }
     }
 
-    public int deletePlaylistTracks(Context context, SongItem song){
+    private int deletePlaylistTracks(Context context, SongItem song){
         ContentResolver resolver = context.getContentResolver();
         int countDel = 0;
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;

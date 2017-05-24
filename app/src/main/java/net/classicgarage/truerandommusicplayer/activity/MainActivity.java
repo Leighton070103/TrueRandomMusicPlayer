@@ -2,6 +2,7 @@ package net.classicgarage.truerandommusicplayer.activity;
 
 import android.Manifest;
 import android.content.ComponentName;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
@@ -10,6 +11,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageButton;
@@ -73,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mAuthorTv = (TextView) findViewById(R.id.author_tv);
         mAlbumTv = (TextView) findViewById(R.id.album_tv);
         mAuthorTv = (TextView) findViewById(R.id.author_tv);
+        mDeleteBtn = (ImageButton) findViewById(R.id.activity_main_delete_btn);
 //        mSongTitleTv.setText(mBaseService.getPlayingSong().getTitle());
 //        mAlbumArtIv = (ImageView) findViewById(R.id.cover_iv);
         mPlayPauseBtn = (ImageButton) findViewById(R.id.play_pause_btn);
@@ -89,6 +92,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        mRandomBtn.setOnClickListener(this);
         mPlayListBtn.setOnClickListener(this);
         mNextBtn.setOnClickListener(this);
+        mDeleteBtn.setOnClickListener(this);
+
 
 
         Intent intent = new Intent(MainActivity.this, MusicService.class);
@@ -175,8 +180,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mBaseService.callPlayLastSong();
                 updateMainPage();
                 break;
+            case R.id.activity_main_delete_btn:
+                deleteDialog();
+                break;
+
         }
     }
+
+    protected void deleteDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setMessage("Are you sure to delete this song?");
+        builder.setTitle("Alert");
+        builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                mBaseService.deleteCurrentSong();
+                updateMainPage();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.create().show();
+    }
+
 
     /**
      * update buttons

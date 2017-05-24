@@ -95,6 +95,16 @@ public class MusicService extends Service {
         return songItem;
     }
 
+    private void deleteCurrentPlayingSong(){
+        try {
+            mDataSource.deletSong(mCurrentSongIndex);
+            play();
+        }
+        catch (java.lang.IndexOutOfBoundsException e){
+            e.printStackTrace();
+        }
+    }
+
 
 
     public void playNextSong(){
@@ -205,6 +215,11 @@ public class MusicService extends Service {
         @Override
         public SongItem getPlayingSong() {
             return getCurrentPlayingSong();
+        }
+
+        @Override
+        public void deleteCurrentSong() {
+            deleteCurrentPlayingSong();
         }
 
         @Override
