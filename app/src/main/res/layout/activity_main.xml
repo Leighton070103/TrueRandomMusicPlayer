@@ -74,13 +74,25 @@
             <ImageButton
                 android:id="@+id/favorite_btn"
                 android:layout_width="40dp"
-                android:layout_height="30dp"
+                android:layout_height="25dp"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="20dp"
                 android:layout_marginTop="10dp"
                 android:background="#00000000"
                 android:scaleType="centerInside"
-                app:srcCompat="@mipmap/fav" />
+                app:srcCompat="@mipmap/main_fav_off" />
+
+            <ToggleButton
+                android:id="@+id/favorite_btn"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="24dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/main_fav_btn_toggle"
+                android:text="ToggleButton"
+                android:textOff=""
+                android:textOn="" />
         </RelativeLayout>
 
         <RelativeLayout

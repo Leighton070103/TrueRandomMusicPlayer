@@ -63,8 +63,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:layout_weight="1"
-        android:elevation="1dp"
         android:descendantFocusability="blocksDescendants"
+        android:elevation="1dp"
         tools:listitem="@layout/song_item" />
 
 
