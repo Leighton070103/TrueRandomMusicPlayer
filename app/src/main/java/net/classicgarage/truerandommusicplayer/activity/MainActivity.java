@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         sSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                mSongTimeTv.setText(SongItem.formateTime(progress));
+                mSongLeftTimeTv.setText(SongItem.formateTime(progress));
             }
 
             @Override
