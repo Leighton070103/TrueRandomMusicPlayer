@@ -25,10 +25,8 @@ import net.classicgarage.truerandommusicplayer.model.SongItem;
 import net.classicgarage.truerandommusicplayer.service.BaseService;
 import net.classicgarage.truerandommusicplayer.service.MusicService;
 
-import javax.sql.DataSource;
-
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    //, OnSharedPreferenceChangeListener, SensorEventListener {
+
 
     public static final int ALBUM_ART_HEIGHT = 150;
     public static final int ALBUM_ART_WIDTH = 150;
