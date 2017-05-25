@@ -16,18 +16,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.ToggleButton;
-import android.widget.SeekBar.OnSeekBarChangeListener;
 
 import net.classicgarage.truerandommusicplayer.R;
 import net.classicgarage.truerandommusicplayer.model.SongItem;
 import net.classicgarage.truerandommusicplayer.service.BaseService;
 import net.classicgarage.truerandommusicplayer.service.MusicService;
-
-import javax.sql.DataSource;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     //, OnSharedPreferenceChangeListener, SensorEventListener {
