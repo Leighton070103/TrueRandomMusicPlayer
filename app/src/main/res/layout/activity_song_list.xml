@@ -8,6 +8,37 @@
     android:orientation="vertical"
     android:background="#e1e1e1"
     tools:context="net.classicgarage.truerandommusicplayer.activity.SongListActivity">
+
+    <LinearLayout
+        android:id="@+id/searchbar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#4f5b62"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/return_btn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:background="#00000000"
+            android:scaleType="centerInside"
+            android:src="@mipmap/return_icon" />
+
+        <EditText
+            android:id="@+id/songlist_searchbar_et"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Search"
+            android:inputType="textPersonName"
+            android:textColor="#ffffff"
+            android:textColorHint="#e6e6e6"
+            android:textColorLink="#e6e6e6" />
+    </LinearLayout>
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"

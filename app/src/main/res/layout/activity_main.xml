@@ -30,11 +30,12 @@
 
                 <ImageButton
                     android:id="@+id/playlist_btn"
-                    android:layout_width="wrap_content"
+                    android:layout_width="30dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginLeft="10dp"
                     android:background="#00000000"
+                    android:scaleType="centerInside"
                     android:src="@mipmap/menu" />
 
                 <EditText
@@ -115,7 +116,7 @@
             android:id="@+id/title_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/cover_layout"
+            android:layout_above="@+id/btn_layout5"
             android:orientation="vertical">
 
             <LinearLayout
@@ -213,9 +214,9 @@
             android:id="@+id/btn_layout5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/title_layout"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentStart="false"
             android:orientation="horizontal"
             android:paddingTop="5dp">
 
