@@ -14,7 +14,6 @@ import net.classicgarage.truerandommusicplayer.db.SongDataSource;
 import net.classicgarage.truerandommusicplayer.model.SongItem;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -46,6 +45,15 @@ public class MusicService extends Service {
                 timer.cancel();
             }
         });
+        try {
+            mediaPlayer.reset();
+            mediaPlayer.setDataSource( getSongFromList().getPath() );
+            Log.d("======play=====", mDataSource.getSongsFromSD().toString());
+            mediaPlayer.prepare();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        mediaPlayer.start();
         super.onCreate();
     }
 
@@ -56,14 +64,14 @@ public class MusicService extends Service {
 
 
     private void play() {
-        try {
-            mediaPlayer.reset();
-            mediaPlayer.setDataSource( getSongFromList().getPath() );
-            Log.d("======play=====", mDataSource.getSongsFromSD().toString());
-            mediaPlayer.prepare();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            mediaPlayer.reset();
+//            mediaPlayer.setDataSource( getSongFromList().getPath() );
+//            Log.d("======play=====", mDataSource.getSongsFromSD().toString());
+//            mediaPlayer.prepare();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
         mediaPlayer.start();
         refereshSeekBar();
 //        if(mediaPlayer.isPlaying()) mediaPlayer.pause();
@@ -108,7 +116,6 @@ public class MusicService extends Service {
     public void seekTo(int position) {
         mediaPlayer.seekTo(position);
     }
-
     private void stop(){
         mediaPlayer.stop();
     }
@@ -116,9 +123,7 @@ public class MusicService extends Service {
         mediaPlayer.start();
     }
 
-    private void pause() {
-        mediaPlayer.pause();
-    }
+    private void pause() { mediaPlayer.pause(); }
 
     private SongItem getCurrentPlayingSong(){
         return getSongFromList();
@@ -137,6 +142,12 @@ public class MusicService extends Service {
             e.printStackTrace();
         }
         mediaPlayer.start();
+    }
+    private int getCurrentPosition() {
+        return mediaPlayer.getCurrentPosition();
+    }
+    private int getDuration() {
+        return mediaPlayer.getDuration();
     }
 
     class MusicBinder extends Binder implements BaseService{
@@ -184,5 +195,10 @@ public class MusicService extends Service {
             return getCurrentPlayingSong();
         }
 
+        @Override
+        public int callGetCurrentPosition() {return getCurrentPosition();}
+
+        @Override
+        public int callGetDuration() {return getDuration();}
     }
 }
