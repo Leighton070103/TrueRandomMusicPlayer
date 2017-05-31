@@ -14,16 +14,17 @@ import net.classicgarage.truerandommusicplayer.db.SongDataSource;
 import net.classicgarage.truerandommusicplayer.model.SongItem;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class MusicService extends Service {
-    private MediaPlayer mediaPlayer;
+    private MediaPlayer mMediaPlayer;
     private SongDataSource mDataSource;
     private Timer timer = null;
     private TimerTask task = null;
-    private int currentSongIndex = 0;
+    private int mCurrentSongIndex = 0;
 
     public MusicService() {
     }
@@ -31,29 +32,20 @@ public class MusicService extends Service {
     @Override
     public void onCreate() {
         //初始化mediaplayer
-        mediaPlayer = new MediaPlayer();
+        mMediaPlayer = new MediaPlayer();
         mDataSource = SongDataSource.getInstance(this.getApplicationContext());
 //        try {
 //            mediaPlayer.setDataSource(mDataSource.getSongsFromSD().get(0).getPath());
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
-        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+        mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
                 task.cancel();
                 timer.cancel();
             }
         });
-        try {
-            mediaPlayer.reset();
-            mediaPlayer.setDataSource( getSongFromList().getPath() );
-            Log.d("======play=====", mDataSource.getSongsFromSD().toString());
-            mediaPlayer.prepare();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        mediaPlayer.start();
         super.onCreate();
     }
 
@@ -64,35 +56,63 @@ public class MusicService extends Service {
 
 
     private void play() {
-//        try {
-//            mediaPlayer.reset();
-//            mediaPlayer.setDataSource( getSongFromList().getPath() );
-//            Log.d("======play=====", mDataSource.getSongsFromSD().toString());
-//            mediaPlayer.prepare();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-        mediaPlayer.start();
+        try {
+//            if(mMediaPlayer.isPlaying()){
+//
+//            }
+            mMediaPlayer.reset();
+            mMediaPlayer.setDataSource( getSongFromListByIndex().getPath() );
+            Log.d("======play=====", mDataSource.getSongsFromSD().toString());
+            mMediaPlayer.prepare();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        catch (IllegalStateException e){
+            mMediaPlayer = null;
+            mMediaPlayer = new MediaPlayer();
+            e.printStackTrace();
+        }
+        mMediaPlayer.start();
         refereshSeekBar();
+        mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                playNextSong();
+            }
+        });
 //        if(mediaPlayer.isPlaying()) mediaPlayer.pause();
 //        else mediaPlayer.start();
     }
 
-    private SongItem getSongFromList() {
-        LinkedList<SongItem> songlist = mDataSource.getSongsFromSD();
-        if(currentSongIndex >= songlist.size()){
-            currentSongIndex = 0;
-        }
-        SongItem songItem = songlist.get(currentSongIndex);
+    private SongItem getSongFromListByIndex() {
+//        LinkedList<SongItem> songlist = mDataSource.getSongsFromSD();
+//        if(currentSongIndex >= songlist.size()){
+//            currentSongIndex = 0;
+//        }
+        SongItem songItem = mDataSource.getSongsFromSD().get(mCurrentSongIndex);
         //return songItem;
         //return songItem;
         return songItem;
     }
 
+    private void deleteCurrentPlayingSong(){
+        try {
+            mDataSource.deletSong(mCurrentSongIndex);
+            play();
+        }
+        catch (java.lang.IndexOutOfBoundsException e){
+            e.printStackTrace();
+        }
+    }
+
 
 
     public void playNextSong(){
-        currentSongIndex ++;
+        updateCurrentSongIndex(1);
+        play();
+    }
+    public void playLastSong(){
+        updateCurrentSongIndex(0);
         play();
     }
     private void refereshSeekBar() {
@@ -100,8 +120,8 @@ public class MusicService extends Service {
         task = new TimerTask() {
             @Override
             public void run() {
-                int position = mediaPlayer.getCurrentPosition();
-                int duration = mediaPlayer.getDuration();
+                int position = mMediaPlayer.getCurrentPosition();
+                int duration = mMediaPlayer.getDuration();
                 Message msg = new Message();
                 Bundle data = new Bundle();
                 data.putInt("duration",duration);
@@ -114,40 +134,46 @@ public class MusicService extends Service {
     }
 
     public void seekTo(int position) {
-        mediaPlayer.seekTo(position);
+        mMediaPlayer.seekTo(position);
     }
+
     private void stop(){
-        mediaPlayer.stop();
+        mMediaPlayer.stop();
     }
     private void continueMusic() {
-        mediaPlayer.start();
+        mMediaPlayer.start();
     }
 
-    private void pause() { mediaPlayer.pause(); }
+    private void pause() {
+        mMediaPlayer.pause();
+    }
 
     private SongItem getCurrentPlayingSong(){
-        return getSongFromList();
+        return getSongFromListByIndex();
     }
 
-    private boolean isPlaying(){ return mediaPlayer.isPlaying(); }
+    public void updateCurrentSongIndex(int action){
+        if(action == 1) mCurrentSongIndex++;
+        if(action == 0) mCurrentSongIndex--;
+        if( mCurrentSongIndex > mDataSource.getSongsFromSD().size() - 1) mCurrentSongIndex = 0;
+        if( mCurrentSongIndex < 0) mCurrentSongIndex = mDataSource.getSongsFromSD().size() - 1;
+    }
+
+    public void setCurrentSongIndex(int index){
+        mCurrentSongIndex = index;
+    }
+
+    private boolean isPlaying(){ return mMediaPlayer.isPlaying(); }
 
     private void playSongAtPosition(int position) {
         Log.d("===playAtPosition===", mDataSource.getSongsFromSD().size()+" pos:"+position);
-        try {
-            // TODO: fix the crush when trying to get song at position
-            mediaPlayer.reset();
-            mediaPlayer.setDataSource(mDataSource.getSongAtPosition(position).getPath());
-            mediaPlayer.prepare();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        mediaPlayer.start();
+        setCurrentSongIndex(position);
+        play();
+
     }
-    private int getCurrentPosition() {
-        return mediaPlayer.getCurrentPosition();
-    }
-    private int getDuration() {
-        return mediaPlayer.getDuration();
+
+    private void setCurrentSongFavorite(){
+        mDataSource.setSongFavorite(getCurrentPlayingSong().getId());
     }
 
     class MusicBinder extends Binder implements BaseService{
@@ -178,11 +204,11 @@ public class MusicService extends Service {
 
         @Override
         public boolean isPlaying() {
-            return mediaPlayer.isPlaying();
+            return mMediaPlayer.isPlaying();
         }
 
         @Override
-        public void callPlayNextSong() {} {
+        public void callPlayNextSong(){
             playNextSong();
         }
 
@@ -196,9 +222,16 @@ public class MusicService extends Service {
         }
 
         @Override
-        public int callGetCurrentPosition() {return getCurrentPosition();}
+        public void deleteCurrentSong() {
+            deleteCurrentPlayingSong();
+        }
 
         @Override
-        public int callGetDuration() {return getDuration();}
+        public void setCurrentSongFavorite() {
+            MusicService.this.setCurrentSongFavorite();
+        }
+
+        @Override
+        public void callPlayLastSong(){playLastSong();}
     }
 }

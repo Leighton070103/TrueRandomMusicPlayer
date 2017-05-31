@@ -13,6 +13,7 @@ public class SongItem implements Serializable, Comparable<SongItem> {
 
 	private static final String TAG="SongItem";
 
+    private int mSequenceLog;
 	private long mIdLog;
 	private String mArtistStr;
 	private String mTitleStr;
@@ -62,11 +63,36 @@ public class SongItem implements Serializable, Comparable<SongItem> {
     public long getAlbumId() {
         return mAlbumIdLog;
     }
-
-    public long getDuration() {
+//  instead of getDuration use the getSongtime()
+    private long getDuration() {
         return mDurationLog;
     }
-    
+
+    public String getSongTime(){
+        long time = getDuration();
+        String formatedTime = formateTime(time);
+        return formatedTime;
+    }
+    public static String formateTime(long time){
+        String min = time / (1000 * 60) + "";
+        String sec = time % (1000 * 60) + "";
+        if (min.length() < 2) {
+            min = "0" + time / (1000 * 60) + "";
+        }else{
+            min = time / (1000 * 60) + "";
+        }
+        if(sec.length() == 4){
+            sec = "0" + ( time % (1000 * 60)) + "";
+        }else if(sec.length() == 3){
+            sec = "00" + ( time % (1000 * 60)) + "";
+        }else if(sec.length() == 2){
+            sec = "000" + ( time % (1000 * 60)) + "";
+        }else if(sec.length() == 1) {
+            sec = "0000" + (time % (1000 * 60)) + "";
+        }
+        return min + ":" + sec.trim().substring(0,2);
+    }
+
     public String getPath() {
         return mPathStr;
     }
@@ -112,8 +138,16 @@ public class SongItem implements Serializable, Comparable<SongItem> {
         return this.toString2().compareTo(another.toString2());
 	}
 
+    public int getSequenceLog() {
+        return mSequenceLog;
+    }
 
-	public static class ArtistAlbumSongsComparator implements Comparator<SongItem>{
+    public void setSequenceLog(int mSequenceLog) {
+        this.mSequenceLog = mSequenceLog;
+    }
+
+
+    public static class ArtistAlbumSongsComparator implements Comparator<SongItem>{
 
 		public int compare(SongItem s1, SongItem s2) {
 			return s1.toString2().toLowerCase().compareTo(s2.toString2().toLowerCase());
@@ -150,6 +184,9 @@ public class SongItem implements Serializable, Comparable<SongItem> {
     public void setArtist(String artist){
         mArtistStr = artist;
     }
+
+    public void setDuration(long duration) {mDurationLog = duration;}
+
 
     public void resetIsFavorite(){
         if( mFavoriteblo ) mFavoriteblo = false;

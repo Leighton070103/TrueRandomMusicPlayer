@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import net.classicgarage.truerandommusicplayer.R;
 import net.classicgarage.truerandommusicplayer.db.SongDataSource;
@@ -93,9 +94,11 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
     public void onBindViewHolder(final SongAdapter.ViewHolder holder, final int position) {
         SongItem song = mSongs.get(position);
         final long songId = song.getId();
-        holder.mSongTitleTv.setText( song.getTitle() );
-        if(song.getFavorite()) holder.mFavBtn.setImageResource(R.mipmap.fav_on);
-        else holder.mFavBtn.setImageResource(R.mipmap.fav_off);
+        song.setSequenceLog(position + 1);
+        holder.mSongSequenceNumberTv.setText(Integer.toString(song.getSequenceLog()));
+        holder.mSongTitleTv.setText( song.getTitle());
+        if(song.getFavorite()) holder.mFavBtn.setBackgroundResource(R.mipmap.fav_on);
+        else holder.mFavBtn.setBackgroundResource(R.mipmap.fav_off);
         holder.mFavBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,7 +122,6 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
                 notifyDataSetChanged();
             }
         });
-
 //        holder.delBtn.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -177,18 +179,20 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
+        private TextView mSongSequenceNumberTv;
         private TextView mSongTitleTv;
         private LinearLayout mSongItemLlayout;
         private LinearLayout mSongItemNameLLayout;
-        private ImageButton mFavBtn;
+        private ToggleButton mFavBtn;
         private ImageButton mDelBtn;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            mSongSequenceNumberTv = (TextView) itemView.findViewById(R.id.number_tv);
             mSongTitleTv = (TextView) itemView.findViewById(R.id.song_title_tv);
 //            mSongItemLlayout = (LinearLayout) itemView.findViewById(R.id.song_item_llayout);
             mSongItemNameLLayout = (LinearLayout) itemView.findViewById(R.id.song_item_name_llayout);
-            mFavBtn = (ImageButton) itemView.findViewById(R.id.song_item_fav_btn);
+            mFavBtn = (ToggleButton) itemView.findViewById(R.id.song_item_fav_btn);
             mDelBtn = (ImageButton) itemView.findViewById(R.id.song_item_del_btn);
         }
 

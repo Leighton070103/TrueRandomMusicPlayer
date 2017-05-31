@@ -7,20 +7,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="net.classicgarage.truerandommusicplayer.activity.MusicPlayerActivity">
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#37474f">
+        android:background="@drawable/background_main">
 
         <LinearLayout
-            android:id="@+id/searchlayout"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:background="#e6e6e6">
+            android:background="#e6e6e6"
+            android:id="@+id/searchlayout"
+            android:layout_height="40dp">
 
             <LinearLayout
                 android:id="@+id/SearchbarLayout"
@@ -33,7 +33,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="10dp"
                     android:background="#00000000"
                     android:src="@mipmap/menu" />
 
@@ -53,34 +52,33 @@
         </LinearLayout>
 
         <RelativeLayout
-            android:id="@+id/delete_fav_layout"
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/searchlayout"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:layout_marginTop="10dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/searchlayout">
 
             <ImageButton
                 android:id="@+id/activity_main_delete_btn"
                 android:layout_width="40dp"
                 android:layout_height="30dp"
                 android:layout_alignParentLeft="true"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="10dp"
                 android:background="#00000000"
                 android:scaleType="centerInside"
                 android:src="@mipmap/delete1w" />
 
-            <ImageButton
+            <ToggleButton
                 android:id="@+id/favorite_btn"
-                android:layout_width="40dp"
+                android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="20dp"
+                android:layout_marginRight="24dp"
                 android:layout_marginTop="10dp"
-                android:background="#00000000"
-                android:scaleType="centerInside"/>
-                <!--app:srcCompat="@mipmap/main_fav_off" -->
+                android:background="@drawable/main_fav_btn_toggle"
+                android:text="ToggleButton"
+                android:textOff=""
+                android:textOn="" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -103,7 +101,7 @@
             android:id="@+id/title_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/cover_layout"
+            android:layout_above="@+id/btn_layout5"
             android:orientation="vertical">
 
             <LinearLayout
@@ -137,12 +135,12 @@
                         android:layout_alignParentStart="true"
                         android:layout_below="@+id/procress_bar"
                         android:layout_weight="1"
-                        android:text="TextView"
+                        android:text="00:00"
                         android:textColor="#ffffff"
                         android:textSize="9sp" />
 
                     <TextView
-                        android:id="@+id/totaltime_tv"
+                        android:id="@+id/timeleft_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
@@ -150,7 +148,7 @@
                         android:layout_below="@+id/procress_bar"
                         android:layout_weight="1"
                         android:gravity="right"
-                        android:text="TextView"
+                        android:text="00:00"
                         android:textColor="#ffffff"
                         android:textSize="9sp" />
                 </LinearLayout>
@@ -171,7 +169,7 @@
                 android:textSize="28sp" />
 
             <TextView
-                android:id="@+id/auther_tv"
+                android:id="@+id/author_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/cover_iv"
@@ -201,9 +199,9 @@
             android:id="@+id/btn_layout5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/title_layout"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentStart="false"
             android:orientation="horizontal"
             android:paddingTop="5dp">
 

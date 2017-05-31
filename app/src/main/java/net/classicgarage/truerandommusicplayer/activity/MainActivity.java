@@ -1,7 +1,9 @@
 package net.classicgarage.truerandommusicplayer.activity;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
@@ -10,26 +12,21 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.SeekBar;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import net.classicgarage.truerandommusicplayer.R;
-import net.classicgarage.truerandommusicplayer.adapter.SwipePagerAdapter;
-import net.classicgarage.truerandommusicplayer.db.SongDataSource;
 import net.classicgarage.truerandommusicplayer.model.SongItem;
 import net.classicgarage.truerandommusicplayer.service.BaseService;
 import net.classicgarage.truerandommusicplayer.service.MusicService;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
+import net.classicgarage.truerandommusicplayer.service.PlayerService;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     //, OnSharedPreferenceChangeListener, SensorEventListener {
@@ -39,49 +36,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static final int REQUEST_CODE = 070103;
 
     public static final int REQUEST_PICK_SONG = 0; 	// used for calling SongPicker activity
-
+    public boolean musicFlag = false; // use for music running or not
     ImageButton mPlayPauseBtn;
     ImageButton mRandomBtn;
-    ImageButton mSkipBtn;
-    ImageButton mRewBtn;
+    ImageButton mNextBtn;
+    ImageButton mPreBtn;
     ImageButton mStopBtn;
-    ImageButton mFavoriteBtn;
+    ToggleButton mFavoriteBtn;
     ImageButton mFilePickerBtn;
     ImageButton mPlayListBtn;
     ImageButton mDeleteBtn;
-    static SeekBar sProgressBar;
+    static SeekBar sSeekBar;
     TextView mSongTitleTv;
+    TextView mAuthorTv;
+    TextView mAlbumTv;
     ImageView mAlbumArtIv;
-    static TextView timeSpendTv;
-    static TextView totalTimeTv;
-
-//    FlingGalleryView flingGalleryView;
-    private ViewPager viewPager;
-    private List<View> albumImageViewList;
-    private SwipePagerAdapter swipePagerAdapter;
-    private ViewPager.OnPageChangeListener mOnPageChangeListener;
-    private static SimpleDateFormat time = new SimpleDateFormat("mm:ss");
-
+    TextView mSongTimeTv;
     SongItem songPlaying;
+    static TextView mSongLeftTimeTv;
 
     private ServiceConnection mMusicConn;
     private BaseService mBaseService;
-    private SongDataSource mSongDataSource;
 
 
-    public static Handler handler = new Handler() {
+    public static Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
             Bundle bundle = msg.getData();
             int duration = bundle.getInt("duration");
             int position = bundle.getInt("position");
-
-            timeSpendTv.setText(time.format(position));
-            totalTimeTv.setText(time.format(duration));
-
-            sProgressBar.setMax(duration);
-            sProgressBar.setProgress(position);
-
+            sSeekBar.setMax(duration);
+            sSeekBar.setProgress(position);
+            mSongLeftTimeTv.setText(SongItem.formateTime(position)+"");
         }
     };
     /** Called when the activity is first created. */
@@ -90,44 +76,61 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mSongDataSource = SongDataSource.getInstance(this.getApplicationContext());
-
         getPermissons();
+        mSongLeftTimeTv = (TextView) findViewById(R.id.timespend_tv);
         mSongTitleTv = (TextView) findViewById(R.id.title_tv);
-      //  mSongTitleTv.setText(mBaseService.getPlayingSong().getTitle());
+        mAuthorTv = (TextView) findViewById(R.id.author_tv);
+        mAlbumTv = (TextView) findViewById(R.id.album_tv);
+        mAuthorTv = (TextView) findViewById(R.id.author_tv);
+        mDeleteBtn = (ImageButton) findViewById(R.id.activity_main_delete_btn);
+        mFavoriteBtn = (ToggleButton) findViewById(R.id.favorite_btn);
+//        mSongTitleTv.setText(mBaseService.getPlayingSong().getTitle());
 //        mAlbumArtIv = (ImageView) findViewById(R.id.cover_iv);
         mPlayPauseBtn = (ImageButton) findViewById(R.id.play_pause_btn);
 //        mRandomBtn = (ImageButton) findViewById(R.id.random_btn);
 //        mSkipBtn = (ImageButton) findViewById(R.id.next_btn);
-//        mRewBtn = (ImageButton) findViewById(R.id.pre_btn);
+        mPreBtn = (ImageButton) findViewById(R.id.pre_btn);
         mPlayListBtn = (ImageButton) findViewById(R.id.playlist_btn);
-        sProgressBar = (SeekBar) findViewById(R.id.procress_bar);
-        mSkipBtn = (ImageButton) findViewById(R.id.next_btn);
-        timeSpendTv = (TextView) findViewById(R.id.timespend_tv);
-        totalTimeTv = (TextView) findViewById(R.id.totaltime_tv);
+        sSeekBar = (SeekBar) findViewById(R.id.procress_bar);
+        mNextBtn = (ImageButton) findViewById(R.id.next_btn);
+        mSongTimeTv = (TextView) findViewById(R.id.timeleft_tv);
+
+
 
         mPlayPauseBtn.setOnClickListener(this);
-//        mSkipBtn.setOnClickListener(this);
+        mPreBtn.setOnClickListener(this);
 //        mRewBtn.setOnClickListener(this);
 //        mRandomBtn.setOnClickListener(this);
         mPlayListBtn.setOnClickListener(this);
-        mSkipBtn.setOnClickListener(this);
+        mNextBtn.setOnClickListener(this);
+        mDeleteBtn.setOnClickListener(this);
+        mFavoriteBtn.setOnClickListener(this);
 
-        sProgressBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        //seekbar
+        sSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if(fromUser) {
-                    mBaseService.callSeekTo(sProgressBar.getProgress());
-                }
+                mSongLeftTimeTv.setText(SongItem.formateTime(progress));
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                if(mBaseService.isPlaying()) {
+                    mBaseService.callPause();
+                    mBaseService.callSeekTo(seekBar.getProgress());
+                    mBaseService.callContinueMusic();
+                }
+                else{
+                    mBaseService.callPause();
+                    mBaseService.callSeekTo(seekBar.getProgress());
+                }
+            }
         });
-
 
 
         Intent intent = new Intent(MainActivity.this, MusicService.class);
@@ -136,6 +139,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
                 mBaseService = (BaseService) service;
+                updateMainPage();
             }
 
             @Override
@@ -143,12 +147,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             }
         };
-
         getApplicationContext().bindService(intent, mMusicConn, BIND_AUTO_CREATE);
 
         initSwipeView();
 
 
+//        updateMainPage();
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+
+
+
+    public void updateMainPage(){
+        if( mBaseService != null){
+            SongItem song = mBaseService.getPlayingSong();
+            if(  song != null) {
+                mSongTitleTv.setText( song.getTitle());
+                mAuthorTv.setText( song.getArtist());
+                mAlbumTv.setText( song.getAlbum() );
+            }
+            else mSongTitleTv.setText("No music stored in this phone.");
+            updateButtonDisplay();
+        }
     }
 
     public void initSwipeView() {
@@ -203,7 +229,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onResume() {
         super.onResume();
-
+        updateMainPage();
     }
 
 
@@ -218,17 +244,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void onClick(View v) {
-
+        mSongTimeTv.setText(mBaseService.getPlayingSong().getSongTime());
         switch (v.getId()){
             case R.id.play_pause_btn:
+                mSongTitleTv.setText(mBaseService.getPlayingSong().getTitle());
                 if(mBaseService.isPlaying()){
                     mBaseService.callPause();
-                    mPlayPauseBtn.setImageDrawable(getResources().getDrawable(R.mipmap.play_btn));
                 }
-                else {
+                else if(musicFlag){
+                    mBaseService.callContinueMusic();
+                }
+                else{
+                    musicFlag = true;
                     mBaseService.callPlay();
                     mPlayPauseBtn.setImageDrawable(getResources().getDrawable(R.mipmap.pause_btn));
                 }
+                updateButtonDisplay();
                 break;
             case R.id.playlist_btn:
                 Intent i = new Intent(this,SongListActivity.class);
@@ -237,15 +268,55 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.next_btn:
                 mBaseService.callPause();
                 mBaseService.callPlayNextSong();
-                mSongTitleTv.setText(mBaseService.getPlayingSong().getTitle());
+                updateMainPage();
                 break;
+            case R.id.pre_btn:
+                mBaseService.callPause();
+                mBaseService.callPlayLastSong();
+                updateMainPage();
+                break;
+            case R.id.activity_main_delete_btn:
+                deleteDialog();
+                break;
+            case R.id.favorite_btn:
+                mBaseService.setCurrentSongFavorite();
+
+
         }
     }
+
+    protected void deleteDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setMessage("Are you sure to delete this song?");
+        builder.setTitle("Alert");
+        builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                mBaseService.deleteCurrentSong();
+                updateMainPage();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.create().show();
+    }
+
 
     /**
      * update buttons
      */
     private void updateButtonDisplay () {
+        if( ! mBaseService.isPlaying()){
+            mPlayPauseBtn.setImageDrawable(getResources().getDrawable(R.mipmap.play_btn));
+        }
+        else {
+            mPlayPauseBtn.setImageDrawable(getResources().getDrawable(R.mipmap.pause_btn));
+        }
 
     }
 
@@ -324,38 +395,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        public void onServiceDisconnected(ComponentName name) {
 //        }
 //    }
-
-            final Handler mHandler = new Handler();
-        final Runnable mRunnable = new Runnable() {
-            @Override
-            public void run() {
-                timeSpendTv.setText(time.format(mBaseService.callGetCurrentPosition()));
-                totalTimeTv.setText(time.format(mBaseService.callGetDuration()));
-
-                sProgressBar.setProgress(mBaseService.callGetCurrentPosition());
-                sProgressBar.setMax(mBaseService.callGetDuration());
-
-                sProgressBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                    @Override
-                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                        if(fromUser) {
-                            mBaseService.callSeekTo(sProgressBar.getProgress());
-                        }
-                    }
-
-                    @Override
-                    public void onStartTrackingTouch(SeekBar seekBar) {
-
-                    }
-
-                    @Override
-                    public void onStopTrackingTouch(SeekBar seekBar) {
-
-                    }
-                });
-                //mHandler.postDelayed(this, 100);
-            }
-        };
-
-
 }

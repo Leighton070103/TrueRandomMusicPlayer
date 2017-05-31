@@ -47,26 +47,30 @@
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
                 android:layout_weight="1"
                 android:background="#00000000"
                 android:scaleType="centerInside"
                 android:src="@mipmap/widget_pre_btn" />
 
-            <ImageButton
+            <ToggleButton
                 android:id="@+id/widget_play_btn"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:layout_weight="1"
-                android:background="#00000000"
-                android:scaleType="centerInside"
-                android:src="@mipmap/widget_play_btn" />
+                android:background="@drawable/widget_play_pause"
+                android:textOff=""
+                android:textOn="" />
 
             <ImageButton
                 android:id="@+id/widget_next_btn"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_gravity="center_vertical"
+                android:layout_marginRight="10dp"
                 android:layout_weight="1"
                 android:background="#00000000"
                 android:scaleType="centerInside"
