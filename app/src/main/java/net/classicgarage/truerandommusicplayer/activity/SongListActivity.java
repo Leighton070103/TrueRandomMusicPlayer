@@ -11,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TabHost;
 
 import net.classicgarage.truerandommusicplayer.R;
@@ -28,13 +29,24 @@ public class SongListActivity extends TabActivity {
     private SongDataSource mSongDataSource;
     private ServiceConnection mMusicConn;
     private BaseService mBaseService;
+    private ImageButton mReturnBtn;
     public static final String SONG_POSITION = "songPosition";
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
+
+
+
         mSongDataSource = SongDataSource.getInstance(this.getApplicationContext());
         setContentView(R.layout.activity_song_list);
         super.onCreate(savedInstanceState);
+        mReturnBtn = (ImageButton)findViewById(R.id.return_btn);
+        mReturnBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SongListActivity.this.finish();
+            }
+        });
 
         mTabHost = (TabHost) findViewById(tabhost);
         mTabHost.setup();
