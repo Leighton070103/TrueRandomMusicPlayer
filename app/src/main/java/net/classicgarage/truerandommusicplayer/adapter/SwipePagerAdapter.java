@@ -20,7 +20,6 @@ public class SwipePagerAdapter extends PagerAdapter{
     @Override
     public int getCount() {
         return mViewList.size();
-        //return Integer.MAX_VALUE;
     }
 
     @Override

@@ -1,9 +1,8 @@
 package net.classicgarage.truerandommusicplayer.activity;
 
 import android.Manifest;
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
-import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
@@ -12,21 +11,28 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
+import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import net.classicgarage.truerandommusicplayer.R;
+import net.classicgarage.truerandommusicplayer.adapter.SwipePagerAdapter;
+import net.classicgarage.truerandommusicplayer.db.SongDataSource;
 import net.classicgarage.truerandommusicplayer.model.SongItem;
 import net.classicgarage.truerandommusicplayer.service.BaseService;
 import net.classicgarage.truerandommusicplayer.service.MusicService;
-import net.classicgarage.truerandommusicplayer.service.PlayerService;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     //, OnSharedPreferenceChangeListener, SensorEventListener {
@@ -57,7 +63,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private ServiceConnection mMusicConn;
     private BaseService mBaseService;
+    private SongDataSource mSongDataSource;
 
+    private ViewPager viewPager;
+    private List<View> albumImageViewList;
+    private SwipePagerAdapter swipePagerAdapter;
+    private ViewPager.OnPageChangeListener mOnPageChangeListener;
+    private static SimpleDateFormat time = new SimpleDateFormat("mm:ss");
 
     public static Handler handler = new Handler(){
         @Override
@@ -75,6 +87,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mSongDataSource = SongDataSource.getInstance(this.getApplicationContext());
 
         getPermissons();
         mSongLeftTimeTv = (TextView) findViewById(R.id.timespend_tv);
@@ -107,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mFavoriteBtn.setOnClickListener(this);
 
         //seekbar
-        sSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+        sSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 mSongLeftTimeTv.setText(SongItem.formateTime(progress));
@@ -133,6 +147,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
 
+
         Intent intent = new Intent(MainActivity.this, MusicService.class);
         startService(intent);
         mMusicConn = new ServiceConnection() {
@@ -147,6 +162,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             }
         };
+
         getApplicationContext().bindService(intent, mMusicConn, BIND_AUTO_CREATE);
 
         initSwipeView();
@@ -395,4 +411,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        public void onServiceDisconnected(ComponentName name) {
 //        }
 //    }
+
+
+
 }

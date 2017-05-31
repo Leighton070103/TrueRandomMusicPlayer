@@ -11,7 +11,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+
 import android.widget.ImageButton;
+
 
 import net.classicgarage.truerandommusicplayer.R;
 import net.classicgarage.truerandommusicplayer.adapter.SongAdapter;
@@ -26,7 +28,9 @@ public class FavoriteActivity extends AppCompatActivity {
     private SongDataSource mSongDataSource;
     private ServiceConnection mMusicConn;
     private BaseService mBaseService;
+
     private ImageButton mReturnBtn;
+
 
 
     @Override
