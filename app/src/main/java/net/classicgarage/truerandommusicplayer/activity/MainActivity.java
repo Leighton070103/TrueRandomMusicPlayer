@@ -400,6 +400,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         getApplicationContext().unbindService(mMusicConn);
     }
 
+    //.
 //    class MusicConn implements ServiceConnection {
 //
 //        @Override
