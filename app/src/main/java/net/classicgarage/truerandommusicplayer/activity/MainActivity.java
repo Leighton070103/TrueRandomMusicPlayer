@@ -41,7 +41,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static final int ALBUM_ART_WIDTH = 150;
     public static final int REQUEST_CODE = 070103;
 
-    public static final int REQUEST_PICK_SONG = 0; 	// used for calling SongPicker activity
+    /**
+     * Used for calling SongPicker activity
+     */
+    public static final int REQUEST_PICK_SONG = 0; 	//
+
     public boolean musicFlag = false; // use for music running or not
     ImageButton mPlayPauseBtn;
     ImageButton mRandomBtn;
@@ -58,16 +62,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TextView mAlbumTv;
     ImageView mAlbumArtIv;
     TextView mSongTimeTv;
-    SongItem songPlaying;
     static TextView mSongLeftTimeTv;
 
     private ServiceConnection mMusicConn;
     private BaseService mBaseService;
     private SongDataSource mSongDataSource;
 
-    private ViewPager viewPager;
-    private List<View> albumImageViewList;
-    private SwipePagerAdapter swipePagerAdapter;
+    private ViewPager mViewPager;
+    private List<View> mAlbumImageViewList;
+    private SwipePagerAdapter mSwipePagerAdapter;
     private ViewPager.OnPageChangeListener mOnPageChangeListener;
     private static SimpleDateFormat time = new SimpleDateFormat("mm:ss");
 
@@ -80,9 +83,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             sSeekBar.setMax(duration);
             sSeekBar.setProgress(position);
             mSongLeftTimeTv.setText(SongItem.formateTime(position)+"");
+
         }
     };
-    /** Called when the activity is first created. */
+
+    /**
+     * Called when the activity is first created.
+     **/
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,11 +105,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mAuthorTv = (TextView) findViewById(R.id.author_tv);
         mDeleteBtn = (ImageButton) findViewById(R.id.activity_main_delete_btn);
         mFavoriteBtn = (ToggleButton) findViewById(R.id.favorite_btn);
-//        mSongTitleTv.setText(mBaseService.getPlayingSong().getTitle());
-//        mAlbumArtIv = (ImageView) findViewById(R.id.cover_iv);
         mPlayPauseBtn = (ImageButton) findViewById(R.id.play_pause_btn);
-//        mRandomBtn = (ImageButton) findViewById(R.id.random_btn);
-//        mSkipBtn = (ImageButton) findViewById(R.id.next_btn);
         mPreBtn = (ImageButton) findViewById(R.id.pre_btn);
         mPlayListBtn = (ImageButton) findViewById(R.id.playlist_btn);
         sSeekBar = (SeekBar) findViewById(R.id.procress_bar);
@@ -113,8 +116,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mPlayPauseBtn.setOnClickListener(this);
         mPreBtn.setOnClickListener(this);
-//        mRewBtn.setOnClickListener(this);
-//        mRandomBtn.setOnClickListener(this);
         mPlayListBtn.setOnClickListener(this);
         mNextBtn.setOnClickListener(this);
         mDeleteBtn.setOnClickListener(this);
@@ -178,8 +179,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-
-
+    /**
+     * Update the main page according to the current playing song.
+     */
     public void updateMainPage(){
         if( mBaseService != null){
             SongItem song = mBaseService.getPlayingSong();
@@ -194,22 +196,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void initSwipeView() {
-        albumImageViewList = new ArrayList<View>();
-        viewPager = (ViewPager) findViewById(R.id.swipe_viewpager);
+        mAlbumImageViewList = new ArrayList<View>();
+        mViewPager = (ViewPager) findViewById(R.id.swipe_viewpager);
 
         LayoutInflater inflater=getLayoutInflater();
         for(int i = 0;  i < mSongDataSource.getSongsFromSD().size(); i++) {
             View album_view = inflater.inflate(R.layout.album_img_layout, null);
-            albumImageViewList.add(album_view);
+            mAlbumImageViewList.add(album_view);
         }
 
 
-         swipePagerAdapter = new SwipePagerAdapter(albumImageViewList);
+         mSwipePagerAdapter = new SwipePagerAdapter(mAlbumImageViewList);
 
         final int currentItem = Integer.MAX_VALUE / 2;
 
-        viewPager.setCurrentItem(currentItem);
-        viewPager.setAdapter(swipePagerAdapter);
+        mViewPager.setCurrentItem(currentItem);
+        mViewPager.setAdapter(mSwipePagerAdapter);
 
         mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
             public int currentPos;
@@ -238,7 +240,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
               * */
             public void onPageScrollStateChanged(int state) {}
         };
-        viewPager.addOnPageChangeListener(mOnPageChangeListener);
+        mViewPager.addOnPageChangeListener(mOnPageChangeListener);
     }
 
 
