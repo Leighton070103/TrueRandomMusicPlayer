@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /**
      * Used for calling SongPicker activity
      */
-    public static final int REQUEST_PICK_SONG = 0; 	//
+    public static final int REQUEST_PICK_SONG = 0;
 
     public boolean musicFlag = false; // use for music running or not
     ImageButton mPlayPauseBtn;
