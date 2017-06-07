@@ -25,15 +25,17 @@
             <LinearLayout
                 android:id="@+id/SearchbarLayout"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <ImageButton
                     android:id="@+id/playlist_btn"
-                    android:layout_width="wrap_content"
+                    android:layout_width="30dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
                     android:background="#00000000"
+                    android:scaleType="centerInside"
                     android:src="@mipmap/menu" />
 
                 <EditText
@@ -52,12 +54,13 @@
         </LinearLayout>
 
         <RelativeLayout
-            android:orientation="horizontal"
+            android:id="@+id/fav_layout"
             android:layout_width="match_parent"
-            android:gravity="center"
-            android:layout_marginTop="10dp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/searchlayout">
+            android:layout_below="@+id/searchlayout"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:orientation="horizontal">
 
             <ImageButton
                 android:id="@+id/activity_main_delete_btn"
@@ -85,7 +88,7 @@
             android:id="@+id/cover_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/delete_fav_layout">
+            android:layout_below="@+id/fav_layout">
 
             <android.support.v4.view.ViewPager
                 android:id="@+id/swipe_viewpager"
@@ -202,8 +205,7 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="false"
             android:layout_alignParentStart="false"
-            android:orientation="horizontal"
-            android:paddingTop="5dp">
+            android:orientation="horizontal">
 
             <ImageButton
                 android:id="@+id/random_btn"
