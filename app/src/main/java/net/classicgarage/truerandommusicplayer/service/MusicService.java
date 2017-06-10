@@ -110,10 +110,12 @@ public class MusicService extends Service {
     public void playNextSong(){
         updateCurrentSongIndex(1);
         play();
+        refereshSeekBar();
     }
     public void playLastSong(){
         updateCurrentSongIndex(0);
         play();
+        refereshSeekBar();
     }
     private void refereshSeekBar() {
         timer = new Timer();

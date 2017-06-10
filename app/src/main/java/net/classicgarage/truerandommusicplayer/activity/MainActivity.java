@@ -189,6 +189,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mSongTitleTv.setText( song.getTitle());
                 mAuthorTv.setText( song.getArtist());
                 mAlbumTv.setText( song.getAlbum() );
+                mSongTimeTv.setText(mBaseService.getPlayingSong().getSongTime());
+
             }
             else mSongTitleTv.setText("No music stored in this phone.");
             updateButtonDisplay();
@@ -262,10 +264,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void onClick(View v) {
-        mSongTimeTv.setText(mBaseService.getPlayingSong().getSongTime());
         switch (v.getId()){
             case R.id.play_pause_btn:
                 mSongTitleTv.setText(mBaseService.getPlayingSong().getTitle());
+                mSongTimeTv.setText(mBaseService.getPlayingSong().getSongTime());
                 if(mBaseService.isPlaying()){
                     mBaseService.callPause();
                 }
@@ -284,12 +286,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivityForResult(i, REQUEST_CODE);
                 break;
             case R.id.next_btn:
-                mBaseService.callPause();
+                /*mBaseService.callPause();*/
                 mBaseService.callPlayNextSong();
                 updateMainPage();
                 break;
             case R.id.pre_btn:
-                mBaseService.callPause();
+                /*mBaseService.callPause();*/
                 mBaseService.callPlayLastSong();
                 updateMainPage();
                 break;

@@ -53,10 +53,23 @@ public class SongItem implements Serializable, Comparable<SongItem> {
     }
 
     public String getTitle() {
-        return mTitleStr;
+        int index = 0;
+        index = mTitleStr.indexOf("-");
+        if(index > 0 && index < mTitleStr.length()-1)
+        {
+            return mTitleStr.substring(0,index);
+        }
+        if(mTitleStr.length()>30)
+            return mTitleStr.substring(0,30);
+        else
+            return mTitleStr;
     }
 
     public String getAlbum() {
+        int index = 0;
+        index = mAlbumStr.indexOf("(");
+        if(index > 0 && index < 30) return mAlbumStr.substring(0,index);
+        if(mAlbumStr.length() > 30) return mAlbumStr.substring(0,30);
         return mAlbumStr;
     }
 
