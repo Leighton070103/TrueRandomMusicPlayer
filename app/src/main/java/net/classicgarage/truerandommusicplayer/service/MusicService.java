@@ -62,7 +62,7 @@ public class MusicService extends Service {
 //            }
             mMediaPlayer.reset();
             mMediaPlayer.setDataSource( getSongFromListByIndex().getPath() );
-            Log.d("======play=====", mDataSource.getSongsFromSD().toString());
+            Log.d("======play=====", getSongFromListByIndex().toString());
             mMediaPlayer.prepare();
         } catch (IOException e) {
             e.printStackTrace();
@@ -122,6 +122,7 @@ public class MusicService extends Service {
         task = new TimerTask() {
             @Override
             public void run() {
+                if(mMediaPlayer == null) return ;
                 int position = mMediaPlayer.getCurrentPosition();
                 int duration = mMediaPlayer.getDuration();
                 Message msg = new Message();

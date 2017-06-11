@@ -1,9 +1,16 @@
 package net.classicgarage.truerandommusicplayer.model;
 
 import android.content.ContentUris;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.MediaMetadataRetriever;
 import android.net.Uri;
+import android.os.ParcelFileDescriptor;
 import android.util.Log;
 
+import java.io.FileDescriptor;
+import java.io.FileNotFoundException;
 import java.io.Serializable;
 import java.util.Comparator;
 
@@ -108,6 +115,43 @@ public class SongItem implements Serializable, Comparable<SongItem> {
 
     public String getPath() {
         return mPathStr;
+    }
+    private static final Uri albumIdUri = Uri.parse("content://media/external/audio/albumart");
+    public static Bitmap getArtworkFromFile(Context context, long songId, long albumId) throws IllegalAccessException {
+        Bitmap bm = null;
+        if(albumId < 0 && songId <0) {
+            throw new IllegalAccessException("Must specify an album or a song id");
+        }
+        try{
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            FileDescriptor fd = null;
+            if(albumId < 0){
+                Uri uri = Uri.parse("content://media/external/audio/media"+ songId +"a/albumart");
+                ParcelFileDescriptor pfd = context.getContentResolver().openFileDescriptor(uri,"r");
+                if(pfd != null){
+                    fd = pfd.getFileDescriptor();
+                }
+            }
+            else {
+                Uri uri = ContentUris.withAppendedId(albumIdUri,albumId);
+                ParcelFileDescriptor pdf = context.getContentResolver().openFileDescriptor(uri,"r");
+                if(pdf != null){
+                    fd = pdf.getFileDescriptor();
+                }
+            }
+            options.inSampleSize =1;
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeFileDescriptor(fd,null,options);
+            options.inSampleSize = 100;
+            options.inJustDecodeBounds = false;
+            options.inDither = false;
+            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+            bm = BitmapFactory.decodeFileDescriptor(fd,null,options);
+        }
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return  bm;
     }
     
     public boolean getFavorite() {

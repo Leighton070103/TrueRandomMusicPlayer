@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public boolean musicFlag = false; // use for music running or not
     ImageButton mPlayPauseBtn;
+    ImageView mAlbumArtView;
     ImageButton mRandomBtn;
     ImageButton mNextBtn;
     ImageButton mPreBtn;
@@ -166,7 +167,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         getApplicationContext().bindService(intent, mMusicConn, BIND_AUTO_CREATE);
 
-        initSwipeView();
+        try {
+            initSwipeView();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
 
 
 //        updateMainPage();
@@ -197,13 +202,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public void initSwipeView() {
+    public void initSwipeView() throws IllegalAccessException {
         mAlbumImageViewList = new ArrayList<View>();
         mViewPager = (ViewPager) findViewById(R.id.swipe_viewpager);
 
         LayoutInflater inflater=getLayoutInflater();
         for(int i = 0;  i < mSongDataSource.getSongsFromSD().size(); i++) {
             View album_view = inflater.inflate(R.layout.album_img_layout, null);
+            mAlbumArtView = (ImageView) album_view.findViewById(R.id.albumView);
+            long path = mSongDataSource.getSongsFromSD().get(i).getId();
+            long album = mSongDataSource.getSongsFromSD().get(i).getAlbumId();
+            mAlbumArtView.setImageBitmap(SongItem.getArtworkFromFile(this.getApplicationContext(),path,album));
             mAlbumImageViewList.add(album_view);
         }
 
@@ -225,13 +234,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
               */
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 currentPos = position;
+                updateMainPage();
+                updateButtonDisplay();
             }
-
             @Override
             public void onPageSelected(int position) {
                 // play song at the position when swipe to another page
                 mBaseService.callPlaySongAtPosition(position);
                 mBaseService.callSeekTo(0);
+                updateMainPage();
+                updateButtonDisplay();
                 Log.d("*******", position+"");
             }
 
@@ -267,6 +279,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()){
             case R.id.play_pause_btn:
                 mSongTitleTv.setText(mBaseService.getPlayingSong().getTitle());
+
                 mSongTimeTv.setText(mBaseService.getPlayingSong().getSongTime());
                 if(mBaseService.isPlaying()){
                     mBaseService.callPause();

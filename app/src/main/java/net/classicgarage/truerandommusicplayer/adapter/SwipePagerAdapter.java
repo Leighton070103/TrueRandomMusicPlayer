@@ -32,7 +32,6 @@ public class SwipePagerAdapter extends PagerAdapter{
         if(container.getParent()!=null)
             ((ViewGroup)container.getParent()).removeView(mViewList.get(position));
         container.addView(mViewList.get(position));
-
         //container.addView(mViewList.get(position));
         return mViewList.get(position);
 //        container.addView(mViewList.get(position % mViewList.size()));
