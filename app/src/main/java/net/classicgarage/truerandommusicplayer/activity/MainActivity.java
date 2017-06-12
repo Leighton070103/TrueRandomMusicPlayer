@@ -167,6 +167,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         getApplicationContext().bindService(intent, mMusicConn, BIND_AUTO_CREATE);
 
+
         try {
             initSwipeView();
         } catch (IllegalAccessException e) {
@@ -175,10 +176,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 //        updateMainPage();
-
     }
-
-    @Override
+ @Override
     protected void onStart() {
         super.onStart();
     }
@@ -210,9 +209,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         for(int i = 0;  i < mSongDataSource.getSongsFromSD().size(); i++) {
             View album_view = inflater.inflate(R.layout.album_img_layout, null);
             mAlbumArtView = (ImageView) album_view.findViewById(R.id.albumView);
-            long path = mSongDataSource.getSongsFromSD().get(i).getId();
+            long songId = mSongDataSource.getSongsFromSD().get(i).getId();
             long album = mSongDataSource.getSongsFromSD().get(i).getAlbumId();
-            mAlbumArtView.setImageBitmap(SongItem.getArtworkFromFile(this.getApplicationContext(),path,album));
+            mAlbumArtView.setImageBitmap(SongItem.getArtworkFromFile(this.getApplicationContext(),songId,album));
             mAlbumImageViewList.add(album_view);
         }
 
@@ -344,13 +343,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * update buttons
      */
     private void updateButtonDisplay () {
-        if( ! mBaseService.isPlaying()){
-            mPlayPauseBtn.setImageDrawable(getResources().getDrawable(R.mipmap.play_btn));
+        if(mBaseService != null) {
+            if (!mBaseService.isPlaying()) {
+                mPlayPauseBtn.setImageDrawable(getResources().getDrawable(R.mipmap.play_btn));
+            } else {
+                mPlayPauseBtn.setImageDrawable(getResources().getDrawable(R.mipmap.pause_btn));
+            }
         }
-        else {
-            mPlayPauseBtn.setImageDrawable(getResources().getDrawable(R.mipmap.pause_btn));
-        }
-
     }
 
     /*

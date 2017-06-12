@@ -117,6 +117,7 @@ public class SongItem implements Serializable, Comparable<SongItem> {
         return mPathStr;
     }
     private static final Uri albumIdUri = Uri.parse("content://media/external/audio/albumart");
+
     public static Bitmap getArtworkFromFile(Context context, long songId, long albumId) throws IllegalAccessException {
         Bitmap bm = null;
         if(albumId < 0 && songId <0) {
