@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -211,7 +212,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mAlbumArtView = (ImageView) album_view.findViewById(R.id.albumView);
             long songId = mSongDataSource.getSongsFromSD().get(i).getId();
             long album = mSongDataSource.getSongsFromSD().get(i).getAlbumId();
-            mAlbumArtView.setImageBitmap(SongItem.getArtworkFromFile(this.getApplicationContext(),songId,album));
+            Bitmap bitmap = SongItem.getArtwork(this.getApplicationContext(),songId,album,false);
+            mAlbumArtView.setImageBitmap(bitmap);
+
             mAlbumImageViewList.add(album_view);
         }
 

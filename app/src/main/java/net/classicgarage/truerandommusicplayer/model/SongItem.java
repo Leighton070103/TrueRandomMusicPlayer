@@ -1,5 +1,6 @@
 package net.classicgarage.truerandommusicplayer.model;
 
+import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -11,6 +12,8 @@ import android.util.Log;
 
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.Comparator;
 
@@ -154,7 +157,75 @@ public class SongItem implements Serializable, Comparable<SongItem> {
         }
         return  bm;
     }
-    
+    public static Bitmap getArtwork(Context context, long song_id, long album_id,boolean small)
+    {
+        ContentResolver res = context.getContentResolver();
+        Uri uri = ContentUris.withAppendedId(albumIdUri,album_id);
+        if(uri != null)
+        {
+            InputStream in = null;
+            try {
+                in = res.openInputStream(uri);
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inSampleSize = 1;
+                options.inJustDecodeBounds = true;
+                BitmapFactory.decodeStream(in,null,options);
+                if(small)
+                {
+                    options.inSampleSize = computeSampleSize(options,300);
+                }
+                else
+                {
+                    options.inSampleSize = computeSampleSize(options,2000);
+                }
+                options.inJustDecodeBounds = false;
+                options.inDither = false;
+                options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                in = res.openInputStream(uri);
+                return BitmapFactory.decodeStream(in,null,options);
+            } catch (FileNotFoundException e) {
+                Bitmap bm = null;
+                try {
+                    bm = getArtworkFromFile(context,song_id,album_id);
+                } catch (IllegalAccessException e1) {
+                    e1.printStackTrace();
+                }
+                e.printStackTrace();
+            }finally {
+                try {
+                    if(in != null){
+                        in.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
+    }
+
+    private static int computeSampleSize(BitmapFactory.Options options, int targe) {
+        int w = options.outWidth;
+        int h = options.outHeight;
+        int candidateW = w/ targe;
+        int candidateH = h/ targe;
+        int cadidate = Math.max(candidateH,candidateW);
+        if(cadidate == 0) return 1;
+        if(cadidate > 1){
+            if((w > targe) && (w/cadidate)<targe)
+            {
+                cadidate -=1;
+            }
+        }
+        if(cadidate > 1){
+            if((h > targe) && (h/cadidate)<targe)
+            {
+                cadidate -=1;
+            }
+        }
+        return cadidate;
+    }
+
     public boolean getFavorite() {
         return mFavoriteblo;
     }
