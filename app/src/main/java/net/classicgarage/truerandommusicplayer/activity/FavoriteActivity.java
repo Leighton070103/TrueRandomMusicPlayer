@@ -76,6 +76,8 @@ public class FavoriteActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
+        mAdapter = new SongAdapter(this,mSongDataSource.getFavoriteSongs());
+        mSongListRv.setAdapter(mAdapter);
         super.onResume();
     }
 
@@ -84,4 +86,5 @@ public class FavoriteActivity extends AppCompatActivity {
         getApplicationContext().unbindService(mMusicConn);
         super.onDestroy();
     }
+
 }

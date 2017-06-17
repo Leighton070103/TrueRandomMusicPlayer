@@ -68,6 +68,13 @@ public class AllMusicTabActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        mAdapter = new SongAdapter(this,mSongDataSource.getSongsFromSD());
+        mSongListRv.setAdapter(mAdapter);
+        super.onResume();
+    }
+
+    @Override
     protected void onDestroy() {
         getApplicationContext().unbindService(mMusicConn);
         super.onDestroy();
