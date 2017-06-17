@@ -371,14 +371,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(!randomFlag) {
             mRandomBtn.setImageDrawable(getResources().getDrawable(R.mipmap.random1b));
             randomFlag = true;
+            mBaseService.callChangeRandomFlag();
             if(replayFlag){
                 mReplayBtn.setImageDrawable(getResources().getDrawable(R.mipmap.replay1w));
                 replayFlag = false;
+                mBaseService.callChangeReplayFlag();
             }
         }
         else {
             mRandomBtn.setImageDrawable(getResources().getDrawable(R.mipmap.randomw));
             randomFlag = false;
+            mBaseService.callChangeRandomFlag();
         }
     }
 
@@ -386,14 +389,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(!replayFlag) {
             mReplayBtn.setImageDrawable(getResources().getDrawable(R.mipmap.replay1b));
             replayFlag = true;
+            mBaseService.callChangeReplayFlag();
             if(randomFlag){
                 mRandomBtn.setImageDrawable(getResources().getDrawable(R.mipmap.randomw));
                 randomFlag = false;
+                mBaseService.callChangeRandomFlag();
             }
         }
         else {
             mReplayBtn.setImageDrawable(getResources().getDrawable(R.mipmap.replay1w));
             replayFlag = false;
+            mBaseService.callChangeReplayFlag();
         }
     }
 

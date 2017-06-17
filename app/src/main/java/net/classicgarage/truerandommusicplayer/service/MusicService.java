@@ -25,6 +25,8 @@ public class MusicService extends Service {
     private Timer timer = null;
     private TimerTask task = null;
     private int mCurrentSongIndex = 0;
+    public boolean replayFlag = false;
+    public boolean randomFlag = false;
 
     public MusicService() {
     }
@@ -72,6 +74,7 @@ public class MusicService extends Service {
             mMediaPlayer = new MediaPlayer();
             e.printStackTrace();
         }
+
         mMediaPlayer.start();
         refereshSeekBar();
         mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -108,14 +111,36 @@ public class MusicService extends Service {
 
 
     public void playNextSong(){
-        updateCurrentSongIndex(1);
-        play();
-        refereshSeekBar();
+        if(replayFlag){
+            play();
+            refereshSeekBar();
+        }
+        else if(randomFlag){
+            randomSongIndex();
+            play();
+            refereshSeekBar();
+        }
+        else{
+            updateCurrentSongIndex(1);
+            play();
+            refereshSeekBar();
+        }
     }
     public void playLastSong(){
-        updateCurrentSongIndex(0);
-        play();
-        refereshSeekBar();
+        if(replayFlag){
+            play();
+            refereshSeekBar();
+        }
+        else if(randomFlag){
+            randomSongIndex();
+            play();
+            refereshSeekBar();
+        }
+        else {
+            updateCurrentSongIndex(0);
+            play();
+            refereshSeekBar();
+        }
     }
     private void refereshSeekBar() {
         timer = new Timer();
@@ -123,14 +148,20 @@ public class MusicService extends Service {
             @Override
             public void run() {
                 if(mMediaPlayer == null) return ;
-                int position = mMediaPlayer.getCurrentPosition();
-                int duration = mMediaPlayer.getDuration();
-                Message msg = new Message();
-                Bundle data = new Bundle();
-                data.putInt("duration",duration);
-                data.putInt("position",position);
-                msg.setData(data);
-                MainActivity.handler.sendMessage(msg);
+                mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                    @Override
+                    public void onPrepared(MediaPlayer mp) {
+                        int position = mMediaPlayer.getCurrentPosition();
+                        int duration = mMediaPlayer.getDuration();
+                        Message msg = new Message();
+                        Bundle data = new Bundle();
+                        data.putInt("duration",duration);
+                        data.putInt("position",position);
+                        msg.setData(data);
+                        MainActivity.handler.sendMessage(msg);
+                    }
+                });
+
             }
         };
         timer.schedule(task,100,1000);
@@ -162,6 +193,11 @@ public class MusicService extends Service {
         if( mCurrentSongIndex < 0) mCurrentSongIndex = mDataSource.getSongsFromSD().size() - 1;
     }
 
+    public void randomSongIndex(){
+        java.util.Random r=new java.util.Random();
+        mCurrentSongIndex = r.nextInt(mDataSource.getSongsFromSD().size());
+    }
+
     public void setCurrentSongIndex(int index){
         mCurrentSongIndex = index;
     }
@@ -177,6 +213,22 @@ public class MusicService extends Service {
 
     private void setCurrentSongFavorite(){
         mDataSource.setSongFavorite(getCurrentPlayingSong().getId());
+    }
+
+    private void changeRandomFlag(){
+        if(!randomFlag) {
+            randomFlag = true;
+        }
+        else
+            randomFlag = false;
+    }
+
+    private void changeReplayFlag(){
+        if(!replayFlag) {
+            replayFlag = true;
+        }
+        else
+            replayFlag = false;
     }
 
     class MusicBinder extends Binder implements BaseService{
@@ -236,5 +288,11 @@ public class MusicService extends Service {
 
         @Override
         public void callPlayLastSong(){playLastSong();}
+
+        @Override
+        public void callChangeReplayFlag(){changeReplayFlag();}
+
+        @Override
+        public void callChangeRandomFlag(){changeRandomFlag();}
     }
 }

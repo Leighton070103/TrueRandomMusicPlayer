@@ -19,4 +19,6 @@ public interface BaseService {
     SongItem getPlayingSong();
     void deleteCurrentSong();
     void setCurrentSongFavorite();
+    void callChangeRandomFlag();
+    void callChangeReplayFlag();
 }
