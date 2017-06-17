@@ -19,6 +19,7 @@ public class SongDataSource {
 
     private static SongDataSource sInstance;
     private LinkedList<SongItem> mSongs = null;
+    private LinkedList<SongItem> mFavSongs = null;
     private Context mContext;
     private SongDatabaseHelper favoriteHelper;
 
@@ -62,15 +63,24 @@ public class SongDataSource {
             song.resetIsFavorite();
             favoriteHelper.updateFavoriteSong(songId);
         }
+        getFavoriteSongs();
+        if(song.getFavorite()){
+            mFavSongs.add(song);
+        }
+        else {
+            mFavSongs.remove(song);
+        }
 
     }
 
     public LinkedList<SongItem> getFavoriteSongs(){
-        LinkedList<SongItem> favoriteSongs = new LinkedList<SongItem>();
-        for(SongItem song: getSongsFromSD()){
-            if(song.getFavorite()) favoriteSongs.add(song);
+        if( mFavSongs == null) {
+            mFavSongs = new LinkedList<SongItem>();
+            for(SongItem song: getSongsFromSD()){
+                if(song.getFavorite()) mFavSongs.add(song);
+            }
         }
-        return favoriteSongs;
+        return mFavSongs;
     }
 
     public SongItem findSongItemById(long songId){
