@@ -48,9 +48,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static final int REQUEST_PICK_SONG = 0;
 
     public boolean musicFlag = false; // use for music running or not
+    public boolean replayFlag = false;
+    public boolean randomFlag = false;
     ImageButton mPlayPauseBtn;
     ImageView mAlbumArtView;
     ImageButton mRandomBtn;
+    ImageButton mReplayBtn;
     ImageButton mNextBtn;
     ImageButton mPreBtn;
     ImageButton mStopBtn;
@@ -113,7 +116,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         sSeekBar = (SeekBar) findViewById(R.id.procress_bar);
         mNextBtn = (ImageButton) findViewById(R.id.next_btn);
         mSongTimeTv = (TextView) findViewById(R.id.timeleft_tv);
-
+        mRandomBtn = (ImageButton) findViewById(R.id.random_btn);
+        mReplayBtn = (ImageButton) findViewById(R.id.replay_btn);
 
 
         mPlayPauseBtn.setOnClickListener(this);
@@ -122,12 +126,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mNextBtn.setOnClickListener(this);
         mDeleteBtn.setOnClickListener(this);
         mFavoriteBtn.setOnClickListener(this);
+        mRandomBtn.setOnClickListener(this);
+        mReplayBtn.setOnClickListener(this);
 
         //seekbar
         sSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 mSongLeftTimeTv.setText(SongItem.formateTime(progress));
+                updateMainPage();
             }
 
             @Override
@@ -302,21 +309,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.next_btn:
                 /*mBaseService.callPause();*/
-                mBaseService.callPlayNextSong();
-                updateMainPage();
+                 mBaseService.callPlayNextSong();
+                    updateMainPage();
                 break;
             case R.id.pre_btn:
                 /*mBaseService.callPause();*/
-                mBaseService.callPlayLastSong();
-                updateMainPage();
+                    mBaseService.callPlayLastSong();
+                    updateMainPage();
                 break;
             case R.id.activity_main_delete_btn:
                 deleteDialog();
                 break;
             case R.id.favorite_btn:
                 mBaseService.setCurrentSongFavorite();
-
-
+                break;
+            case R.id.random_btn:
+                updateRandomButton();
+                break;
+            case R.id.replay_btn:
+                updateReplayButton();
+                break;
         }
     }
 
@@ -352,6 +364,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             } else {
                 mPlayPauseBtn.setImageDrawable(getResources().getDrawable(R.mipmap.pause_btn));
             }
+        }
+    }
+
+    private void updateRandomButton() {
+        if(!randomFlag) {
+            mRandomBtn.setImageDrawable(getResources().getDrawable(R.mipmap.random1b));
+            randomFlag = true;
+            if(replayFlag){
+                mReplayBtn.setImageDrawable(getResources().getDrawable(R.mipmap.replay1w));
+                replayFlag = false;
+            }
+        }
+        else {
+            mRandomBtn.setImageDrawable(getResources().getDrawable(R.mipmap.randomw));
+            randomFlag = false;
+        }
+    }
+
+    private void updateReplayButton() {
+        if(!replayFlag) {
+            mReplayBtn.setImageDrawable(getResources().getDrawable(R.mipmap.replay1b));
+            replayFlag = true;
+            if(randomFlag){
+                mRandomBtn.setImageDrawable(getResources().getDrawable(R.mipmap.randomw));
+                randomFlag = false;
+            }
+        }
+        else {
+            mReplayBtn.setImageDrawable(getResources().getDrawable(R.mipmap.replay1w));
+            replayFlag = false;
         }
     }
 
