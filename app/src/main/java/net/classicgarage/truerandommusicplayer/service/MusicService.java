@@ -1,7 +1,9 @@
 package net.classicgarage.truerandommusicplayer.service;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.Bundle;
@@ -27,12 +29,13 @@ public class MusicService extends Service {
     private int mCurrentSongIndex = 0;
     public boolean replayFlag = false;
     public boolean randomFlag = false;
-
     public MusicService() {
     }
 
     @Override
     public void onCreate() {
+       SharedPreferences preferences1=getSharedPreferences("user", Context.MODE_PRIVATE);
+        mCurrentSongIndex =preferences1.getInt("si",3);
         //初始化mediaplayer
         mMediaPlayer = new MediaPlayer();
         mDataSource = SongDataSource.getInstance(this.getApplicationContext());
@@ -49,6 +52,11 @@ public class MusicService extends Service {
             }
         });
         super.onCreate();
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
     }
 
     @Override
@@ -74,7 +82,6 @@ public class MusicService extends Service {
             mMediaPlayer = new MediaPlayer();
             e.printStackTrace();
         }
-
         mMediaPlayer.start();
         refereshSeekBar();
         mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -147,20 +154,15 @@ public class MusicService extends Service {
         task = new TimerTask() {
             @Override
             public void run() {
-                if(mMediaPlayer == null) return ;
-                mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                    @Override
-                    public void onPrepared(MediaPlayer mp) {
-                        int position = mMediaPlayer.getCurrentPosition();
-                        int duration = mMediaPlayer.getDuration();
-                        Message msg = new Message();
-                        Bundle data = new Bundle();
-                        data.putInt("duration",duration);
-                        data.putInt("position",position);
-                        msg.setData(data);
-                        MainActivity.handler.sendMessage(msg);
-                    }
-                });
+                if(mMediaPlayer == null) return;
+                int position = mMediaPlayer.getCurrentPosition();
+                int duration = mMediaPlayer.getDuration();
+                Message msg = new Message();
+                Bundle data = new Bundle();
+                data.putInt("duration",duration);
+                data.putInt("position",position);
+                msg.setData(data);
+                MainActivity.handler.sendMessage(msg);
 
             }
         };
@@ -191,6 +193,10 @@ public class MusicService extends Service {
         if(action == 0) mCurrentSongIndex--;
         if( mCurrentSongIndex > mDataSource.getSongsFromSD().size() - 1) mCurrentSongIndex = 0;
         if( mCurrentSongIndex < 0) mCurrentSongIndex = mDataSource.getSongsFromSD().size() - 1;
+        SharedPreferences preferences=getSharedPreferences("user",Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt("si",mCurrentSongIndex);
+        editor.commit();
     }
 
     public void randomSongIndex(){
