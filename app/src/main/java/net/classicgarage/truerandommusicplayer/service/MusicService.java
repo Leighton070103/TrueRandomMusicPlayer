@@ -34,11 +34,11 @@ public class MusicService extends Service {
 
     @Override
     public void onCreate() {
-       SharedPreferences preferences1=getSharedPreferences("user", Context.MODE_PRIVATE);
-        mCurrentSongIndex =preferences1.getInt("si",3);
         //初始化mediaplayer
         mMediaPlayer = new MediaPlayer();
         mDataSource = SongDataSource.getInstance(this.getApplicationContext());
+        SharedPreferences preferences=getSharedPreferences("user", Context.MODE_PRIVATE);
+        mCurrentSongIndex = getCurentSongIndexById(preferences.getLong("songId",mDataSource.getSongsFromSD().get(mCurrentSongIndex).getId()));
 //        try {
 //            mediaPlayer.setDataSource(mDataSource.getSongsFromSD().get(0).getPath());
 //        } catch (IOException e) {
@@ -195,8 +195,16 @@ public class MusicService extends Service {
         if( mCurrentSongIndex < 0) mCurrentSongIndex = mDataSource.getSongsFromSD().size() - 1;
         SharedPreferences preferences=getSharedPreferences("user",Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt("si",mCurrentSongIndex);
+        editor.putLong("songId",getSongFromListByIndex().getId());
         editor.commit();
+    }
+
+    public int getCurentSongIndexById(long songId){
+        for(int i = 0;i <= mDataSource.getSongsFromSD().size() - 1;i++){
+            if(songId == mDataSource.getSongsFromSD().get(i).getId())
+                return i;
+        }
+        return 0;
     }
 
     public void randomSongIndex(){
