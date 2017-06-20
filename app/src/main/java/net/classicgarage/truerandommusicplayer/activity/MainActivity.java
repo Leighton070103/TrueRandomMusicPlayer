@@ -289,7 +289,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mAlbumImageViewList.add(album_view);
         }
 
-         mSwipePagerAdapter = new SwipePagerAdapter(mAlbumImageViewList);
+        mSwipePagerAdapter = new SwipePagerAdapter(mAlbumImageViewList);
 
         final int currentItem = Integer.MAX_VALUE / 2;
 
@@ -329,13 +329,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mViewPager.addOnPageChangeListener(mOnPageChangeListener);
     }
 
-
     @Override
     public void onResume() {
         super.onResume();
         updateMainPage();
     }
-
 
     @Override
     public void onPause() {
@@ -466,9 +464,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    /*
-     * receive result from SongPickerActivity
-     * @see android.app.Activity#onActivityResult(int, int, android.content.Intent)
+    /**
+     * receiving results from songPickerActivity
+     * @param requestCode
+     * @param resultCode
+     * @param intent
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
