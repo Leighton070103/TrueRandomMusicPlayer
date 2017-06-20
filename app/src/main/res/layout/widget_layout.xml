@@ -1,22 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:background="#37474f"
-        android:orientation="horizontal">
+    android:layout_height="wrap_content"
+    android:background="#37474f"
+    android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="170dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
+            android:layout_marginLeft="50dp"
             android:layout_marginStart="50dp"
             android:layout_marginTop="5dp"
             android:orientation="vertical">
@@ -25,7 +19,7 @@
                 android:id="@+id/widget_title_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="title"
+                android:text="@string/title"
                 android:textColor="#ffffff"
                 android:textSize="20sp" />
 
@@ -33,12 +27,12 @@
                 android:id="@+id/widget_artist_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="artist"
+                android:text="@string/artist"
                 android:textColor="#e6e6e6" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
@@ -48,12 +42,13 @@
                 android:layout_height="35dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
                 android:layout_weight="1"
                 android:background="#00000000"
                 android:scaleType="centerInside"
                 android:src="@mipmap/widget_pre_btn" />
 
-            <ToggleButton
+            <ImageButton
                 android:id="@+id/widget_play_btn"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
@@ -61,9 +56,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
-                android:background="@drawable/widget_play_pause"
-                android:textOff=""
-                android:textOn="" />
+                android:background="@drawable/widget_play_pause" />
 
             <ImageButton
                 android:id="@+id/widget_next_btn"
@@ -71,12 +64,13 @@
                 android:layout_height="35dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="10dp"
+                android:layout_marginEnd="10dp"
                 android:layout_weight="1"
                 android:background="#00000000"
                 android:scaleType="centerInside"
                 android:src="@mipmap/widget_next_btn" />
 
-            <ImageButton
+<!--            <ImageButton
                 android:id="@+id/widget_close_btn"
                 android:layout_width="13dp"
                 android:layout_height="13dp"
@@ -85,7 +79,7 @@
                 android:elevation="1dp"
                 android:scaleType="centerInside"
                 app:srcCompat="@mipmap/widget_close_btn" />
-
+-->
         </LinearLayout>
-    </LinearLayout>
-</RelativeLayout>
+
+</LinearLayout>
