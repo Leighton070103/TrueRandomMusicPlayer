@@ -22,7 +22,6 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.KeyEvent;
 
-import net.classicgarage.truerandommusicplayer.PlayerWidgetProvider;
 import net.classicgarage.truerandommusicplayer.service.MusicService;
 
 /**
@@ -34,7 +33,7 @@ import net.classicgarage.truerandommusicplayer.service.MusicService;
 public class MediaButtonBroadcastReceiver extends BroadcastReceiver {
 
 	private static final String TAG="MediaButtonReceiver";
-    private static boolean pDouble = false;
+    private static boolean mDouble = false;
     @Override
     public void onReceive(Context context, Intent intent) {
 
@@ -51,13 +50,13 @@ public class MediaButtonBroadcastReceiver extends BroadcastReceiver {
                     buttonIntent.putExtra( MusicService.INTENT_ACTION, MusicService.PLAY_NEXT);
                     break;
                 case KeyEvent.KEYCODE_HEADSETHOOK:
-                    if(!pDouble)
+                    if(!mDouble)
                     {
-                        pDouble = true;
+                        mDouble = true;
                     }
                     else {
                         buttonIntent.putExtra(MusicService.INTENT_ACTION, MusicService.OPERATE_CURRENT);
-                        pDouble = false;
+                        mDouble = false;
                     }
                     break;
                 case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
