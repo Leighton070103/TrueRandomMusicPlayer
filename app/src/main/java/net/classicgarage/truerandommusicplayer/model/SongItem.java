@@ -18,7 +18,8 @@ import java.io.Serializable;
 import java.util.Comparator;
 
 public class SongItem implements Serializable, Comparable<SongItem> {
-    //variable not used
+
+    public static final String SONG_ID = "songId";
 	static final long serialVersionUID = 1;
 
 	private static final String TAG="SongItem";
@@ -86,7 +87,7 @@ public class SongItem implements Serializable, Comparable<SongItem> {
     public long getAlbumId() {
         return mAlbumIdLog;
     }
-//  instead of getDuration use the getSongtime()
+
     private long getDuration() {
         return mDurationLog;
     }

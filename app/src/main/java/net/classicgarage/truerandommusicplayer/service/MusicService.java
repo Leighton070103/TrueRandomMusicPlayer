@@ -16,46 +16,48 @@ import net.classicgarage.truerandommusicplayer.db.SongDataSource;
 import net.classicgarage.truerandommusicplayer.model.SongItem;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class MusicService extends Service {
+
     private MediaPlayer mMediaPlayer;
     private SongDataSource mDataSource;
-    private Timer timer = null;
-    private TimerTask task = null;
+    private Timer mTimer = null;
+    private TimerTask mTask = null;
     private int mCurrentSongIndex = 0;
-    public boolean replayFlag = false;
-    public boolean randomFlag = false;
+    public boolean pReplayFlag = false;
+    public boolean pRandomFlag = false;
+
+
+
     public MusicService() {
     }
 
+    /**
+     * On create method of the service.
+     * Initialize the media player and the data source.
+     * Set the current index if previously the service was killed.
+     */
     @Override
     public void onCreate() {
-        //初始化mediaplayer
+        //Initialize media player
         mMediaPlayer = new MediaPlayer();
         mDataSource = SongDataSource.getInstance(this.getApplicationContext());
-        SharedPreferences preferences=getSharedPreferences("user", Context.MODE_PRIVATE);
-        mCurrentSongIndex = getCurentSongIndexById(preferences.getLong("songId",mDataSource.getSongsFromSD().get(mCurrentSongIndex).getId()));
-//        try {
-//            mediaPlayer.setDataSource(mDataSource.getSongsFromSD().get(0).getPath());
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-        mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                task.cancel();
-                timer.cancel();
-            }
-        });
+        SharedPreferences preferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+        mCurrentSongIndex = getCurrentSongIndexById(preferences.getLong( SongItem.SONG_ID,
+                getCurrentPlayingSong().getId()));
         super.onCreate();
     }
 
+    /**
+     * Called when the app is killed.
+     * Save the id of current playing song.
+     */
     @Override
     public void onDestroy(){
+
+
         super.onDestroy();
     }
 
@@ -65,15 +67,17 @@ public class MusicService extends Service {
     }
 
 
+    /**
+     * Play the song from the data source.
+     */
     private void play() {
         try {
-//            if(mMediaPlayer.isPlaying()){
-//
-//            }
             mMediaPlayer.reset();
             mMediaPlayer.setDataSource( getSongFromListByIndex().getPath() );
             Log.d("======play=====", getSongFromListByIndex().toString());
             mMediaPlayer.prepare();
+            mMediaPlayer.start();
+            refereshSeekBar();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -82,27 +86,33 @@ public class MusicService extends Service {
             mMediaPlayer = new MediaPlayer();
             e.printStackTrace();
         }
-        mMediaPlayer.start();
-        refereshSeekBar();
+        catch (NullPointerException e){
+            e.printStackTrace();
+        }
         mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
+                mTask.cancel();
+                mTimer.cancel();
                 playNextSong();
             }
         });
-//        if(mediaPlayer.isPlaying()) mediaPlayer.pause();
-//        else mediaPlayer.start();
+
     }
 
+    /**
+     * Use the current index to get the song.
+     * @return
+     */
     private SongItem getSongFromListByIndex() {
-//        LinkedList<SongItem> songlist = mDataSource.getSongsFromSD();
-//        if(currentSongIndex >= songlist.size()){
-//            currentSongIndex = 0;
-//        }
-        SongItem songItem = mDataSource.getSongsFromSD().get(mCurrentSongIndex);
-        //return songItem;
-        //return songItem;
-        return songItem;
+        try {
+            return mDataSource.getSongsFromSD().get(mCurrentSongIndex);
+        }
+        catch (IndexOutOfBoundsException e){
+            e.printStackTrace();
+            return null;
+        }
+
     }
 
     private void deleteCurrentPlayingSong(){
@@ -116,13 +126,16 @@ public class MusicService extends Service {
     }
 
 
-
+    /**
+     * Called when playing of current song is complete or the next song button is clicked.
+     * Play the next song.
+     */
     public void playNextSong(){
-        if(replayFlag){
+        if(pReplayFlag){
             play();
             refereshSeekBar();
         }
-        else if(randomFlag){
+        else if(pRandomFlag){
             randomSongIndex();
             play();
             refereshSeekBar();
@@ -133,12 +146,16 @@ public class MusicService extends Service {
             refereshSeekBar();
         }
     }
+
+    /**
+     * Called when the previous song button is clicked.
+     */
     public void playLastSong(){
-        if(replayFlag){
+        if(pReplayFlag){
             play();
             refereshSeekBar();
         }
-        else if(randomFlag){
+        else if(pRandomFlag){
             randomSongIndex();
             play();
             refereshSeekBar();
@@ -150,8 +167,8 @@ public class MusicService extends Service {
         }
     }
     private void refereshSeekBar() {
-        timer = new Timer();
-        task = new TimerTask() {
+        mTimer = new Timer();
+        mTask = new TimerTask() {
             @Override
             public void run() {
                 if(mMediaPlayer == null) return;
@@ -166,7 +183,7 @@ public class MusicService extends Service {
 
             }
         };
-        timer.schedule(task,100,1000);
+        mTimer.schedule(mTask,100,1000);
     }
 
     public void seekTo(int position) {
@@ -193,13 +210,13 @@ public class MusicService extends Service {
         if(action == 0) mCurrentSongIndex--;
         if( mCurrentSongIndex > mDataSource.getSongsFromSD().size() - 1) mCurrentSongIndex = 0;
         if( mCurrentSongIndex < 0) mCurrentSongIndex = mDataSource.getSongsFromSD().size() - 1;
-        SharedPreferences preferences=getSharedPreferences("user",Context.MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences("user",Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putLong("songId",getSongFromListByIndex().getId());
+        editor.putLong( SongItem.SONG_ID, getSongFromListByIndex().getId());
         editor.commit();
     }
 
-    public int getCurentSongIndexById(long songId){
+    public int getCurrentSongIndexById(long songId){
         for(int i = 0;i <= mDataSource.getSongsFromSD().size() - 1;i++){
             if(songId == mDataSource.getSongsFromSD().get(i).getId())
                 return i;
@@ -229,20 +246,26 @@ public class MusicService extends Service {
         mDataSource.setSongFavorite(getCurrentPlayingSong().getId());
     }
 
+    /**
+     * Change the random flag.
+     */
     private void changeRandomFlag(){
-        if(!randomFlag) {
-            randomFlag = true;
+        if(!pRandomFlag) {
+            pRandomFlag = true;
         }
         else
-            randomFlag = false;
+            pRandomFlag = false;
     }
 
+    /**
+     * Change the replayflag.
+     */
     private void changeReplayFlag(){
-        if(!replayFlag) {
-            replayFlag = true;
+        if(!pReplayFlag) {
+            pReplayFlag = true;
         }
         else
-            replayFlag = false;
+            pReplayFlag = false;
     }
 
     class MusicBinder extends Binder implements BaseService{
@@ -284,7 +307,6 @@ public class MusicService extends Service {
         @Override
         public void callPlaySongAtPosition(int position) { playSongAtPosition(position);}
 
-
         @Override
         public SongItem getPlayingSong() {
             return getCurrentPlayingSong();
@@ -301,10 +323,10 @@ public class MusicService extends Service {
         }
 
         @Override
-        public void callPlayLastSong(){playLastSong();}
+        public void callPlayLastSong(){ playLastSong();}
 
         @Override
-        public void callChangeReplayFlag(){changeReplayFlag();}
+        public void callChangeReplayFlag(){ changeReplayFlag(); }
 
         @Override
         public void callChangeRandomFlag(){changeRandomFlag();}
