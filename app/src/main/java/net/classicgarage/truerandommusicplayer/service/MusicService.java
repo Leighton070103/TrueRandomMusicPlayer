@@ -1,6 +1,8 @@
 package net.classicgarage.truerandommusicplayer.service;
 
 import android.app.Service;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,8 +11,12 @@ import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Message;
+import android.support.annotation.IntDef;
 import android.util.Log;
+import android.widget.RemoteViews;
 
+import net.classicgarage.truerandommusicplayer.PlayerWidgetProvider;
+import net.classicgarage.truerandommusicplayer.R;
 import net.classicgarage.truerandommusicplayer.activity.MainActivity;
 import net.classicgarage.truerandommusicplayer.db.SongDataSource;
 import net.classicgarage.truerandommusicplayer.model.SongItem;
@@ -34,6 +40,7 @@ public class MusicService extends Service {
     public MusicService() {
     }
 
+
     /**
      * On create method of the service.
      * Initialize the media player and the data source.
@@ -51,14 +58,29 @@ public class MusicService extends Service {
     }
 
     /**
-     * Called when the app is killed.
-     * Save the id of current playing song.
+     * Called every time start service method is called for this service.
+     * @param intent
+     * @param flags
+     * @param startId
+     * @return
      */
     @Override
-    public void onDestroy(){
-
-
-        super.onDestroy();
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        int action = intent.getIntExtra( PlayerWidgetProvider.WIDGET_ACTION, -1);
+        switch (action){
+            case PlayerWidgetProvider.WIDGET_OPERATE_CURRENT:
+                if(isPlaying()) pause();
+                else play();
+                break;
+            case PlayerWidgetProvider.WIDGET_PLAY_NEXT:
+                playNextSong();
+                break;
+            case PlayerWidgetProvider.WIDGET_PLAY_PREVIOUS:
+                playLastSong();
+                break;
+        }
+        updateWidget();
+        return START_NOT_STICKY;
     }
 
     @Override
@@ -225,7 +247,7 @@ public class MusicService extends Service {
     }
 
     public void randomSongIndex(){
-        java.util.Random r=new java.util.Random();
+        java.util.Random r = new java.util.Random();
         mCurrentSongIndex = r.nextInt(mDataSource.getSongsFromSD().size());
     }
 
@@ -233,7 +255,10 @@ public class MusicService extends Service {
         mCurrentSongIndex = index;
     }
 
-    private boolean isPlaying(){ return mMediaPlayer.isPlaying(); }
+    private boolean isPlaying(){
+        if( mMediaPlayer == null ) return false;
+        return mMediaPlayer.isPlaying();
+    }
 
     private void playSongAtPosition(int position) {
         Log.d("===playAtPosition===", mDataSource.getSongsFromSD().size()+" pos:"+position);
@@ -244,6 +269,30 @@ public class MusicService extends Service {
 
     private void setCurrentSongFavorite(){
         mDataSource.setSongFavorite(getCurrentPlayingSong().getId());
+    }
+
+    /**
+     * To update the screen widget.
+     */
+    private void updateWidget() {
+        RemoteViews remoteViews = new RemoteViews(getApplicationContext().getPackageName(),
+                R.layout.widget_layout);
+        SongItem song = getCurrentPlayingSong();
+        if(song != null){
+            remoteViews.setTextViewText(R.id.widget_title_tv, song.getTitle());
+            remoteViews.setTextViewText(R.id.widget_artist_tv, song.getArtist());
+//            if(isPlaying()) remoteViews.setInt(R.id.widget_play_btn, "setBackground",
+//                    R.mipmap.widget_play_btn);
+//            else remoteViews.setInt(R.id.widget_play_btn, "setBackground",
+//                    R.mipmap.widget_pause_btn);
+        }
+        else {
+            remoteViews.setTextViewText(R.id.widget_title_tv, getString(R.string.no_song_hint));
+        }
+
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
+        appWidgetManager.updateAppWidget(new ComponentName(getApplicationContext(),
+                PlayerWidgetProvider.class), remoteViews);
     }
 
     /**

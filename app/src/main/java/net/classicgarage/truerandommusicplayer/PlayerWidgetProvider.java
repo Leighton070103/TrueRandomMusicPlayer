@@ -26,147 +26,52 @@ import net.classicgarage.truerandommusicplayer.service.MusicService;
 
 public class PlayerWidgetProvider extends AppWidgetProvider {
 	
-	private static final String TAG="PlayerWidgetProvider";
+	private static final String TAG = "PlayerWidgetProvider";
+	public static final String WIDGET_ACTION = "Widget action";
+	public static final int WIDGET_PLAY_PREVIOUS = 0;
+	public static final int WIDGET_OPERATE_CURRENT = 1;
+	public static final int WIDGET_PLAY_NEXT = 2;
 
-    private ServiceConnection mMusicConn;
-    private BaseService mBaseService;
-	/*
-    PlayerServiceState mPlayerServiceState = PlayerServiceState.Inexistant;
-    private SongItem songPlaying;
-    private String songTitle;
-    private PlaybackMode playbackMode = PlaybackMode.RANDOM;
-    */
-
-	/* onUpdate() 在更新 widget 时，被执行，或者首次加入*/
+	/**
+	 * Called when the app
+	 * @param context
+	 * @param appWidgetManager
+	 * @param appWidgetIds
+	 */
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
 
-        /*for (int appWidgetId : appWidgetIds) {
-            Intent intent = new Intent(context, MusicService.class);
+        Intent intent = new Intent(context, MusicService.class);
+        context.startService(intent);
 
-            if( mBaseService != null) {
-                SongItem song = mBaseService.getPlayingSong();
-                RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
-                remoteViews.setTextViewText(R.id.widget_title_tv, song.getTitle());
-            }*/
+        for (int appWidgetId : appWidgetIds) {
 
-
-        	/*
-        	Intent intent;
-        	PendingIntent pendingIntent;
-        	RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
-
-        	// launch MusicPlayerActivity when click on song playing or main frame                   	
-        	intent = new Intent(context, MusicPlayerActivity.class);
-        	pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);          	
-        	remoteViews.setOnClickPendingIntent(R.id.widgetsongplaying, pendingIntent);  
-        	remoteViews.setOnClickPendingIntent(R.id.widgetmainframe, pendingIntent);  
-        	
-        	// sets intent for PLAY/PAUSE button        	
-        	intent = new Intent(context, PlayerService.class);
-        	if (mPlayerServiceState == PlayerServiceState.Playing)
-        		intent.setAction(PlayerService.ACTION_PAUSE);
-            else
-                intent.setAction(PlayerService.ACTION_PLAY);
-        	
-        	pendingIntent = PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        	remoteViews.setOnClickPendingIntent(R.id.widgetplaypausebutton, pendingIntent);
-
-        	// sets intent for SKIP button        	
-        	intent = new Intent(context, PlayerService.class);     
-       		intent.setAction(PlayerService.ACTION_SKIP);
-        	pendingIntent = PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        	remoteViews.setOnClickPendingIntent(R.id.widgetskipbutton, pendingIntent);
-        	
-        	// sets intent for REW button        	
-        	intent = new Intent(context, PlayerService.class);     
-       		intent.setAction(PlayerService.ACTION_REW);
-        	pendingIntent = PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        	remoteViews.setOnClickPendingIntent(R.id.widgetrewbutton, pendingIntent);
-        	
-        	// sets intent for STOP button        	
-        	intent = new Intent(context, PlayerService.class);     
-       		intent.setAction(PlayerService.ACTION_STOP);
-        	pendingIntent = PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        	remoteViews.setOnClickPendingIntent(R.id.widgetstopbutton, pendingIntent);
-        	
-        	// set intent for PLAYBACKMODE button
-        	intent = new Intent(context, PlayerService.class);     
-        	intent.setAction(PlayerService.ACTION_PLAYBACK_MODE);
-        	switch (playbackMode) {
-        	case RANDOM:        	
-           		if (mPlayerServiceState == PlayerServiceState.Playing 
-           				|| mPlayerServiceState == PlayerServiceState.Paused) 
-        			intent.putExtra(PlayerService.INTENT_EXTRA_PLAYBACK_MODE, PlayerService.PlaybackMode.RANDOM_FAVORITE);            		
-           		break;
-        	case RANDOM_FAVORITE:        	
-         		if (mPlayerServiceState == PlayerServiceState.Playing 
-         				|| mPlayerServiceState == PlayerServiceState.Paused) 
-        			intent.putExtra(PlayerService.INTENT_EXTRA_PLAYBACK_MODE, PlayerService.PlaybackMode.SEQUENTIAL);            		            		
-         		break;
-        	case SEQUENTIAL:
-    			intent.putExtra(PlayerService.INTENT_EXTRA_PLAYBACK_MODE, PlayerService.PlaybackMode.RANDOM);            		
-           		break;
-        	}
-        	pendingIntent = PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        	remoteViews.setOnClickPendingIntent(R.id.widgetshufflebutton, pendingIntent);
-        		
-        	
-        	// update buttons display
-    		if (mPlayerServiceState != PlayerServiceState.Playing) {
-    			//remoteViews.setImageViewBitmap(R.id.widgetbuttonframe, 
-    			//		((BitmapDrawable)context.getResources().getDrawable(R.drawable.frame_widget_dim)).getBitmap());
-    			//remoteViews.setImageViewResource(R.id.widgetbuttonframe, R.drawable.frame_widget_dim);
-    			remoteViews.setInt(R.id.widgetbuttonframe, "setBackgroundResource", R.mipmap.frame_widget_dim);
-    			remoteViews.setImageViewResource(R.id.widgetplaypausebutton, R.drawable.btn_play_nob);
-    			remoteViews.setTextColor(R.id.widgetsongplaying, 
-    					context.getResources().getColor(R.color.textDim));
-    		}
-    		else {
-    			//remoteViews.setImageViewResource(R.id.widgetbuttonframe, R.drawable.frame_widget); 
-    			//remoteViews.setImageViewBitmap(R.id.widgetbuttonframe, 
-    			//		((BitmapDrawable)context.getResources().getDrawable(R.drawable.frame_widget)).getBitmap());
-    			remoteViews.setInt(R.id.widgetbuttonframe, "setBackgroundResource", R.mipmap.frame_widget);
-    			
-    			remoteViews.setImageViewResource(R.id.widgetplaypausebutton, R.drawable.btn_pause_nob);
-    			remoteViews.setTextColor(R.id.widgetsongplaying, 
-    					context.getResources().getColor(R.color.text));  
-    		}
-    	
-    		if (mPlayerServiceState == PlayerServiceState.Inexistant) {
-    			remoteViews.setImageViewResource(R.id.widgetskipbutton, R.mipmap.ff_nob_dim);
-    			remoteViews.setImageViewResource(R.id.widgetrewbutton, R.mipmap.rew_nob_dim);
-    			remoteViews.setImageViewResource(R.id.widgetstopbutton, R.mipmap.stop_nob_dim);
-    		}
-    		else {
-    			remoteViews.setImageViewResource(R.id.widgetskipbutton, R.mipmap.ff_nob);
-    			remoteViews.setImageViewResource(R.id.widgetrewbutton, R.mipmap.rew_nob);
-    			remoteViews.setImageViewResource(R.id.widgetstopbutton, R.mipmap.stop_nob);
-    		}
-
-    		// update song title
-    		if (songTitle != null || (mPlayerServiceState != PlayerServiceState.Paused && 
-    								   mPlayerServiceState != PlayerServiceState.Playing))
-    			remoteViews.setTextViewText(R.id.widgetsongplaying, songTitle);
-
-    		// update Playback mode
-    		switch (playbackMode) {
-    		case RANDOM:
-    			remoteViews.setImageViewResource(R.id.widgetshufflebutton, R.mipmap.shuffle);
-    			break;
-    		case RANDOM_FAVORITE:
-    			remoteViews.setImageViewResource(R.id.widgetshufflebutton, R.mipmap.shuffle_fav);
-    			break;
-    		case SEQUENTIAL:
-    			remoteViews.setImageViewResource(R.id.widgetshufflebutton, R.mipmap.straight);
-    			break;
-    		}
-    		
-        	// Tell the AppWidgetManager to perform an update on the current app widget            
-        	appWidgetManager.updateAppWidget(appWidgetId, remoteViews);    		*/
+            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
+            //Set intent for playing previous song.
+            remoteViews.setOnClickPendingIntent(R.id.widget_pre_btn, getPendingIntentByAction(context,
+				WIDGET_PLAY_PREVIOUS));
+            //Set intent for play pause button.
+            remoteViews.setOnClickPendingIntent(R.id.widget_play_btn, getPendingIntentByAction(context,
+				WIDGET_OPERATE_CURRENT));
+            // sets intent for play next button
+            remoteViews.setOnClickPendingIntent(R.id.widget_next_btn, getPendingIntentByAction(context,
+				WIDGET_PLAY_NEXT));
+            appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
+      }
 	}
-        	
 
+
+	/**
+	 * Return the pending intent according to the action.
+	 * @param context
+	 * @param action
+	 * @return
+	 */
+	private PendingIntent getPendingIntentByAction(Context context, int action){
+		Intent intent = new Intent(context, MusicService.class);
+		intent.putExtra(WIDGET_ACTION, WIDGET_PLAY_PREVIOUS);
+		return PendingIntent.getService(context, 0, intent, 0);
+	}
 
 	// 当 widget 被初次添加 或者 当 widget 的大小被改变时，被调用
 	@Override
