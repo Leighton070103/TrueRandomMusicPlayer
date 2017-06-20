@@ -16,8 +16,6 @@ import net.classicgarage.truerandommusicplayer.db.SongDataSource;
 import net.classicgarage.truerandommusicplayer.model.SongItem;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -107,7 +105,7 @@ public class MusicService extends Service {
 
     private void deleteCurrentPlayingSong(){
         try {
-            mDataSource.deletSong(mCurrentSongIndex);
+            mDataSource.deleteSongInIndex(mCurrentSongIndex);
             play();
         }
         catch (java.lang.IndexOutOfBoundsException e){
@@ -291,9 +289,7 @@ public class MusicService extends Service {
         }
 
         @Override
-        public void deleteCurrentSong() {
-            deleteCurrentPlayingSong();
-        }
+        public void deleteCurrentSong() { deleteCurrentPlayingSong(); }
 
         @Override
         public void setCurrentSongFavorite() {
