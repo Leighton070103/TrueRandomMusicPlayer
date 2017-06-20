@@ -16,7 +16,6 @@
         <service android:name=".service.PlayerService" />
         <service android:name=".service.MusicService" />
 
-        <activity android:name=".activity.PermissionActivity"/>
         <activity android:name=".activity.SongListActivity" />
         <activity
             android:name=".activity.MusicPlayerActivity"
