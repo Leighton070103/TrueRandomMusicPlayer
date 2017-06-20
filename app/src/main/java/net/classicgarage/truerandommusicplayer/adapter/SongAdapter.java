@@ -22,6 +22,7 @@ import java.util.LinkedList;
 
 
 /**
+ * This class is to provide basic data and view operations for the recycler view of the song lists.
  * Created by Tong on 2017/5/16.
  */
 
@@ -29,8 +30,6 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
 
     private LinkedList<SongItem> mSongs;
     private OnSongItemNameClickListener mOnSongItemNameClickListener;
-//    private OnFavBtnClickListener mOnFavBtnClickListener;
-//    private OnDelBtnClickListener mOnDelBtnClickListener;
     private SongDataSource mSongDataSource;
     private View mItemView;
     private Context mContext;
@@ -54,14 +53,6 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
          */
         void onSongItemNameClick(View view, int position);
     }
-//    public interface OnFavBtnClickListener {
-//        void onFavBtnClick(View view, int position);
-//    }
-//    public interface OnDelBtnClickListener {
-//        void onDelBtnClick(View view, int position);
-//
-//    }
-
 
     /**
      * Set the value of mOnSongNameClickListener, mOnFavBtnClickListener, mOnDelBtnClickListener.
@@ -71,15 +62,6 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
         mOnSongItemNameClickListener = listener;
 
     }
-//    public void setmOnFavBtnClickListener(OnFavBtnClickListener listener) {
-//        mOnFavBtnClickListener = listener;
-//    }
-//    public void setmOnDelBtnClickListener(OnDelBtnClickListener listener) {
-//        mOnDelBtnClickListener = listener;
-//    }
-
-
-
 
     @Override
     public SongAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -121,52 +103,8 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
                 notifyDataSetChanged();
             }
         });
-//        holder.delBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if( mOnDelBtnClickListener != null){
-//                    Log.d("====del==", position+"");
-//                    mOnDelBtnClickListener.onDelBtnClick(holder.itemView, position);
-//                }
-//            }
-//        });
-//        holder.favBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if( mOnFavBtnClickListener != null){
-//                    Log.d("===fav===", position+"");
-//                    mOnFavBtnClickListener.onFavBtnClick(holder.itemView, position);
-//                }
-//            }
-//        });
+        holder.mArtistTv.setText( song.getArtist() );
 
-    }
-
-    public void deletSong(SongItem songDeleting){
-        for (int i = 0; i < mSongs.size();i++){
-            if(mSongs.get(i) == songDeleting){
-                mSongs.remove(i);
-
-                //deletePlaylistTracks(this,)
-            }
-        }
-    }
-
-    public int deletePlaylistTracks(Context context, long playlistId, long audioId){
-        ContentResolver resolver = context.getContentResolver();
-        int countDel = 0;
-        try{
-            Uri uri = MediaStore.Audio.Playlists.Members.getContentUri(
-                    "external",playlistId);
-            String where = MediaStore.Audio.Playlists.Members._ID + "=?";
-            String audioId1 = Long.toString(audioId);
-            String[] whereVal = { audioId1 };
-            countDel = resolver.delete(uri,where,whereVal);
-            Log.d("TAG", "tracks deleted=" + countDel);
-        }catch (Exception e){
-            Log.d("Error", "Error");
-        }
-        return countDel;
     }
 
 
@@ -180,16 +118,16 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
 
         private TextView mSongSequenceNumberTv;
         private TextView mSongTitleTv;
-        private LinearLayout mSongItemLlayout;
+        private TextView mArtistTv;
         private LinearLayout mSongItemNameLLayout;
         private ToggleButton mFavBtn;
         private ImageButton mDelBtn;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            mSongSequenceNumberTv = (TextView) itemView.findViewById(R.id.number_tv);
-            mSongTitleTv = (TextView) itemView.findViewById(R.id.song_title_tv);
-//            mSongItemLlayout = (LinearLayout) itemView.findViewById(R.id.song_item_llayout);
+            mSongSequenceNumberTv = (TextView) itemView.findViewById(R.id.song_item_number_tv);
+            mSongTitleTv = (TextView) itemView.findViewById(R.id.song_item_title_tv);
+            mArtistTv = (TextView) itemView.findViewById(R.id.song_item_artist_tv);
             mSongItemNameLLayout = (LinearLayout) itemView.findViewById(R.id.song_item_name_llayout);
             mFavBtn = (ToggleButton) itemView.findViewById(R.id.song_item_fav_btn);
             mDelBtn = (ImageButton) itemView.findViewById(R.id.song_item_del_btn);

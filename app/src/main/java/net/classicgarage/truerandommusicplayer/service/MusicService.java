@@ -24,6 +24,9 @@ import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ * This service is to provide operations of playing, pausing, deleting songs.
+ */
 public class MusicService extends Service {
 
     private MediaPlayer mMediaPlayer;

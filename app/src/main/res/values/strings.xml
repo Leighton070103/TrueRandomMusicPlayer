@@ -12,7 +12,7 @@
     <string name="rebuild_catalog">Rebuild Catalog</string>
     <string name="reset">Reset</string>
     <string name="delete_song">Delete Song</string>
-    <string name="title">title</string>
-    <string name="artist">artist</string>
+    <string name="title">Title</string>
+    <string name="artist">Artist</string>
     <string name="no_song_hint">No music detected.</string>
 </resources>
