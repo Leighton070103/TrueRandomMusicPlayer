@@ -16,7 +16,6 @@
         <service android:name=".service.PlayerService" />
         <service android:name=".service.MusicService" />
 
-        <activity android:name=".activity.PermissionActivity"/>
         <activity android:name=".activity.SongListActivity" />
         <activity
             android:name=".activity.MusicPlayerActivity"
@@ -40,6 +39,15 @@
 
         <activity android:name=".activity.AllSongsActivity" />
         <activity android:name=".activity.FavSongsActivity"></activity>
+		
+		<receiver android:name=".PlayerWidgetProvider" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.skywang.widget.UPDATE_ALL"/>
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider"
+                android:resource="@layout/appwidget_info" />
+        </receiver>
     </application>
 
 </manifest>

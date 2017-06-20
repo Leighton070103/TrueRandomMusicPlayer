@@ -1,38 +1,60 @@
 package net.classicgarage.truerandommusicplayer;
 
+import android.Manifest;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
+import android.widget.ImageButton;
 import android.widget.RemoteViews;
+import android.widget.TextView;
+
 
 import net.classicgarage.truerandommusicplayer.activity.MusicPlayerActivity;
+import net.classicgarage.truerandommusicplayer.service.BaseService;
 import net.classicgarage.truerandommusicplayer.service.PlayerService;
 import net.classicgarage.truerandommusicplayer.service.PlayerService.PlaybackMode;
 import net.classicgarage.truerandommusicplayer.service.PlayerService.PlayerServiceState;
 import net.classicgarage.truerandommusicplayer.model.SongItem;
+import net.classicgarage.truerandommusicplayer.service.MusicService;
 
 public class PlayerWidgetProvider extends AppWidgetProvider {
 	
 	private static final String TAG="PlayerWidgetProvider";
-	        
+
+    private ServiceConnection mMusicConn;
+    private BaseService mBaseService;
+	/*
     PlayerServiceState mPlayerServiceState = PlayerServiceState.Inexistant;
     private SongItem songPlaying;
     private String songTitle;
     private PlaybackMode playbackMode = PlaybackMode.RANDOM;
+    */
 
- 
+	/* onUpdate() 在更新 widget 时，被执行，或者首次加入*/
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
 
-        for (int appWidgetId : appWidgetIds) {        	
-        	
+        /*for (int appWidgetId : appWidgetIds) {
+            Intent intent = new Intent(context, MusicService.class);
+
+            if( mBaseService != null) {
+                SongItem song = mBaseService.getPlayingSong();
+                RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
+                remoteViews.setTextViewText(R.id.widget_title_tv, song.getTitle());
+            }*/
+
+
+        	/*
         	Intent intent;
         	PendingIntent pendingIntent;
-        	RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.appwidget);
+        	RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
 
         	// launch MusicPlayerActivity when click on song playing or main frame                   	
         	intent = new Intent(context, MusicPlayerActivity.class);
@@ -141,12 +163,24 @@ public class PlayerWidgetProvider extends AppWidgetProvider {
     		}
     		
         	// Tell the AppWidgetManager to perform an update on the current app widget            
-        	appWidgetManager.updateAppWidget(appWidgetId, remoteViews);    		
-        }
+        	appWidgetManager.updateAppWidget(appWidgetId, remoteViews);    		*/
+	}
         	
-    }
-    
-    @Override
+
+
+	// 当 widget 被初次添加 或者 当 widget 的大小被改变时，被调用
+	@Override
+	public void onAppWidgetOptionsChanged(Context context,
+										  AppWidgetManager appWidgetManager, int appWidgetId,
+										  Bundle newOptions) {
+		Log.d(TAG, "onAppWidgetOptionsChanged");
+
+
+		super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId,
+				newOptions);
+	}
+
+	@Override
     public void onEnabled(Context context) {
     	Log.d(TAG, "onEnabled");
     	super.onEnabled(context);
@@ -161,7 +195,7 @@ public class PlayerWidgetProvider extends AppWidgetProvider {
     @Override	
     public void onReceive (Context context, Intent intent) {   	 
     	Log.d(TAG, "onReceive " + intent.getAction());
-    	
+    	/*
 		// player state
     	if (intent.getAction().equals(PlayerService.NEW_PLAYER_STATE_INTENT)) {
     		if (intent.hasExtra(PlayerService.INTENT_EXTRA_PLAYER_STATE)) {
@@ -172,8 +206,8 @@ public class PlayerWidgetProvider extends AppWidgetProvider {
 	   			if (mPlayerServiceState == PlayerServiceState.Playing) 
 	   				pausedPlaybackByFaceDown = false;	// indicator reset
 				*/
-	    	}    		
-    		
+	    	//}
+    		/*
     		// song title
     		if (intent.hasExtra(PlayerService.INTENT_EXTRA_SONG_PLAYING)) {
     			songPlaying = (SongItem) intent.getSerializableExtra(PlayerService.INTENT_EXTRA_SONG_PLAYING);    			    	
@@ -204,7 +238,7 @@ public class PlayerWidgetProvider extends AppWidgetProvider {
     		// context.startService(new Intent(PlayerService.ACTION_BROADCAST));
 			context.startService(new Intent(context, PlayerService.class));
     	}
-    		        	
+    	*/
     	super.onReceive(context, intent);    	
     }  
     
