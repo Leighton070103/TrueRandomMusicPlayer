@@ -32,7 +32,6 @@ public class PlayerWidgetProvider extends AppWidgetProvider {
         context.startService(intent);
 
         for (int appWidgetId : appWidgetIds) {
-
             RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout
 					.widget_layout);
             //Set intent for playing previous song.
@@ -66,7 +65,6 @@ public class PlayerWidgetProvider extends AppWidgetProvider {
 										  AppWidgetManager appWidgetManager, int appWidgetId,
 										  Bundle newOptions) {
 		Log.d(TAG, "onAppWidgetOptionsChanged");
-
 
 		super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId,
 				newOptions);

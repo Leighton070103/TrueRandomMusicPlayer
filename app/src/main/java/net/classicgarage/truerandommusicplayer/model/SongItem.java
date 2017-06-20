@@ -5,7 +5,6 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 import android.util.Log;
@@ -33,6 +32,7 @@ public class SongItem implements Serializable, Comparable<SongItem> {
 	private long mDurationLog;
 	private String mPathStr;
 	private boolean mFavoriteblo = false;
+    private int mPlayedTime = 0;
 
     public SongItem(){}
 
@@ -274,6 +274,14 @@ public class SongItem implements Serializable, Comparable<SongItem> {
 
     public void setSequenceLog(int mSequenceLog) {
         this.mSequenceLog = mSequenceLog;
+    }
+
+    public int getmPlayedTime() {
+        return mPlayedTime;
+    }
+
+    public void setmPlayedTime(int mPlayedTime) {
+        this.mPlayedTime = mPlayedTime;
     }
 
 
