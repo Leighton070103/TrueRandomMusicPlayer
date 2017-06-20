@@ -41,8 +41,8 @@ public class PlayerWidgetProvider extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
 
-//        Intent intent = new Intent(context, MusicService.class);
-//        context.startService(intent);
+        Intent intent = new Intent(context, MusicService.class);
+        context.startService(intent);
 
         for (int appWidgetId : appWidgetIds) {
 
