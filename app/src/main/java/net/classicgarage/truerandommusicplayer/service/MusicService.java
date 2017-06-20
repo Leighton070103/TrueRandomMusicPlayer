@@ -28,7 +28,7 @@ public class MusicService extends Service {
     private int mCurrentSongIndex = 0;
     public boolean pReplayFlag = false;
     public boolean pRandomFlag = false;
-
+    public boolean pPlayFlag = false;
 
 
     public MusicService() {
@@ -71,32 +71,38 @@ public class MusicService extends Service {
      * Play the song from the data source.
      */
     private void play() {
-        try {
-            mMediaPlayer.reset();
-            mMediaPlayer.setDataSource( getSongFromListByIndex().getPath() );
-            Log.d("======play=====", getSongFromListByIndex().toString());
-            mMediaPlayer.prepare();
-            mMediaPlayer.start();
-            refereshSeekBar();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        catch (IllegalStateException e){
-            mMediaPlayer = null;
-            mMediaPlayer = new MediaPlayer();
-            e.printStackTrace();
-        }
-        catch (NullPointerException e){
-            e.printStackTrace();
-        }
-        mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                mTask.cancel();
-                mTimer.cancel();
-                playNextSong();
+            try {
+                mMediaPlayer.reset();
+                mMediaPlayer.setDataSource(getSongFromListByIndex().getPath());
+                Log.d("======play=====", getSongFromListByIndex().toString());
+                mMediaPlayer.prepare();
+                if(pPlayFlag)
+                    mMediaPlayer.start();
+                refereshSeekBar();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (IllegalStateException e) {
+                mMediaPlayer = null;
+                mMediaPlayer = new MediaPlayer();
+                e.printStackTrace();
+            } catch (NullPointerException e) {
+                e.printStackTrace();
             }
-        });
+            mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    if (pReplayFlag) {
+                        mTask.cancel();
+                        mTimer.cancel();
+                        play();
+                        refereshSeekBar();
+                    } else {
+                        mTask.cancel();
+                        mTimer.cancel();
+                        playNextSong();
+                    }
+                }
+            });
 
     }
 
@@ -131,11 +137,7 @@ public class MusicService extends Service {
      * Play the next song.
      */
     public void playNextSong(){
-        if(pReplayFlag){
-            play();
-            refereshSeekBar();
-        }
-        else if(pRandomFlag){
+       if(pRandomFlag){
             randomSongIndex();
             play();
             refereshSeekBar();
@@ -151,11 +153,7 @@ public class MusicService extends Service {
      * Called when the previous song button is clicked.
      */
     public void playLastSong(){
-        if(pReplayFlag){
-            play();
-            refereshSeekBar();
-        }
-        else if(pRandomFlag){
+        if(pRandomFlag){
             randomSongIndex();
             play();
             refereshSeekBar();
@@ -268,6 +266,14 @@ public class MusicService extends Service {
             pReplayFlag = false;
     }
 
+    private void changPlayingFlag() {
+        if(!pPlayFlag) {
+            pPlayFlag = true;
+        }
+        else
+            pPlayFlag = false;
+    }
+
     class MusicBinder extends Binder implements BaseService{
         @Override
         public void callPlay() {
@@ -330,5 +336,8 @@ public class MusicService extends Service {
 
         @Override
         public void callChangeRandomFlag(){changeRandomFlag();}
+
+        @Override
+        public void callChangePlayFlag(){changPlayingFlag();}
     }
 }

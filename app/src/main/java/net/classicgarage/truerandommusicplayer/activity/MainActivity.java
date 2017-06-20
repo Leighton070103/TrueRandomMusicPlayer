@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static final int REQUEST_PICK_SONG = 0;
 
     public boolean musicFlag = false; // use for music running or not
+    public boolean playFlag = false;
     public boolean replayFlag = false;
     public boolean randomFlag = false;
     ImageButton mPlayPauseBtn;
@@ -293,6 +294,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.play_pause_btn:
                 mSongTitleTv.setText(mBaseService.getPlayingSong().getTitle());
                 mSongTimeTv.setText(mBaseService.getPlayingSong().getSongTime());
+                if(!playFlag) {
+                    playFlag = true;
+                    mBaseService.callChangePlayFlag();
+                }
+                else{
+                    playFlag = false;
+                    mBaseService.callChangePlayFlag();
+                }
                 if(mBaseService.isPlaying()){
                     mBaseService.callPause();
                 }
