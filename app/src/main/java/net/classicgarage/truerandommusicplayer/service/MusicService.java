@@ -11,7 +11,6 @@ import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Message;
-import android.support.annotation.IntDef;
 import android.util.Log;
 import android.widget.RemoteViews;
 
@@ -35,6 +34,12 @@ public class MusicService extends Service {
     public boolean pReplayFlag = false;
     public boolean pRandomFlag = false;
     public boolean pPlayFlag = false;
+
+
+    public static final String INTENT_ACTION = "Intent action";
+    public static final int PLAY_PREVIOUS = 0;
+    public static final int OPERATE_CURRENT = 1;
+    public static final int PLAY_NEXT = 2;
 
 
     public MusicService() {
@@ -66,16 +71,16 @@ public class MusicService extends Service {
      */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        int action = intent.getIntExtra( PlayerWidgetProvider.WIDGET_ACTION, -1);
+        int action = intent.getIntExtra( INTENT_ACTION, -1);
         switch (action){
-            case PlayerWidgetProvider.WIDGET_OPERATE_CURRENT:
+            case OPERATE_CURRENT:
                 if( pPlayFlag ) pause();
                 else play();
                 break;
-            case PlayerWidgetProvider.WIDGET_PLAY_NEXT:
+            case PLAY_NEXT:
                 playNextSong();
                 break;
-            case PlayerWidgetProvider.WIDGET_PLAY_PREVIOUS:
+            case PLAY_PREVIOUS:
                 playLastSong();
                 break;
             case -1:

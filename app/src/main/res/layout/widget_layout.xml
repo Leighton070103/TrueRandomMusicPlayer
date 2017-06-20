@@ -56,7 +56,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
-                android:background="@drawable/widget_play_pause" />
+                android:background="@mipmap/play_btn" />
 
             <ImageButton
                 android:id="@+id/widget_next_btn"

@@ -1,36 +1,23 @@
 package net.classicgarage.truerandommusicplayer;
 
-import android.Manifest;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.util.Log;
-import android.widget.ImageButton;
 import android.widget.RemoteViews;
-import android.widget.TextView;
 
 
-import net.classicgarage.truerandommusicplayer.activity.MusicPlayerActivity;
-import net.classicgarage.truerandommusicplayer.service.BaseService;
-import net.classicgarage.truerandommusicplayer.service.PlayerService;
-import net.classicgarage.truerandommusicplayer.service.PlayerService.PlaybackMode;
-import net.classicgarage.truerandommusicplayer.service.PlayerService.PlayerServiceState;
-import net.classicgarage.truerandommusicplayer.model.SongItem;
 import net.classicgarage.truerandommusicplayer.service.MusicService;
 
 public class PlayerWidgetProvider extends AppWidgetProvider {
 	
 	private static final String TAG = "PlayerWidgetProvider";
-	public static final String WIDGET_ACTION = "Widget action";
-	public static final int WIDGET_PLAY_PREVIOUS = 0;
-	public static final int WIDGET_OPERATE_CURRENT = 1;
-	public static final int WIDGET_PLAY_NEXT = 2;
+	private static final int PLAY_PREVIOUS_REQUEST_CODE = 1;
+	private static final int OPERATE_CURRENT_REQUEST_CODE = 2;
+	private static final int PLAY_NEXT_REQUEST_CODE = 3;
 
 	/**
 	 * Called when the app
@@ -46,16 +33,17 @@ public class PlayerWidgetProvider extends AppWidgetProvider {
 
         for (int appWidgetId : appWidgetIds) {
 
-            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
+            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout
+					.widget_layout);
             //Set intent for playing previous song.
-            remoteViews.setOnClickPendingIntent(R.id.widget_pre_btn, getPendingIntentByAction(context,
-				WIDGET_PLAY_PREVIOUS));
+            remoteViews.setOnClickPendingIntent(R.id.widget_pre_btn, getPendingIntentByAction(
+            		context, PLAY_PREVIOUS_REQUEST_CODE, MusicService.PLAY_PREVIOUS));
             //Set intent for play pause button.
-            remoteViews.setOnClickPendingIntent(R.id.widget_play_btn, getPendingIntentByAction(context,
-				WIDGET_OPERATE_CURRENT));
+            remoteViews.setOnClickPendingIntent(R.id.widget_play_btn, getPendingIntentByAction(
+            		context, OPERATE_CURRENT_REQUEST_CODE, MusicService.OPERATE_CURRENT));
             // sets intent for play next button
-            remoteViews.setOnClickPendingIntent(R.id.widget_next_btn, getPendingIntentByAction(context,
-				WIDGET_PLAY_NEXT));
+            remoteViews.setOnClickPendingIntent(R.id.widget_next_btn, getPendingIntentByAction(
+            		context, PLAY_NEXT_REQUEST_CODE, MusicService.PLAY_NEXT));
             appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
       }
 	}
@@ -67,10 +55,10 @@ public class PlayerWidgetProvider extends AppWidgetProvider {
 	 * @param action
 	 * @return
 	 */
-	private PendingIntent getPendingIntentByAction(Context context, int action){
+	private PendingIntent getPendingIntentByAction(Context context, int requestCode, int action){
 		Intent intent = new Intent(context, MusicService.class);
-		intent.putExtra(WIDGET_ACTION, action);
-		return PendingIntent.getService(context, 0, intent, 0);
+		intent.putExtra(MusicService.INTENT_ACTION, action);
+		return PendingIntent.getService(context, requestCode, intent, 0);
 	}
 
 	@Override

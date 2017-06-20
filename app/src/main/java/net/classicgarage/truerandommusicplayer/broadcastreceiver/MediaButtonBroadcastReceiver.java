@@ -21,11 +21,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.widget.Toast;
 
 import net.classicgarage.truerandommusicplayer.PlayerWidgetProvider;
 import net.classicgarage.truerandommusicplayer.service.MusicService;
-import net.classicgarage.truerandommusicplayer.service.PlayerService;
 
 /**
  * Receives broadcasted intents. In particular, we are interested in the
@@ -35,7 +33,7 @@ import net.classicgarage.truerandommusicplayer.service.PlayerService;
  */
 public class MediaButtonBroadcastReceiver extends BroadcastReceiver {
 
-	private static final String TAG="MediaButtonBroadcastReceiver";
+	private static final String TAG="MediaButtonReceiver";
     
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -50,16 +48,13 @@ public class MediaButtonBroadcastReceiver extends BroadcastReceiver {
             int keyCode = keyEvent.getKeyCode();
             switch ( keyCode ){
                 case KeyEvent.KEYCODE_MEDIA_NEXT:
-                    intent.putExtra( PlayerWidgetProvider.WIDGET_ACTION, PlayerWidgetProvider
-                            .WIDGET_PLAY_NEXT);
+                    intent.putExtra( MusicService.INTENT_ACTION, MusicService.PLAY_NEXT);
                     break;
                 case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
-                    intent.putExtra( PlayerWidgetProvider.WIDGET_ACTION, PlayerWidgetProvider
-                            .WIDGET_OPERATE_CURRENT);
+                    intent.putExtra( MusicService.INTENT_ACTION, MusicService.OPERATE_CURRENT);
                     break;
                 case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
-                    intent.putExtra( PlayerWidgetProvider.WIDGET_ACTION, PlayerWidgetProvider
-                            .WIDGET_PLAY_PREVIOUS);
+                    intent.putExtra( MusicService.INTENT_ACTION, MusicService.PLAY_PREVIOUS);
                     break;
             }
             context.startService(buttonIntent);
