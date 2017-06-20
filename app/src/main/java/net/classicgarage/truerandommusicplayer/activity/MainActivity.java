@@ -61,16 +61,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ImageButton mReplayBtn;
     ImageButton mNextBtn;
     ImageButton mPreBtn;
-    ImageButton mStopBtn;
     ToggleButton mFavoriteBtn;
-    ImageButton mFilePickerBtn;
     ImageButton mPlayListBtn;
     ImageButton mDeleteBtn;
     static SeekBar sSeekBar;
     TextView mSongTitleTv;
     TextView mAuthorTv;
     TextView mAlbumTv;
-    ImageView mAlbumArtIv;
     TextView mSongTimeTv;
     static TextView mSongLeftTimeTv;
 
