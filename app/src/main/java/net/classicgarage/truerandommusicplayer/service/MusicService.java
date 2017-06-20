@@ -98,18 +98,12 @@ public class MusicService extends Service {
         return new MusicBinder();
     }
 
-
-    /**
-     * Play the song from the data source.
-     */
-    private void play() {
+    private void prepare(){
         try {
             mMediaPlayer.reset();
             mMediaPlayer.setDataSource(getSongFromListByIndex().getPath());
             Log.d("======play=====", getSongFromListByIndex().toString());
             mMediaPlayer.prepare();
-            if(pPlayFlag) mMediaPlayer.start();
-            refereshSeekBar();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (IllegalStateException e) {
@@ -120,22 +114,31 @@ public class MusicService extends Service {
             e.printStackTrace();
         }
         mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mp) {
-                    if (pReplayFlag) {
-                        mTask.cancel();
-                        mTimer.cancel();
-                        play();
-                        refereshSeekBar();
-                    } else {
-                        mTask.cancel();
-                        mTimer.cancel();
-                        playNextSong();
-                    }
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                if (pReplayFlag) {
+                    mTask.cancel();
+                    mTimer.cancel();
+                    play();
+                    refreshSeekBar();
+                } else {
+                    mTask.cancel();
+                    mTimer.cancel();
+                    playNextSong();
                 }
-            });
+            }
+        });
         updateWidget();
+    }
 
+    /**
+     * Play the song from the data source.
+     */
+    private void play() {
+        prepare();
+        pPlayFlag = true;
+        mMediaPlayer.start();
+        refreshSeekBar();
     }
 
     /**
@@ -169,16 +172,14 @@ public class MusicService extends Service {
      * Play the next song.
      */
     public void playNextSong(){
-       if(pRandomFlag){
+        if(pRandomFlag){
             randomSongIndex();
-            play();
-            refereshSeekBar();
         }
         else{
             updateCurrentSongIndex(1);
-            play();
-            refereshSeekBar();
         }
+        if( pPlayFlag ) play();
+        else prepare();
     }
 
     /**
@@ -187,16 +188,18 @@ public class MusicService extends Service {
     public void playLastSong(){
         if(pRandomFlag){
             randomSongIndex();
-            play();
-            refereshSeekBar();
         }
         else {
             updateCurrentSongIndex(0);
-            play();
-            refereshSeekBar();
         }
+        if(pPlayFlag) play();
+        else prepare();
     }
-    private void refereshSeekBar() {
+
+    /**
+     * Update the seek bar of the main activity.
+     */
+    private void refreshSeekBar() {
         mTimer = new Timer();
         mTask = new TimerTask() {
             @Override
@@ -206,8 +209,8 @@ public class MusicService extends Service {
                 int duration = mMediaPlayer.getDuration();
                 Message msg = new Message();
                 Bundle data = new Bundle();
-                data.putInt("duration",duration);
-                data.putInt("position",position);
+                data.putInt("duration", duration);
+                data.putInt("position", position);
                 msg.setData(data);
                 MainActivity.handler.sendMessage(msg);
 
@@ -225,11 +228,13 @@ public class MusicService extends Service {
     }
     private void continueMusic() {
         mMediaPlayer.start();
+        pPlayFlag = true;
     }
 
     private void pause() {
         mMediaPlayer.pause();
         updateWidget();
+        changPlayingFlag();
     }
 
     private SongItem getCurrentPlayingSong(){
@@ -265,14 +270,14 @@ public class MusicService extends Service {
         mCurrentSongIndex = r.nextInt(mDataSource.getSongsFromSD().size());
     }
 
+    /**
+     * Set the current song index
+     * @param index
+     */
     public void setCurrentSongIndex(int index){
         mCurrentSongIndex = index;
     }
 
-    private boolean isPlaying(){
-        if( mMediaPlayer == null ) return false;
-        return mMediaPlayer.isPlaying();
-    }
 
     private void playSongAtPosition(int position) {
         Log.d("===playAtPosition===", mDataSource.getSongsFromSD().size()+" pos:"+position);
@@ -367,7 +372,7 @@ public class MusicService extends Service {
 
         @Override
         public boolean isPlaying() {
-            return mMediaPlayer.isPlaying();
+            return pPlayFlag;
         }
 
         @Override
@@ -400,7 +405,5 @@ public class MusicService extends Service {
         @Override
         public void callChangeRandomFlag(){changeRandomFlag();}
 
-        @Override
-        public void callChangePlayFlag(){changPlayingFlag();}
     }
 }

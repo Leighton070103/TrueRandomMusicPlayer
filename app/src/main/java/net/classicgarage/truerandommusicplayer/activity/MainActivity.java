@@ -296,14 +296,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.play_pause_btn:
                 mSongTitleTv.setText(mBaseService.getPlayingSong().getTitle());
                 mSongTimeTv.setText(mBaseService.getPlayingSong().getSongTime());
-                if(!playFlag) {
-                    playFlag = true;
-                    mBaseService.callChangePlayFlag();
-                }
-                else{
-                    playFlag = false;
-                    mBaseService.callChangePlayFlag();
-                }
                 if(mBaseService.isPlaying()){
                     mBaseService.callPause();
                 }
@@ -311,7 +303,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     mBaseService.callContinueMusic();
                 }
                 else{
-                    musicFlag = true;
                     mBaseService.callPlay();
                     mPlayPauseBtn.setImageDrawable(getResources().getDrawable(R.mipmap.pause_btn));
                 }
@@ -322,12 +313,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivityForResult(i, REQUEST_CODE);
                 break;
             case R.id.next_btn:
-                /*mBaseService.callPause();*/
+                //mBaseService.callPause();
                  mBaseService.callPlayNextSong();
                     updateMainPage();
                 break;
             case R.id.pre_btn:
-                /*mBaseService.callPause();*/
+                //mBaseService.callPause();
                     mBaseService.callPlayLastSong();
                     updateMainPage();
                 break;

@@ -21,5 +21,4 @@ public interface BaseService {
     void setCurrentSongFavorite();
     void callChangeRandomFlag();
     void callChangeReplayFlag();
-    void callChangePlayFlag();
 }
