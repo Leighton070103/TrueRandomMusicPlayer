@@ -69,7 +69,7 @@ public class MusicService extends Service {
         int action = intent.getIntExtra( PlayerWidgetProvider.WIDGET_ACTION, -1);
         switch (action){
             case PlayerWidgetProvider.WIDGET_OPERATE_CURRENT:
-                if(isPlaying()) pause();
+                if( pPlayFlag ) pause();
                 else play();
                 break;
             case PlayerWidgetProvider.WIDGET_PLAY_NEXT:
@@ -78,8 +78,10 @@ public class MusicService extends Service {
             case PlayerWidgetProvider.WIDGET_PLAY_PREVIOUS:
                 playLastSong();
                 break;
+            case -1:
+                updateWidget();
+                break;
         }
-        updateWidget();
         return START_NOT_STICKY;
     }
 
@@ -93,24 +95,23 @@ public class MusicService extends Service {
      * Play the song from the data source.
      */
     private void play() {
-            try {
-                mMediaPlayer.reset();
-                mMediaPlayer.setDataSource(getSongFromListByIndex().getPath());
-                Log.d("======play=====", getSongFromListByIndex().toString());
-                mMediaPlayer.prepare();
-                if(pPlayFlag)
-                    mMediaPlayer.start();
-                refereshSeekBar();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (IllegalStateException e) {
-                mMediaPlayer = null;
-                mMediaPlayer = new MediaPlayer();
-                e.printStackTrace();
-            } catch (NullPointerException e) {
-                e.printStackTrace();
-            }
-            mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+        try {
+            mMediaPlayer.reset();
+            mMediaPlayer.setDataSource(getSongFromListByIndex().getPath());
+            Log.d("======play=====", getSongFromListByIndex().toString());
+            mMediaPlayer.prepare();
+            if(pPlayFlag) mMediaPlayer.start();
+            refereshSeekBar();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (IllegalStateException e) {
+            mMediaPlayer = null;
+            mMediaPlayer = new MediaPlayer();
+            e.printStackTrace();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+        mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
                     if (pReplayFlag) {
@@ -125,6 +126,7 @@ public class MusicService extends Service {
                     }
                 }
             });
+        updateWidget();
 
     }
 
@@ -219,12 +221,18 @@ public class MusicService extends Service {
 
     private void pause() {
         mMediaPlayer.pause();
+        updateWidget();
     }
 
     private SongItem getCurrentPlayingSong(){
         return getSongFromListByIndex();
     }
 
+    /**
+     * Update the current index of the song, while also store the current id in the shared
+     * preference.
+     * @param action
+     */
     public void updateCurrentSongIndex(int action){
         if(action == 1) mCurrentSongIndex++;
         if(action == 0) mCurrentSongIndex--;
@@ -279,7 +287,7 @@ public class MusicService extends Service {
         if(song != null){
             remoteViews.setTextViewText(R.id.widget_title_tv, song.getTitle());
             remoteViews.setTextViewText(R.id.widget_artist_tv, song.getArtist());
-//            if(isPlaying()) remoteViews.setInt(R.id.widget_play_btn, "setBackground",
+//            if(pPlayFlag) remoteViews.setInt(R.id.widget_play_btn, "setBackground",
 //                    R.mipmap.widget_play_btn);
 //            else remoteViews.setInt(R.id.widget_play_btn, "setBackground",
 //                    R.mipmap.widget_pause_btn);

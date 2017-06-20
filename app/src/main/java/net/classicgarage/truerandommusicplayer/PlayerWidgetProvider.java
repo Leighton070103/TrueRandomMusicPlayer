@@ -41,8 +41,8 @@ public class PlayerWidgetProvider extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
 
-        Intent intent = new Intent(context, MusicService.class);
-        context.startService(intent);
+//        Intent intent = new Intent(context, MusicService.class);
+//        context.startService(intent);
 
         for (int appWidgetId : appWidgetIds) {
 
@@ -69,11 +69,10 @@ public class PlayerWidgetProvider extends AppWidgetProvider {
 	 */
 	private PendingIntent getPendingIntentByAction(Context context, int action){
 		Intent intent = new Intent(context, MusicService.class);
-		intent.putExtra(WIDGET_ACTION, WIDGET_PLAY_PREVIOUS);
+		intent.putExtra(WIDGET_ACTION, action);
 		return PendingIntent.getService(context, 0, intent, 0);
 	}
 
-	// 当 widget 被初次添加 或者 当 widget 的大小被改变时，被调用
 	@Override
 	public void onAppWidgetOptionsChanged(Context context,
 										  AppWidgetManager appWidgetManager, int appWidgetId,
