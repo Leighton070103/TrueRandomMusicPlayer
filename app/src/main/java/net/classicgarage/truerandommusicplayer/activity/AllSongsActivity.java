@@ -9,7 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 
 import net.classicgarage.truerandommusicplayer.R;
@@ -61,7 +60,8 @@ public class AllSongsActivity extends AppCompatActivity {
             @Override
             public void onSongItemNameClick(View view, int position) {
                 mBaseService.callPlaySongAtPosition(position);
-                Log.d("===songlist===", "song clicked");
+                //Log.d("===songlist===", "song clicked");
+                finish();
             }
         });
 

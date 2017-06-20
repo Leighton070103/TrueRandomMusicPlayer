@@ -83,9 +83,6 @@ public class SongListActivity extends TabActivity {
 //                Log.d("===songlist===", "song clicked");
 //            }
 //        });
-
-
-
     }
 
     @Override

@@ -37,7 +37,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    //, OnSharedPreferenceChangeListener, SensorEventListener {
 
     public static final int ALBUM_ART_HEIGHT = 150;
     public static final int ALBUM_ART_WIDTH = 150;
@@ -128,54 +127,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mRandomBtn.setOnClickListener(this);
         mReplayBtn.setOnClickListener(this);
 
-        /*sSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                mSongLeftTimeTv.setText(SongItem.formateTime(progress));
-                updateMainPage();
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                if(mBaseService.isPlaying()) {
-                    mBaseService.callPause();
-                    mBaseService.callSeekTo(seekBar.getProgress());
-                    mBaseService.callContinueMusic();
-                }
-                else{
-                    mBaseService.callPause();
-                    mBaseService.callSeekTo(seekBar.getProgress());
-                }
-            }
-        });*/
-
-        /*Intent intent = new Intent(MainActivity.this, MusicService.class);
-        startService(intent);
-        mMusicConn = new ServiceConnection() {
-            @Override
-            public void onServiceConnected(ComponentName name, IBinder service) {
-                mBaseService = (BaseService) service;
-                updateMainPage();
-            }
-
-            @Override
-            public void onServiceDisconnected(ComponentName name) {}
-        };
-
-        getApplicationContext().bindService(intent, mMusicConn, BIND_AUTO_CREATE);*/
-
-        /*try {
-            initSwipeView();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }*/
-        getPermissons();
+        getPermissions();
     }
 
-    private void getPermissons() {
+    private void getPermissions() {
         int code = ActivityCompat.checkSelfPermission(
                 MainActivity.this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE);
@@ -194,8 +149,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode){
             case 1:
+                //seek bar
                 setSeekBarListener();
+                // app service
                 startServices();
+                //swipe
                 enableSwiping();
         }
     }
@@ -255,29 +213,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onStart() {
         super.onStart();
     }
-    /**
-     * Update the main page according to the current playing song.
-     */
-    public void updateMainPage(){
-        if( mBaseService != null){
-            SongItem song = mBaseService.getPlayingSong();
-            if(  song != null) {
-                mSongTitleTv.setText( song.getTitle());
-                mAuthorTv.setText( song.getArtist());
-                mAlbumTv.setText( song.getAlbum() );
-                mSongTimeTv.setText(mBaseService.getPlayingSong().getSongTime());
 
-            }
-            else mSongTitleTv.setText("No music stored in this phone.");
-            updateButtonDisplay();
-        }
-    }
 
     public void initSwipeView() throws IllegalAccessException {
         mAlbumImageViewList = new ArrayList<View>();
         mViewPager = (ViewPager) findViewById(R.id.swipe_viewpager);
 
-        LayoutInflater inflater=getLayoutInflater();
+        LayoutInflater inflater = getLayoutInflater();
         for(int i = 0;  i < mSongDataSource.getSongsFromSD().size(); i++) {
             View album_view = inflater.inflate(R.layout.album_img_layout, null);
             mAlbumArtView = (ImageView) album_view.findViewById(R.id.albumView);
@@ -285,7 +227,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             long album = mSongDataSource.getSongsFromSD().get(i).getAlbumId();
             Bitmap bitmap = SongItem.getArtwork(this.getApplicationContext(),songId,album,false);
             mAlbumArtView.setImageBitmap(bitmap);
-
             mAlbumImageViewList.add(album_view);
         }
 
@@ -298,17 +239,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
             public int currentPos;
-            @Override
+
             /**
              * position:current page;
-              positionOffset: offset of current page
-              positionOffsetPixels: offset pixels of current page
-              */
+             * positionOffset: offset of current page
+             * positionOffsetPixels: offset pixels of current page
+             */
+            @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 currentPos = position;
                 updateMainPage();
                 updateButtonDisplay();
             }
+
             @Override
             public void onPageSelected(int position) {
                 // play song at the position when swipe to another page
@@ -323,7 +266,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
              /**
               * state == ViewPager.SCROLL_STATE_DRAGGING ||  ViewPager.SCROLL_STATE_SETTLING
               * || ViewPager.SCROLL_STATE_IDLE
-              * */
+              */
             public void onPageScrollStateChanged(int state) {}
         };
         mViewPager.addOnPageChangeListener(mOnPageChangeListener);
@@ -349,7 +292,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()){
             case R.id.play_pause_btn:
                 mSongTitleTv.setText(mBaseService.getPlayingSong().getTitle());
-
                 mSongTimeTv.setText(mBaseService.getPlayingSong().getSongTime());
                 if(mBaseService.isPlaying()){
                     mBaseService.callPause();
@@ -414,6 +356,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         builder.create().show();
     }
 
+    /**
+     * Update the main page according to the current playing song.
+     */
+    public void updateMainPage(){
+        if( mBaseService != null){
+            SongItem song = mBaseService.getPlayingSong();
+            if(  song != null) {
+                mSongTitleTv.setText( song.getTitle());
+                mAuthorTv.setText( song.getArtist());
+                mAlbumTv.setText( song.getAlbum() );
+                mSongTimeTv.setText(mBaseService.getPlayingSong().getSongTime());
+            }
+            else mSongTitleTv.setText("No music stored in this phone.");
+            updateButtonDisplay();
+        }
+    }
 
     /**
      * update buttons

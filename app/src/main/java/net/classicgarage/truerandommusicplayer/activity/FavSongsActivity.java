@@ -3,17 +3,14 @@ package net.classicgarage.truerandommusicplayer.activity;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
-
 import android.widget.ImageButton;
-
 
 import net.classicgarage.truerandommusicplayer.R;
 import net.classicgarage.truerandommusicplayer.adapter.SongAdapter;
@@ -30,8 +27,6 @@ public class FavSongsActivity extends AppCompatActivity {
     private BaseService mBaseService;
 
     private ImageButton mReturnBtn;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,9 +52,7 @@ public class FavSongsActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onServiceDisconnected(ComponentName name) {
-
-            }
+            public void onServiceDisconnected(ComponentName name) {}
         };
         getApplicationContext().bindService(intent, mMusicConn, BIND_AUTO_CREATE);
 
@@ -68,10 +61,10 @@ public class FavSongsActivity extends AppCompatActivity {
             @Override
             public void onSongItemNameClick(View view, int position) {
                 mBaseService.callPlaySongAtPosition(position);
-                Log.d("===songlist===", "song clicked");
+                //Log.d("===songlist===", "song clicked");
+                finish();
             }
         });
-
     }
 
     @Override
@@ -87,5 +80,4 @@ public class FavSongsActivity extends AppCompatActivity {
         getApplicationContext().unbindService(mMusicConn);
         super.onDestroy();
     }
-
 }
