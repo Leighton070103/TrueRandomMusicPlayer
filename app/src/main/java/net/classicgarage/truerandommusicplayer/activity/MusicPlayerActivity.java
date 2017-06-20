@@ -27,7 +27,6 @@ import net.classicgarage.truerandommusicplayer.service.PlayerService;
 import net.classicgarage.truerandommusicplayer.service.PlayerService.PlaybackMode;
 import net.classicgarage.truerandommusicplayer.service.PlayerService.PlayerServiceState;
 
-import static net.classicgarage.truerandommusicplayer.util.IntentHelper.getExplicitIntentForService;
 
 public class MusicPlayerActivity extends Activity
 	implements OnClickListener{
@@ -157,22 +156,23 @@ public class MusicPlayerActivity extends Activity
         // Send the correct intent to the MusicService, according to the button that was clicked
 
         if (target == mPlayPauseButton) {
-        	if (mPlayerServiceState == PlayerServiceState.Playing)
-        		startService(getExplicitIntentForService(this,PlayerService.ACTION_PAUSE));
+        	if (mPlayerServiceState == PlayerServiceState.Playing){}
+        		//startService(new Intent(this,PlayerService.ACTION_PAUSE));
 
-            else
-                startService(getExplicitIntentForService(this,PlayerService.ACTION_PLAY));
+            else{}
+               // startService(getExplicitIntentForService(this,PlayerService.ACTION_PLAY));
         // we will update the button bitmap and song title through a broadcast sent by service
         }
-        else if (target == mSkipButton)
-            startService(getExplicitIntentForService(this,PlayerService.ACTION_SKIP));
-        else if (target == mRewButton)
-            startService(getExplicitIntentForService(this,PlayerService.ACTION_REW));
-        else if (target == mStopButton)
-            startService(getExplicitIntentForService(this,PlayerService.ACTION_STOP));
+        else if (target == mSkipButton){}
+           // startService(getExplicitIntentForService(this,PlayerService.ACTION_SKIP));
+        else if (target == mRewButton){}
+          //  startService(getExplicitIntentForService(this,PlayerService.ACTION_REW));
+        else if (target == mStopButton){}
+            //startService(getExplicitIntentForService(this,PlayerService.ACTION_STOP));
         else if (target == mRandomButton) {
         	// select the next playing mode by rotation R, RF, S
-            Intent i = getExplicitIntentForService(this,PlayerService.ACTION_PLAYBACK_MODE);
+           // Intent i = getExplicitIntentForService(this,PlayerService.ACTION_PLAYBACK_MODE);
+			Intent i = new Intent(this, PlayerService.class);
         	switch (mPlaybackMode) {
         	case RANDOM:
         		if (mPlayerServiceState == PlayerServiceState.Playing 
