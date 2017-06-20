@@ -198,8 +198,10 @@ public class SongDataSource {
             if(mSongs.get(i).getId() == songId){
                 File f = new File(mSongs.get(i).getPath());
                 f.delete();
-                deletePlaylistTracks(mContext,mSongs.get(i));
+                SongItem song = mSongs.get(i);
+                deletePlaylistTracks(mContext, song);
                 favoriteHelper.deleteSongFav(songId);
+                if(song.getFavorite()) mFavSongs.remove(song);
                 mSongs.remove(i);
             }
         }

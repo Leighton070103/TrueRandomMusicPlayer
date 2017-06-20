@@ -2,8 +2,12 @@ package net.classicgarage.truerandommusicplayer.adapter;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +19,7 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import net.classicgarage.truerandommusicplayer.R;
+import net.classicgarage.truerandommusicplayer.activity.MainActivity;
 import net.classicgarage.truerandommusicplayer.db.SongDataSource;
 import net.classicgarage.truerandommusicplayer.model.SongItem;
 
@@ -99,12 +104,38 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
         holder.mDelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mSongDataSource.deleteSong( songId );
-                notifyDataSetChanged();
+               deleteDialog(songId);
             }
         });
         holder.mArtistTv.setText( song.getArtist() );
 
+    }
+
+
+    /**
+     * To display a delete dialog.
+     */
+    protected void deleteDialog(final long songId){
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setMessage(R.string.delete_alert);
+        builder.setTitle(R.string.alert);
+        builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                MediaScannerConnection.scanFile(mContext.getApplicationContext(), new String[]
+                        { Environment.getExternalStorageDirectory().getAbsolutePath()}, null, null);
+                mSongDataSource.deleteSong( songId );
+                notifyDataSetChanged();
+                dialog.dismiss();
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.create().show();
     }
 
 

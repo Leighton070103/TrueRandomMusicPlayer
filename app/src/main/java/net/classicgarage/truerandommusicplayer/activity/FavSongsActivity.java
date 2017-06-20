@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -26,7 +27,6 @@ public class FavSongsActivity extends AppCompatActivity {
     private ServiceConnection mMusicConn;
     private BaseService mBaseService;
 
-    private ImageButton mReturnBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,17 +60,18 @@ public class FavSongsActivity extends AppCompatActivity {
         mAdapter.setOnSongItemNameClickListener(new SongAdapter.OnSongItemNameClickListener() {
             @Override
             public void onSongItemNameClick(View view, int position) {
-                mBaseService.callPlaySongAtPosition(position);
-                //Log.d("===songlist===", "song clicked");
+                long id = mSongDataSource.getFavoriteSongs().get(position).getId();
+                mBaseService.callPlaySongAtPosition(mSongDataSource.findSongIndexById(id));
                 finish();
             }
         });
     }
 
+    /**
+     * Update the recyclerview.
+     */
     @Override
     protected void onResume() {
-//        mAdapter = new SongAdapter(this,mSongDataSource.getFavoriteSongs());
-//        mSongListRv.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
         super.onResume();
     }
