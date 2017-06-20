@@ -60,7 +60,7 @@ public class MusicService extends Service {
         mMediaPlayer = new MediaPlayer();
         mDataSource = SongDataSource.getInstance(this.getApplicationContext());
         SharedPreferences preferences = getSharedPreferences("user", Context.MODE_PRIVATE);
-        mCurrentSongIndex = getCurrentSongIndexById(preferences.getLong( SongItem.SONG_ID,
+        mCurrentSongIndex = mDataSource.findSongIndexById(preferences.getLong( SongItem.SONG_ID,
                 getCurrentPlayingSong().getId()));
         super.onCreate();
     }
@@ -100,11 +100,19 @@ public class MusicService extends Service {
         return START_NOT_STICKY;
     }
 
+    /**
+     * Called when the service is binded.
+     * @param intent
+     * @return
+     */
     @Override
     public IBinder onBind(Intent intent) {
         return new MusicBinder();
     }
 
+    /**
+     * Called for the preperation of the music.
+     */
     private void prepare(){
         try {
             mMediaPlayer.reset();
@@ -144,6 +152,7 @@ public class MusicService extends Service {
     private void play() {
         prepare();
         pPlayFlag = true;
+        updateWidget();
         mMediaPlayer.start();
         refreshSeekBar();
     }
@@ -154,7 +163,7 @@ public class MusicService extends Service {
      */
     private SongItem getSongFromListByIndex() {
         try {
-            return mDataSource.getSongsFromSD().get(mCurrentSongIndex);
+            return mDataSource.getAllSongs().get(mCurrentSongIndex);
         }
         catch (IndexOutOfBoundsException e){
             e.printStackTrace();
@@ -163,6 +172,9 @@ public class MusicService extends Service {
 
     }
 
+    /**
+     * Delete the song that is currently displayed.
+     */
     private void deleteCurrentPlayingSong(){
         try {
             mDataSource.deleteSongInIndex(mCurrentSongIndex);
@@ -183,7 +195,7 @@ public class MusicService extends Service {
             randomSongIndex();
         }
         else{
-            updateCurrentSongIndex(1);
+            updateCurrentSongIndex(PLAY_NEXT);
         }
         if( pPlayFlag ) play();
         else prepare();
@@ -197,7 +209,7 @@ public class MusicService extends Service {
             randomSongIndex();
         }
         else {
-            updateCurrentSongIndex(0);
+            updateCurrentSongIndex(PLAY_PREVIOUS);
         }
         if(pPlayFlag) play();
         else prepare();
@@ -226,6 +238,10 @@ public class MusicService extends Service {
         mTimer.schedule(mTask,100,1000);
     }
 
+    /**
+     * Called when the song is continued.
+     * @param position
+     */
     public void seekTo(int position) {
         mMediaPlayer.seekTo(position);
     }
@@ -233,17 +249,28 @@ public class MusicService extends Service {
     private void stop(){
         mMediaPlayer.stop();
     }
+
+    /**
+     * Called when the music is supposed to continue.
+     */
     private void continueMusic() {
         mMediaPlayer.start();
         pPlayFlag = true;
     }
 
+    /**
+     * Called when the song is paused.
+     */
     private void pause() {
         mMediaPlayer.pause();
+        pPlayFlag = false;
         updateWidget();
-        changPlayingFlag();
     }
 
+    /**
+     * Return the current playing song.
+     * @return
+     */
     private SongItem getCurrentPlayingSong(){
         return getSongFromListByIndex();
     }
@@ -254,27 +281,35 @@ public class MusicService extends Service {
      * @param action
      */
     public void updateCurrentSongIndex(int action){
-        if(action == 1) mCurrentSongIndex++;
-        if(action == 0) mCurrentSongIndex--;
-        if( mCurrentSongIndex > mDataSource.getSongsFromSD().size() - 1) mCurrentSongIndex = 0;
-        if( mCurrentSongIndex < 0) mCurrentSongIndex = mDataSource.getSongsFromSD().size() - 1;
+        if(action == PLAY_NEXT) mCurrentSongIndex++;
+        if(action == PLAY_PREVIOUS) mCurrentSongIndex--;
+        if( mCurrentSongIndex > mDataSource.getAllSongs().size() - 1) mCurrentSongIndex = 0;
+        if( mCurrentSongIndex < 0) mCurrentSongIndex = mDataSource.getAllSongs().size() - 1;
         SharedPreferences preferences = getSharedPreferences("user",Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putLong( SongItem.SONG_ID, getSongFromListByIndex().getId());
         editor.commit();
     }
 
+    /**
+     * Get the current song index.
+     * @param songId
+     * @return
+     */
     public int getCurrentSongIndexById(long songId){
-        for(int i = 0;i <= mDataSource.getSongsFromSD().size() - 1;i++){
-            if(songId == mDataSource.getSongsFromSD().get(i).getId())
+        for(int i = 0; i <= mDataSource.getAllSongs().size() - 1; i++){
+            if(songId == mDataSource.getAllSongs().get(i).getId())
                 return i;
         }
         return 0;
     }
 
+    /**
+     * Get a random index of the song.
+     */
     public void randomSongIndex(){
         java.util.Random r = new java.util.Random();
-        mCurrentSongIndex = r.nextInt(mDataSource.getSongsFromSD().size());
+        mCurrentSongIndex = r.nextInt(mDataSource.getAllSongs().size());
     }
 
     /**
@@ -286,13 +321,20 @@ public class MusicService extends Service {
     }
 
 
+    /**
+     * Call a song at a specific position.
+     * @param position
+     */
     private void playSongAtPosition(int position) {
-        Log.d("===playAtPosition===", mDataSource.getSongsFromSD().size()+" pos:"+position);
+        Log.d("===playAtPosition===", mDataSource.getAllSongs().size()+" pos:"+position);
         setCurrentSongIndex(position);
         play();
 
     }
 
+    /**
+     * Set the current playing song as favorite.
+     */
     private void setCurrentSongFavorite(){
         mDataSource.setSongFavorite(getCurrentPlayingSong().getId());
     }
@@ -307,10 +349,10 @@ public class MusicService extends Service {
         if(song != null){
             remoteViews.setTextViewText(R.id.widget_title_tv, song.getTitle());
             remoteViews.setTextViewText(R.id.widget_artist_tv, song.getArtist());
-//            if(pPlayFlag) remoteViews.setInt(R.id.widget_play_btn, "setBackground",
-//                    R.mipmap.widget_play_btn);
-//            else remoteViews.setInt(R.id.widget_play_btn, "setBackground",
-//                    R.mipmap.widget_pause_btn);
+            if( pPlayFlag ) remoteViews.setInt(R.id.widget_play_btn, "setBackgroundResource",
+                    R.mipmap.widget_pause_btn);
+            else remoteViews.setInt(R.id.widget_play_btn, "setBackgroundResource",
+                    R.mipmap.widget_play_btn);
         }
         else {
             remoteViews.setTextViewText(R.id.widget_title_tv, getString(R.string.no_song_hint));
@@ -343,14 +385,10 @@ public class MusicService extends Service {
             pReplayFlag = false;
     }
 
-    private void changPlayingFlag() {
-        if(!pPlayFlag) {
-            pPlayFlag = true;
-        }
-        else
-            pPlayFlag = false;
-    }
-
+    /**
+     * This class is to provide a binder which has some basic functions for activities to operate
+     * in music service.
+     */
     class MusicBinder extends Binder implements BaseService{
         @Override
         public void callPlay() {
