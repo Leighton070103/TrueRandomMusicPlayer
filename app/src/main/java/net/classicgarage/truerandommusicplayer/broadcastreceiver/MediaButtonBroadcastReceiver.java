@@ -33,9 +33,9 @@ import net.classicgarage.truerandommusicplayer.service.PlayerService;
  * broadcast, for example, when the user disconnects the headphones
  * we have register to this broadcast in the manifest file
  */
-public class MusicIntentReceiver extends BroadcastReceiver {
+public class MediaButtonBroadcastReceiver extends BroadcastReceiver {
 
-	private static final String TAG="MusicIntentReceiver";	
+	private static final String TAG="MediaButtonBroadcastReceiver";
     
     @Override
     public void onReceive(Context context, Intent intent) {
