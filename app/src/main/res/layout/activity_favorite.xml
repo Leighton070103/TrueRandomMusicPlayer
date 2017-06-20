@@ -10,9 +10,11 @@
     tools:context="net.classicgarage.truerandommusicplayer.activity.FavSongsActivity">
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="match_parent"
+        android:layout_width="368dp"
         android:layout_height="wrap_content"
-        android:id="@+id/menu_tablayout">
+        android:id="@+id/menu_tablayout"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="8dp">
 
         <TabHost
             android:id="@android:id/tabhost"
@@ -59,13 +61,15 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/fav_song_list_rv"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:layout_weight="1"
         android:elevation="1dp"
         android:descendantFocusability="blocksDescendants"
-        tools:listitem="@layout/song_item" />
+        tools:listitem="@layout/song_item"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="8dp" />
 
 
 

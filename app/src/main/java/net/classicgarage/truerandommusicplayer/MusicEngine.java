@@ -310,9 +310,7 @@ public class MusicEngine{
 		 SongItem thisSong = null;
 		 String key = null;
 		 int retry = 0;
-
 		 synchronized (mSongsCatalog) {
-
 			 Random r = new Random();
 			 if (mFavoriteSongs.size() >0) {
 				 // retry if favorite song picked up is not in catalog
@@ -341,7 +339,6 @@ public class MusicEngine{
 				 Log.e(TAG, "getRandomFavoriteSong : unable to get new song. favorite songs list is empty"); 
 			 }
 		 }
-	        		        
 		return thisSong;
 	 }
 			 

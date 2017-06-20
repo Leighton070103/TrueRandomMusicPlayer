@@ -24,8 +24,10 @@ public class SongDataSource {
     private static SongDataSource sInstance;
     private LinkedList<SongItem> mSongs = null;
     private LinkedList<SongItem> mFavSongs = null;
+    private LinkedList<SongItem> mRandomSongs = null;
     private Context mContext;
     private SongDatabaseHelper favoriteHelper;
+    private int rotation = 0;
 
     /**
      * The constructor.
@@ -208,6 +210,14 @@ public class SongDataSource {
         int rowsDeleted = resolver.delete(uri,where,whereArgs);
         Log.d("TAG", "tracks deleted=" + rowsDeleted);
         return rowsDeleted;
+    }
+
+    public int getRotation() {
+        return rotation;
+    }
+
+    public void setRotation(int rotation) {
+        this.rotation = rotation;
     }
 //    public List<String> getMusicData(Context context){
 //        List<String> list = new ArrayList<String>();

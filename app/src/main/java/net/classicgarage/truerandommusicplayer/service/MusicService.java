@@ -42,11 +42,10 @@ public class MusicService extends Service {
     public static final int PLAY_PREVIOUS = 0;
     public static final int OPERATE_CURRENT = 1;
     public static final int PLAY_NEXT = 2;
+    public static final int PLAY_MODE = 3;
 
 
-    public MusicService() {
-    }
-
+    public MusicService() {}
 
     /**
      * On create method of the service.
@@ -302,7 +301,28 @@ public class MusicService extends Service {
      */
     public void randomSongIndex(){
         java.util.Random r = new java.util.Random();
+        boolean isAllPlayedInARow = true;
+        int randomSongIndex = r.nextInt(mDataSource.getAllSongs().size());
+        if (mDataSource.getSongAtPosition(randomSongIndex).getmPlayedTime() == 0){
+            mCurrentSongIndex = randomSongIndex;
+            mDataSource.getSongAtPosition(randomSongIndex).setmPlayedTime(1);
+            isAllPlayedInARow = false;
+        }
+        else if (mDataSource.getSongAtPosition(randomSongIndex).getmPlayedTime() > 0){
+            for(int i = 0;i < mDataSource.getAllSongs().size();i++){
+                if(mDataSource.getSongAtPosition(i).getmPlayedTime() == 0){
+                    mCurrentSongIndex = i;
+                    isAllPlayedInARow = false;
+                }
+            }
+            if(isAllPlayedInARow){
+                for (int i = 0;i < mDataSource.getAllSongs().size();i++){
+                    mDataSource.getSongAtPosition(i).setmPlayedTime(0);
+                }
+            }
+        }
         mCurrentSongIndex = r.nextInt(mDataSource.getAllSongs().size());
+
     }
 
     /**

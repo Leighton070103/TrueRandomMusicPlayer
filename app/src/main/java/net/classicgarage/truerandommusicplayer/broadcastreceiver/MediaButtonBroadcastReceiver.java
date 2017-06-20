@@ -22,7 +22,6 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.KeyEvent;
 
-import net.classicgarage.truerandommusicplayer.PlayerWidgetProvider;
 import net.classicgarage.truerandommusicplayer.service.MusicService;
 
 /**
