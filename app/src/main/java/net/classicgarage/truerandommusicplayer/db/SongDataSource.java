@@ -94,20 +94,28 @@ public class SongDataSource {
     private void initializeSongs(){
         mSongs = new LinkedList<SongItem>();
         ContentResolver cr = mContext.getContentResolver();
-        if(cr != null){
-            Cursor cursor = cr.query(
-                    MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null, null,
-                    null, MediaStore.Audio.Media.DEFAULT_SORT_ORDER);
-            if(null == cursor){
-                mSongs = null;
-            }
-            if(cursor.moveToFirst()){
-                do{
-                    SongItem song = readSong(cursor);
-                    if( song != null ) mSongs.add(song);
-                }while(cursor.moveToNext());
-            }
-            cursor.close();
+        if(cr != null) {
+
+                Cursor cursor = cr.query(
+                        MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null, null,
+                        null, MediaStore.Audio.Media.DEFAULT_SORT_ORDER);
+                if(cursor == null){
+                    cursor = cr.query(
+                            MediaStore.Audio.Media.INTERNAL_CONTENT_URI, null, null,
+                            null, MediaStore.Audio.Media.DEFAULT_SORT_ORDER);
+                }
+                if (null == cursor) {
+                    mSongs = null;
+                } else if (cursor.moveToFirst()) {
+                    do {
+                        SongItem song = readSong(cursor);
+                        if (song != null) mSongs.add(song);
+                    } while (cursor.moveToNext());
+                }
+
+                if (cursor != null) {
+                    cursor.close();
+                }
         }
         mSongs = favoriteHelper.updateFavoriteForSongs(mSongs);
 

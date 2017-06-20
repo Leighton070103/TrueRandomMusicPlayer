@@ -138,9 +138,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
+            public void onStartTrackingTouch(SeekBar seekBar) {}
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
@@ -156,8 +154,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-
-
         Intent intent = new Intent(MainActivity.this, MusicService.class);
         startService(intent);
         mMusicConn = new ServiceConnection() {
@@ -168,13 +164,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             @Override
-            public void onServiceDisconnected(ComponentName name) {
-
-            }
+            public void onServiceDisconnected(ComponentName name) {}
         };
 
         getApplicationContext().bindService(intent, mMusicConn, BIND_AUTO_CREATE);
-
 
         try {
             initSwipeView();
@@ -224,7 +217,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             mAlbumImageViewList.add(album_view);
         }
-
 
          mSwipePagerAdapter = new SwipePagerAdapter(mAlbumImageViewList);
 
