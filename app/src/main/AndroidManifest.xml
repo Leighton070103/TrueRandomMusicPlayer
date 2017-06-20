@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.MEDIA_CONTENT_CONTROL" />
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
 
     <application
         android:name=".activity.PlayerApplication"
@@ -24,6 +25,7 @@
         <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -31,21 +33,26 @@
         <receiver android:name=".broadcastreceiver.MediaButtonBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
+
                 <category android:name="android.intent.categoy.DEFAULT" />
             </intent-filter>
         </receiver>
 
         <activity android:name=".activity.AllSongsActivity" />
-        <activity android:name=".activity.FavSongsActivity"></activity>
-		
-		<receiver android:name=".PlayerWidgetProvider" >
+        <activity android:name=".activity.FavSongsActivity" />
+
+        <receiver android:name=".PlayerWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="com.skywang.widget.UPDATE_ALL"/>
+                <action android:name="com.skywang.widget.UPDATE_ALL" />
             </intent-filter>
-            <meta-data android:name="android.appwidget.provider"
+
+            <meta-data
+                android:name="android.appwidget.provider"
                 android:resource="@layout/appwidget_info" />
         </receiver>
+
+        <activity android:name=".activity.LockScreenActivity"></activity>
     </application>
 
 </manifest>
