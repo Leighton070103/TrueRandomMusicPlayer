@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -102,7 +103,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mSongDataSource = SongDataSource.getInstance(this.getApplicationContext());
 
-        getPermissons();
         mSongLeftTimeTv = (TextView) findViewById(R.id.timespend_tv);
         mSongTitleTv = (TextView) findViewById(R.id.title_tv);
         mAuthorTv = (TextView) findViewById(R.id.author_tv);
@@ -119,7 +119,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mRandomBtn = (ImageButton) findViewById(R.id.random_btn);
         mReplayBtn = (ImageButton) findViewById(R.id.replay_btn);
 
-
         mPlayPauseBtn.setOnClickListener(this);
         mPreBtn.setOnClickListener(this);
         mPlayListBtn.setOnClickListener(this);
@@ -129,7 +128,104 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mRandomBtn.setOnClickListener(this);
         mReplayBtn.setOnClickListener(this);
 
-        //seekbar
+        /*sSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                mSongLeftTimeTv.setText(SongItem.formateTime(progress));
+                updateMainPage();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                if(mBaseService.isPlaying()) {
+                    mBaseService.callPause();
+                    mBaseService.callSeekTo(seekBar.getProgress());
+                    mBaseService.callContinueMusic();
+                }
+                else{
+                    mBaseService.callPause();
+                    mBaseService.callSeekTo(seekBar.getProgress());
+                }
+            }
+        });*/
+
+        /*Intent intent = new Intent(MainActivity.this, MusicService.class);
+        startService(intent);
+        mMusicConn = new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                mBaseService = (BaseService) service;
+                updateMainPage();
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {}
+        };
+
+        getApplicationContext().bindService(intent, mMusicConn, BIND_AUTO_CREATE);*/
+
+        /*try {
+            initSwipeView();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }*/
+        getPermissons();
+    }
+
+    private void getPermissons() {
+        int code = ActivityCompat.checkSelfPermission(
+                MainActivity.this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (code != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+        }
+        else{
+            setSeekBarListener();
+            startServices();
+            enableSwiping();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        //super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode){
+            case 1:
+                setSeekBarListener();
+                startServices();
+                enableSwiping();
+        }
+    }
+
+    private void startServices(){
+        Intent intent = new Intent(MainActivity.this, MusicService.class);
+        startService(intent);
+        mMusicConn = new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                mBaseService = (BaseService) service;
+                updateMainPage();
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {}
+        };
+        getApplicationContext().bindService(intent, mMusicConn, BIND_AUTO_CREATE);
+    }
+
+    private void enableSwiping(){
+        try {
+            initSwipeView();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setSeekBarListener(){
+        //seek bar
         sSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -153,37 +249,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
         });
-
-        Intent intent = new Intent(MainActivity.this, MusicService.class);
-        startService(intent);
-        mMusicConn = new ServiceConnection() {
-            @Override
-            public void onServiceConnected(ComponentName name, IBinder service) {
-                mBaseService = (BaseService) service;
-                updateMainPage();
-            }
-
-            @Override
-            public void onServiceDisconnected(ComponentName name) {}
-        };
-
-        getApplicationContext().bindService(intent, mMusicConn, BIND_AUTO_CREATE);
-
-        try {
-            initSwipeView();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-
-
-//        updateMainPage();
     }
- @Override
+
+    @Override
     protected void onStart() {
         super.onStart();
     }
-
-
     /**
      * Update the main page according to the current playing song.
      */
@@ -414,64 +485,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-
-    /*
-     * inner broadcast receiver class
-     */
-//    class PlayerStatusReceiver extends BroadcastReceiver {
-//        @Override
-//        public void onReceive (Context context, Intent intent) {
-//        }
-//    }
-
-    // start menu first time user press on the "menu" touch
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        MenuInflater inflater = getMenuInflater ();
-//        inflater.inflate(R.menu.menu_main, menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onPrepareOptionsMenu(Menu menu) {
-//
-//        return true;
-//    }
-
-//    //handle menu options
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        return true;
-//    }
-
-    private void getPermissons() {
-        int code = ActivityCompat.checkSelfPermission(
-                MainActivity.this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        if (code != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-        }
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
         getApplicationContext().unbindService(mMusicConn);
     }
-
-    //.
-//    class MusicConn implements ServiceConnection {
-//
-//        @Override
-//        public void onServiceConnected(ComponentName name, IBinder service) {
-//            mBaseService = (BaseService) service;
-//        }
-//
-//        @Override
-//        public void onServiceDisconnected(ComponentName name) {
-//        }
-//    }
-
-
-
 }

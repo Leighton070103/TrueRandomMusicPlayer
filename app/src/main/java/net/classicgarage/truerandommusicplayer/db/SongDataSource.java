@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import net.classicgarage.truerandommusicplayer.model.SongItem;
@@ -33,22 +34,11 @@ public class SongDataSource {
 
         // Use the application context, which will ensure that you
         // don't accidentally leak an Activity's context.
-
         if ( sInstance == null ) {
             sInstance = new SongDataSource(context.getApplicationContext());
         }
         return sInstance;
     }
-
-//    private void getPermissons(Activity activity) {
-//        int code = ActivityCompat.checkSelfPermission(
-//                activity,
-//                Manifest.permission.WRITE_EXTERNAL_STORAGE);
-//        if (code != PackageManager.PERMISSION_GRANTED) {
-//            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-//        }
-//     }
-
 
     public LinkedList<SongItem> getSongsFromSD(){
         if( mSongs != null) return mSongs;
@@ -57,7 +47,6 @@ public class SongDataSource {
     }
 
     public void setSongFavorite(long songId){
-
         SongItem song = findSongItemById(songId);
         if( song != null ) {
             song.resetIsFavorite();
@@ -70,7 +59,6 @@ public class SongDataSource {
         else {
             mFavSongs.remove(song);
         }
-
     }
 
     public LinkedList<SongItem> getFavoriteSongs(){
@@ -95,7 +83,6 @@ public class SongDataSource {
         mSongs = new LinkedList<SongItem>();
         ContentResolver cr = mContext.getContentResolver();
         if(cr != null) {
-
                 Cursor cursor = cr.query(
                         MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null, null,
                         null, MediaStore.Audio.Media.DEFAULT_SORT_ORDER);
@@ -104,7 +91,7 @@ public class SongDataSource {
                             MediaStore.Audio.Media.INTERNAL_CONTENT_URI, null, null,
                             null, MediaStore.Audio.Media.DEFAULT_SORT_ORDER);
                 }
-                if (null == cursor) {
+                if (cursor == null) {
                     mSongs = null;
                 } else if (cursor.moveToFirst()) {
                     do {
@@ -112,13 +99,11 @@ public class SongDataSource {
                         if (song != null) mSongs.add(song);
                     } while (cursor.moveToNext());
                 }
-
                 if (cursor != null) {
                     cursor.close();
                 }
         }
         mSongs = favoriteHelper.updateFavoriteForSongs(mSongs);
-
     }
 
 
@@ -136,9 +121,7 @@ public class SongDataSource {
         mSongs.get(position).setFavorite(statu);
     }
 
-
-
-
+    @Nullable
     private SongItem readSong(Cursor cursor){
         SongItem song = new SongItem();
         song.setTitle(cursor.getString(cursor
@@ -171,8 +154,6 @@ public class SongDataSource {
             return song;
         }
         return null;
-
-
     }
 
     public SongItem getSongWithPath(String path){
