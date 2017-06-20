@@ -37,7 +37,7 @@ public class FavSongsActivity extends AppCompatActivity {
         mSongListRv = (RecyclerView) findViewById(R.id.fav_song_list_rv);
 
         mAdapter = new SongAdapter(this,mSongDataSource.getFavoriteSongs());
-        //mAdapter = new SongAdapter(this, mSongDataSource.getSongsFromSD());
+        //mAdapter = new SongAdapter(this, mSongDataSource.getAllSongs());
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         mSongListRv.setLayoutManager(mLayoutManager);
         mSongListRv.setItemAnimator(new DefaultItemAnimator());

@@ -33,8 +33,8 @@ public class AllSongsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_all_music_tab);
         mSongListRv = (RecyclerView) findViewById(R.id.activity_all_music_rv);
 
-        mAdapter = new SongAdapter(this,mSongDataSource.getSongsFromSD());
-        //mAdapter = new SongAdapter(this, mSongDataSource.getSongsFromSD());
+        mAdapter = new SongAdapter(this,mSongDataSource.getAllSongs());
+        //mAdapter = new SongAdapter(this, mSongDataSource.getAllSongs());
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         mSongListRv.setLayoutManager(mLayoutManager);
         mSongListRv.setItemAnimator(new DefaultItemAnimator());

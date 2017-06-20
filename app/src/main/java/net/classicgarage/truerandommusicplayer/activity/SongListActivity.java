@@ -57,7 +57,7 @@ public class SongListActivity extends TabActivity {
 
 
 //        mSongListRv = (RecyclerView) findViewById(R.id.song_list_rv);
-//        mAdapter = new SongAdapter(this,mSongDataSource.getSongsFromSD());
+//        mAdapter = new SongAdapter(this,mSongDataSource.getAllSongs());
 //        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
 //        mSongListRv.setLayoutManager(mLayoutManager);
 //        mSongListRv.setItemAnimator(new DefaultItemAnimator());

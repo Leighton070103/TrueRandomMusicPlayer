@@ -223,11 +223,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mViewPager = (ViewPager) findViewById(R.id.swipe_viewpager);
 
         LayoutInflater inflater = getLayoutInflater();
-        for(int i = 0;  i < mSongDataSource.getSongsFromSD().size(); i++) {
+        for(int i = 0; i < mSongDataSource.getAllSongs().size(); i++) {
             View album_view = inflater.inflate(R.layout.album_img_layout, null);
             mAlbumArtView = (ImageView) album_view.findViewById(R.id.albumView);
-            long songId = mSongDataSource.getSongsFromSD().get(i).getId();
-            long album = mSongDataSource.getSongsFromSD().get(i).getAlbumId();
+            long songId = mSongDataSource.getAllSongs().get(i).getId();
+            long album = mSongDataSource.getAllSongs().get(i).getAlbumId();
             Bitmap bitmap = SongItem.getArtwork(this.getApplicationContext(),songId,album,false);
             mAlbumArtView.setImageBitmap(bitmap);
             mAlbumImageViewList.add(album_view);

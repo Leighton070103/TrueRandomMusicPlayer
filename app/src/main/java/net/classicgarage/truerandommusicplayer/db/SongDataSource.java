@@ -15,6 +15,8 @@ import java.util.LinkedList;
 
 /**
  * Created by Tong on 2017/5/16.
+ * This class is to read from the android internal storage to provide data source for this music
+ * player.
  */
 
 public class SongDataSource {
@@ -25,12 +27,20 @@ public class SongDataSource {
     private Context mContext;
     private SongDatabaseHelper favoriteHelper;
 
+    /**
+     * The constructor.
+     * @param applicationContext
+     */
     private SongDataSource(Context applicationContext){
         mContext = applicationContext;
         favoriteHelper = SongDatabaseHelper.getInstance(mContext);
-//        getPermissons(activity);
     }
 
+    /**
+     * Return an instance of this datasource.
+     * @param context
+     * @return
+     */
     public static synchronized SongDataSource getInstance(Context context) {
 
         // Use the application context, which will ensure that you
@@ -41,7 +51,7 @@ public class SongDataSource {
         return sInstance;
     }
 
-    public LinkedList<SongItem> getSongsFromSD(){
+    public LinkedList<SongItem> getAllSongs(){
         if( mSongs != null) return mSongs;
         initializeSongs();
         return mSongs;
@@ -65,7 +75,7 @@ public class SongDataSource {
     public LinkedList<SongItem> getFavoriteSongs(){
         if( mFavSongs == null) {
             mFavSongs = new LinkedList<SongItem>();
-            for(SongItem song: getSongsFromSD()){
+            for(SongItem song: getAllSongs()){
                 if(song.getFavorite()) mFavSongs.add(song);
             }
         }
@@ -78,6 +88,14 @@ public class SongDataSource {
             if( song.getId() == songId ) return song;
         }
         return null;
+    }
+
+    public int findSongIndexById(long songId){
+        if( mSongs == null ) mSongs = new LinkedList<SongItem>();
+        for( int i = 0; i< mSongs.size(); i++){
+            if( mSongs.get(i).getId() == songId ) return i;
+        }
+        return 0;
     }
 
     private void initializeSongs(){
