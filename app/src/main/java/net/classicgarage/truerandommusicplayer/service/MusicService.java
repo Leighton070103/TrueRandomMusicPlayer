@@ -341,7 +341,8 @@ public class MusicService extends Service {
     private void playSongAtPosition(int position) {
         Log.d("===playAtPosition===", mDataSource.getAllSongs().size()+" pos:"+position);
         setCurrentSongIndex(position);
-        play();
+        if(pPlayFlag) play();
+        else prepare();
 
     }
 

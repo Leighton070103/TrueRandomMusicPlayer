@@ -379,9 +379,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     protected void deleteDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-        builder.setMessage("Are you sure to delete this song?");
-        builder.setTitle("Alert");
-        builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+        builder.setMessage(getString(R.string.delete_alert));
+        builder.setTitle(getString(R.string.alert));
+        builder.setPositiveButton(getString(R.string.confirm), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 mBaseService.deleteCurrentSong();
@@ -390,7 +390,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 dialog.dismiss();
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
