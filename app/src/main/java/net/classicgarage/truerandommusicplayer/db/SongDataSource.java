@@ -10,6 +10,7 @@ import android.util.Log;
 
 import net.classicgarage.truerandommusicplayer.model.SongItem;
 
+import java.io.File;
 import java.util.LinkedList;
 
 /**
@@ -96,6 +97,7 @@ public class SongDataSource {
                 } else if (cursor.moveToFirst()) {
                     do {
                         SongItem song = readSong(cursor);
+                        cursor.getPosition();
                         if (song != null) mSongs.add(song);
                     } while (cursor.moveToNext());
                 }
@@ -164,14 +166,20 @@ public class SongDataSource {
         return null;
     }
 
-    public void deletSong(long songId){
+    public void deleteSong(long songId){
         for (int i = 0; i < mSongs.size();i++){
             if(mSongs.get(i).getId() == songId){
+                File f = new File(mSongs.get(i).getPath());
+                f.delete();
                 deletePlaylistTracks(mContext,mSongs.get(i));
                 favoriteHelper.deleteSongFav(songId);
                 mSongs.remove(i);
             }
         }
+    }
+
+    public void deleteSongInIndex(int mCurrentSongIndex) {
+        deleteSong(mSongs.get(mCurrentSongIndex).getId());
     }
 
     private int deletePlaylistTracks(Context context, SongItem song){
