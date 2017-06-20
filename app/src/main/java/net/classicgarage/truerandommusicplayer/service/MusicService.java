@@ -37,7 +37,7 @@ public class MusicService extends Service {
     public boolean pReplayFlag = false;
     public boolean pRandomFlag = false;
     public boolean pPlayFlag = false;
-
+    public boolean pDouble = false;
 
     public static final String INTENT_ACTION = "Intent action";
     public static final int PLAY_PREVIOUS = 0;
@@ -77,8 +77,15 @@ public class MusicService extends Service {
         int action = intent.getIntExtra( INTENT_ACTION, -1);
         switch (action){
             case OPERATE_CURRENT:
-                if( pPlayFlag ) pause();
-                else play();
+                if(!pDouble)
+                {
+                    pDouble = true;
+                }
+                else {
+                    if (pPlayFlag) pause();
+                    else play();
+                    pDouble =false;
+                }
                 break;
             case PLAY_NEXT:
                 playNextSong();

@@ -2,11 +2,13 @@ package net.classicgarage.truerandommusicplayer.activity;
 
 import android.Manifest;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.media.AudioManager;
 import android.media.MediaScannerConnection;
 import android.os.Bundle;
 import android.os.Environment;
@@ -29,6 +31,7 @@ import android.widget.ToggleButton;
 
 import net.classicgarage.truerandommusicplayer.R;
 import net.classicgarage.truerandommusicplayer.adapter.SwipePagerAdapter;
+import net.classicgarage.truerandommusicplayer.broadcastreceiver.MediaButtonBroadcastReceiver;
 import net.classicgarage.truerandommusicplayer.db.SongDataSource;
 import net.classicgarage.truerandommusicplayer.model.SongItem;
 import net.classicgarage.truerandommusicplayer.service.BaseService;
@@ -130,7 +133,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mRandomBtn.setOnClickListener(this);
         mReplayBtn.setOnClickListener(this);
 
+        AudioManager audioManager = (AudioManager)this.getSystemService(Context.AUDIO_SERVICE);
+        ComponentName name = new ComponentName(this.getPackageName(),
+                MediaButtonBroadcastReceiver.class.getName());
+        audioManager.registerMediaButtonEventReceiver(name);
         getPermissions();
+
     }
 
     private void getPermissions() {
