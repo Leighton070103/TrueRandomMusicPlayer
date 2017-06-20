@@ -40,12 +40,11 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
         mContext = context;
         mSongDataSource = SongDataSource.getInstance(context);
     }
-//
+
 //    /**
 //     *  Used for defining method that used when items in the recycler view is clicked.
 //     */
-//
-//
+
 //    // create three interface for each item need ClickListener
     public interface OnSongItemNameClickListener {
         /**
@@ -118,7 +117,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
         holder.mDelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mSongDataSource.deletSong( songId );
+                mSongDataSource.deleteSong( songId );
                 notifyDataSetChanged();
             }
         });
