@@ -38,16 +38,18 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This activity is to provide the main view for this app.
+ * And enable users to check the song lists, play, pause, delete music, or label them as favorite.
+ */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    public static final int ALBUM_ART_HEIGHT = 150;
-    public static final int ALBUM_ART_WIDTH = 150;
     public static final int REQUEST_CODE = 070103;
 
     /**
      * Used for calling SongPicker activity
      */
-    public static final int REQUEST_PICK_SONG = 0;
+
 
     public boolean musicFlag = false; // use for music running or not
     public boolean playFlag = false;
@@ -133,12 +135,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         getPermissions();
     }
 
+    /**
+     * This method is check permissions which is necessary for this app, and if the permission is
+     * not granted, request it from the user.
+     */
     private void getPermissions() {
         int code = ActivityCompat.checkSelfPermission(
                 MainActivity.this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE);
         if (code != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
         }
         else{
             setSeekBarListener();
@@ -147,8 +154,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    /**
+     * This method is called when a request of permission is finished.
+     * And if the app has the permission, enable the basic functions.
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         //super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode){
             case 1:
@@ -161,6 +176,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    /**
+     * This method is to start the music service.
+     */
     private void startServices(){
         Intent intent = new Intent(MainActivity.this, MusicService.class);
         startService(intent);
@@ -177,6 +195,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         getApplicationContext().bindService(intent, mMusicConn, BIND_AUTO_CREATE);
     }
 
+    /**
+     * This method is to init the swipe view, so as to enable the swiping to change song function.
+     */
     private void enableSwiping(){
         try {
             initSwipeView();
@@ -185,6 +206,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    /**
+     * This method is to set listener to the seek bar, change its status due to different operations.
+     */
     private void setSeekBarListener(){
         //seek bar
         sSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -218,6 +242,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
+    /**
+     * Initialization of the swipe view.
+     * @throws IllegalAccessException
+     */
     public void initSwipeView() throws IllegalAccessException {
         mAlbumImageViewList = new ArrayList<View>();
         mViewPager = (ViewPager) findViewById(R.id.swipe_viewpager);
@@ -275,6 +303,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mViewPager.addOnPageChangeListener(mOnPageChangeListener);
     }
 
+    /**
+     * Called when the activity is displayed, and update the main page.
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -291,6 +322,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onStop();
     }
 
+    /**
+     * The onclick method for most all the buttons.
+     * @param v
+     */
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.play_pause_btn:
@@ -337,6 +372,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    /**
+     * To display a delete dialog.
+     */
     protected void deleteDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setMessage("Are you sure to delete this song?");

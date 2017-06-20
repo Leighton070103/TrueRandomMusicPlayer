@@ -188,7 +188,7 @@ public class MusicService extends Service {
             randomSongIndex();
         }
         else{
-            updateCurrentSongIndex(1);
+            updateCurrentSongIndex(PLAY_NEXT);
         }
         if( pPlayFlag ) play();
         else prepare();
@@ -202,7 +202,7 @@ public class MusicService extends Service {
             randomSongIndex();
         }
         else {
-            updateCurrentSongIndex(0);
+            updateCurrentSongIndex(PLAY_PREVIOUS);
         }
         if(pPlayFlag) play();
         else prepare();
@@ -274,8 +274,8 @@ public class MusicService extends Service {
      * @param action
      */
     public void updateCurrentSongIndex(int action){
-        if(action == 1) mCurrentSongIndex++;
-        if(action == 0) mCurrentSongIndex--;
+        if(action == PLAY_NEXT) mCurrentSongIndex++;
+        if(action == PLAY_PREVIOUS) mCurrentSongIndex--;
         if( mCurrentSongIndex > mDataSource.getAllSongs().size() - 1) mCurrentSongIndex = 0;
         if( mCurrentSongIndex < 0) mCurrentSongIndex = mDataSource.getAllSongs().size() - 1;
         SharedPreferences preferences = getSharedPreferences("user",Context.MODE_PRIVATE);
@@ -378,6 +378,10 @@ public class MusicService extends Service {
             pReplayFlag = false;
     }
 
+    /**
+     * This class is to provide a binder which has some basic functions for activities to operate
+     * in music service.
+     */
     class MusicBinder extends Binder implements BaseService{
         @Override
         public void callPlay() {
