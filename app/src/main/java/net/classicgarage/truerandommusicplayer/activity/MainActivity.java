@@ -55,9 +55,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     public boolean musicFlag = false; // use for music running or not
-    public boolean playFlag = false;
-    public boolean replayFlag = false;
-    public boolean randomFlag = false;
     ImageButton mPlayPauseBtn;
     ImageView mAlbumArtView;
     ImageButton mRandomBtn;
@@ -436,37 +433,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void updateRandomButton() {
-        if(!randomFlag) {
+        if(!mBaseService.callGetRandomFlag()) {
             mRandomBtn.setImageDrawable(getResources().getDrawable(R.mipmap.random1b));
-            randomFlag = true;
             mBaseService.callChangeRandomFlag();
-            if(replayFlag){
+            if(mBaseService.callGetReplayFlag()){
                 mReplayBtn.setImageDrawable(getResources().getDrawable(R.mipmap.replay1w));
-                replayFlag = false;
                 mBaseService.callChangeReplayFlag();
             }
         }
         else {
             mRandomBtn.setImageDrawable(getResources().getDrawable(R.mipmap.randomw));
-            randomFlag = false;
             mBaseService.callChangeRandomFlag();
         }
     }
 
     private void updateReplayButton() {
-        if(!replayFlag) {
+        if(!mBaseService.callGetReplayFlag()) {
             mReplayBtn.setImageDrawable(getResources().getDrawable(R.mipmap.replay1b));
-            replayFlag = true;
             mBaseService.callChangeReplayFlag();
-            if(randomFlag){
+            if(mBaseService.callGetRandomFlag()){
                 mRandomBtn.setImageDrawable(getResources().getDrawable(R.mipmap.randomw));
-                randomFlag = false;
                 mBaseService.callChangeRandomFlag();
             }
         }
         else {
             mReplayBtn.setImageDrawable(getResources().getDrawable(R.mipmap.replay1w));
-            replayFlag = false;
             mBaseService.callChangeReplayFlag();
         }
     }

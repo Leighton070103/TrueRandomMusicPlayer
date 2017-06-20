@@ -171,6 +171,7 @@ public class MusicService extends Service {
         try {
             mDataSource.deleteSongInIndex(mCurrentSongIndex);
             play();
+            updateWidget();
         }
         catch (java.lang.IndexOutOfBoundsException e){
             e.printStackTrace();
@@ -378,6 +379,20 @@ public class MusicService extends Service {
     }
 
     /**
+     *  Return the ramdomflag.
+     */
+    private boolean getRandomflag(){
+        return pRandomFlag;
+    }
+
+    /**
+     *  Return the replayflag.
+     */
+    private boolean getReplayflag(){
+        return pReplayFlag;
+    }
+
+    /**
      * This class is to provide a binder which has some basic functions for activities to operate
      * in music service.
      */
@@ -440,7 +455,13 @@ public class MusicService extends Service {
         public void callChangeReplayFlag(){ changeReplayFlag(); }
 
         @Override
-        public void callChangeRandomFlag(){changeRandomFlag();}
+        public void callChangeRandomFlag(){ changeRandomFlag(); }
+
+        @Override
+        public boolean callGetRandomFlag(){ return getRandomflag(); }
+
+        @Override
+        public boolean callGetReplayFlag(){ return getReplayflag();}
 
     }
 }
