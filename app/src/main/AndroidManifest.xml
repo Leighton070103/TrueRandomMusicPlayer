@@ -8,7 +8,6 @@
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
-
     <application
         android:name=".activity.PlayerApplication"
         android:allowBackup="true"
@@ -54,14 +53,15 @@
                 android:resource="@layout/appwidget_info" />
         </receiver>
 
-        <activity android:name=".activity.LockScreenActivity"
-            android:launchMode="singleTask" >
-        </activity>
+        <activity
+            android:name=".activity.LockScreenActivity"
+            android:launchMode="singleTask"></activity>
 
         <receiver
             android:name=".broadcastreceiver.LockScreenBroadcastReceiver"
             android:enabled="true"
-            android:exported="true"></receiver>
+            android:exported="true" />
+
     </application>
 
 </manifest>
