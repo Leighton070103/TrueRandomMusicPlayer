@@ -5,5 +5,162 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="net.classicgarage.truerandommusicplayer.activity.LockScreenActivity">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#37474f">
+        android:background="@drawable/background_main">
+        <LinearLayout
+            android:id="@+id/title_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/btn_layout5"
+            android:layout_margin="10dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <SeekBar
+                    android:id="@+id/procress_bar"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/album_tv"
+                    android:layout_weight="1" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/timespend_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@+id/procress_bar"
+                        android:layout_weight="1"
+                        android:text="00:00"
+                        android:textColor="#ffffff"
+                        android:textSize="9sp" />
+
+                    <TextView
+                        android:id="@+id/timeleft_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@+id/procress_bar"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:text="00:00"
+                        android:textColor="#ffffff"
+                        android:textSize="9sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <net.classicgarage.truerandommusicplayer.widget.AlwaysMarqueeTextView
+                android:id="@+id/title_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/auther_tv"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentStart="true"
+                android:focusable= "true"
+                android:focusableInTouchMode= "true"
+                android:scrollHorizontally= "true"
+                android:marqueeRepeatLimit= "marquee_forever"
+                android:ellipsize= "marquee"
+                android:gravity="center"
+                android:text="Title"
+                android:textColor="#ffffff"
+                android:textSize="28sp" />
+
+            <TextView
+                android:id="@+id/author_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/cover_iv"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentStart="true"
+                android:gravity="center"
+                android:text="Author"
+                android:textColor="#ffffff" />
+
+            <TextView
+                android:id="@+id/album_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/title_tv"
+                android:gravity="center"
+                android:text="Album"
+                android:textColor="#ffffff" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btn_layout5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentStart="false"
+            android:layout_margin="10dp"
+            android:orientation="horizontal">
+
+
+            <ImageButton
+                android:id="@+id/pre_btn"
+                android:layout_width="45dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|center"
+                android:layout_weight="1"
+                android:background="#00000000"
+                android:src="@mipmap/pre" />
+
+            <ImageButton
+                android:id="@+id/play_pause_btn"
+                android:layout_width="45dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/timespend_tv"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal|center"
+                android:layout_weight="1"
+                android:background="#00000000"
+                android:src="@mipmap/play_btn" />
+
+            <ImageButton
+                android:id="@+id/next_btn"
+                android:layout_width="45dp"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/pause_btn"
+                android:layout_gravity="center_vertical|center"
+                android:layout_marginLeft="0dp"
+                android:layout_marginStart="0dp"
+                android:layout_toEndOf="@+id/pause_btn"
+                android:layout_toRightOf="@+id/pause_btn"
+                android:layout_weight="1"
+                android:background="#00000000"
+                android:elevation="0dp"
+                android:src="@mipmap/next" />
+
+        </LinearLayout>
+    </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>

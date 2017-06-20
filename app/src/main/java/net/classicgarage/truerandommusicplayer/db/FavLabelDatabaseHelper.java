@@ -13,14 +13,15 @@ import java.util.LinkedList;
 
 /**
  * Created by tomat on 2017-05-17.
+ * This class is to store and update the favorite label information in the database.
  */
 
 
-public class SongDatabaseHelper extends SQLiteOpenHelper {
+public class FavLabelDatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "favorite_songs";
     private static int DATABASE_VERSION = 1;
-    private static SongDatabaseHelper sInstance;
+    private static FavLabelDatabaseHelper sInstance;
 
     private LinkedList<SongFavItem> mSongFavItems = null;
     public static final String TABLE_SONGS = "favorite_songs";
@@ -35,31 +36,57 @@ public class SongDatabaseHelper extends SQLiteOpenHelper {
                     COLUMN_FAVORITE + " INTEGER, " + COLUMN_MUSIC_ID + " LONG "
                     + ")";
 
-    public SongDatabaseHelper(Context context) {
+    /**
+     * The constructor.
+     * @param context
+     */
+    private FavLabelDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
 
     }
 
-    public static synchronized SongDatabaseHelper getInstance(Context context) {
+    /**
+     * Return an instance of this helper.
+     * @param context
+     * @return
+     */
+    public static synchronized FavLabelDatabaseHelper getInstance(Context context) {
         // Use the application context, which will ensure that you
         // don't accidentally leak an Activity's context.
 
         if ( sInstance == null ) {
-            sInstance = new SongDatabaseHelper(context);
+            sInstance = new FavLabelDatabaseHelper(context);
         }
         return sInstance;
     }
 
+    /**
+     * Called when the database is first created.
+     * @param db
+     */
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(TABLE_CREATE);
     }
 
+    /**
+     * Called when the database is updated.
+     * @param db
+     * @param oldVersion
+     * @param newVersion
+     */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
     }
 
+    /**
+     * For the list of songs, add the favorite label information according to records stored in the
+     * database.
+     * If there is no corresponding favorite record for a specific song, create one.
+     * @param songs
+     * @return
+     */
     public LinkedList<SongItem> updateFavoriteForSongs(LinkedList<SongItem> songs){
 
         //Get favorite record from the database.
@@ -160,12 +187,16 @@ public class SongDatabaseHelper extends SQLiteOpenHelper {
         return songFavItem;
     }
 
+    /**
+     * Update the favorite information for a specific song.
+     * @param songId
+     */
     public void updateFavoriteSong(long songId){
         SQLiteDatabase db = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         SongFavItem item = getSongFavBySongId(songId);
         item.updateFavorite();
-        contentValues.put(SongDatabaseHelper.COLUMN_FAVORITE, item.getFavorite());
+        contentValues.put(FavLabelDatabaseHelper.COLUMN_FAVORITE, item.getFavorite());
         String[] args = { String.valueOf(songId) };
         db.update( TABLE_SONGS, contentValues, COLUMN_MUSIC_ID + "=?",args);
     }
