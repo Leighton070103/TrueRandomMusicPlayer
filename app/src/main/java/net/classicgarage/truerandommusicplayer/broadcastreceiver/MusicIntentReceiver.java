@@ -20,8 +20,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.widget.Toast;
 
+import net.classicgarage.truerandommusicplayer.PlayerWidgetProvider;
+import net.classicgarage.truerandommusicplayer.service.MusicService;
 import net.classicgarage.truerandommusicplayer.service.PlayerService;
 
 /**
@@ -37,15 +40,29 @@ public class MusicIntentReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        // AudioManager.ACTION_AUDIO_BECOMING_NOISY:
-        // Broadcast intent, a hint for applications that audio is about to become 'noisy'
-        // due to a change in audio outputs.
-        if (intent.getAction().equals(android.media.AudioManager.ACTION_AUDIO_BECOMING_NOISY)) {
-            Toast.makeText(context, "Headphones disconnected", Toast.LENGTH_SHORT).show();
+        String intentAction = intent.getAction();
+        KeyEvent keyEvent = (KeyEvent) intent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
+        Log.i(TAG, "Action ---->" + intentAction + "  KeyEvent----->"+ keyEvent.toString());
 
-            // send an intent to PlayerService to tell it to pause the audio
-            Log.d(TAG, "sending PAUSE intent");
-            context.startService(new Intent(PlayerService.ACTION_PAUSE));
+        if (Intent.ACTION_MEDIA_BUTTON.equals(intentAction)) {
+            // get key code.
+            Intent buttonIntent = new Intent(context, MusicService.class);
+            int keyCode = keyEvent.getKeyCode();
+            switch ( keyCode ){
+                case KeyEvent.KEYCODE_MEDIA_NEXT:
+                    intent.putExtra( PlayerWidgetProvider.WIDGET_ACTION, PlayerWidgetProvider
+                            .WIDGET_PLAY_NEXT);
+                    break;
+                case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
+                    intent.putExtra( PlayerWidgetProvider.WIDGET_ACTION, PlayerWidgetProvider
+                            .WIDGET_OPERATE_CURRENT);
+                    break;
+                case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
+                    intent.putExtra( PlayerWidgetProvider.WIDGET_ACTION, PlayerWidgetProvider
+                            .WIDGET_PLAY_PREVIOUS);
+                    break;
+            }
+            context.startService(buttonIntent);
         }
     }    
 }
