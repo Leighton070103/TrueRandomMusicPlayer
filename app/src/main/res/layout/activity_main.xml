@@ -51,17 +51,15 @@
 
         </LinearLayout>
 
-        <ListView
-            android:id="@+id/song_list_lv"
-            android:visibility="gone"
-            android:layout_below="@id/searchlayout"
-            android:layout_height="match_parent"
+        <FrameLayout
+            android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:background="#969696" />
+            android:layout_weight="1">
+
 
         <LinearLayout
             android:layout_below="@id/searchlayout"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_width="match_parent"
             android:layout_weight="1"
             android:orientation="vertical">
@@ -276,6 +274,14 @@
                 android:scaleType="centerInside"
                 android:src="@mipmap/replay1w" />
         </LinearLayout>
+        </LinearLayout>
+            <ListView
+                android:id="@+id/song_list_lv"
+                android:visibility="gone"
+                android:layout_below="@id/searchlayout"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:background="#969696" />
+        </FrameLayout>
     </LinearLayout>
-</LinearLayout>
 </LinearLayout>

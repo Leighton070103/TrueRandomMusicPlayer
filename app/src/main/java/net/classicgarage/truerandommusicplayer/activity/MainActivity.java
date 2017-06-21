@@ -178,6 +178,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         getPermissions();
 
     }
+
     /**
      * This method is check permissions which is necessary for this app, and if the permission is
      * not granted, request it from the user.
