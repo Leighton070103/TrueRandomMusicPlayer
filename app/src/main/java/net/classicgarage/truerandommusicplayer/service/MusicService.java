@@ -61,8 +61,14 @@ public class MusicService extends Service {
         mMediaPlayer = new MediaPlayer();
         mDataSource = SongDataSource.getInstance(this.getApplicationContext());
         SharedPreferences preferences = getSharedPreferences("user", Context.MODE_PRIVATE);
-        mCurrentSongIndex = mDataSource.findSongIndexById(preferences.getLong( SongItem.SONG_ID,
+        try{
+            mCurrentSongIndex = mDataSource.findSongIndexById(preferences.getLong( SongItem.SONG_ID,
                 getCurrentPlayingSong().getId()));
+        }
+        catch ( NullPointerException e){
+            e.printStackTrace();
+            mCurrentSongIndex = 0;
+        }
         KeyguardManager.KeyguardLock key;
         KeyguardManager km = (KeyguardManager)getSystemService(KEYGUARD_SERVICE);
         key = km.newKeyguardLock("IN");
@@ -81,6 +87,7 @@ public class MusicService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         int action = intent.getIntExtra( INTENT_ACTION, -1);
+        if(mDataSource.getAllSongs()!=null && mDataSource.getAllSongs().size()!= 0){
         switch (action){
             case OPERATE_CURRENT:
                 if (pPlayFlag) pause();
@@ -96,6 +103,8 @@ public class MusicService extends Service {
                 updateWidget();
                 break;
         }
+        }
+
         return START_NOT_STICKY;
     }
 

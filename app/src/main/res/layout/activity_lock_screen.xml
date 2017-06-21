@@ -130,7 +130,7 @@
 
 
             <ImageButton
-                android:id="@+id/pre_btn"
+                android:id="@+id/lock_screen_pre_btn"
                 android:layout_width="45dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal|center"
@@ -139,7 +139,7 @@
                 android:src="@mipmap/pre" />
 
             <ImageButton
-                android:id="@+id/play_pause_btn"
+                android:id="@+id/lock_screen_play_pause_btn"
                 android:layout_width="45dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/timespend_tv"
@@ -150,7 +150,7 @@
                 android:src="@mipmap/play_btn" />
 
             <ImageButton
-                android:id="@+id/next_btn"
+                android:id="@+id/lock_screen_next_btn"
                 android:layout_width="45dp"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/pause_btn"
