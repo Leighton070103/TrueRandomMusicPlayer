@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Message;
 import android.util.Log;
-import android.view.WindowManager;
 import android.widget.RemoteViews;
 
 import net.classicgarage.truerandommusicplayer.PlayerWidgetProvider;
@@ -51,9 +50,6 @@ public class MusicService extends Service {
 
 
     public MusicService() {}
-
-
-
     /**
      * On create method of the service.
      * Initialize the media player and the data source.

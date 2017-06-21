@@ -28,6 +28,7 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+                <categor android:name="android.intent.category.HOME" />
             </intent-filter>
         </activity>
 
@@ -55,7 +56,14 @@
 
         <activity
             android:name=".activity.LockScreenActivity"
-            android:launchMode="singleTask"></activity>
+            android:launchMode="singleTask">
+
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+
+        </activity>
 
         <receiver
             android:name=".broadcastreceiver.LockScreenBroadcastReceiver"
