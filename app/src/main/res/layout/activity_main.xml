@@ -39,16 +39,22 @@
                     android:scaleType="centerInside"
                     android:src="@mipmap/menu" />
 
-                <android.support.v7.widget.SearchView
-                    android:id="@+id/search_sv"
-                    android:layout_width="0px"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:iconifiedByDefault="false"
-                    android:inputType="textFilter"
-                    android:queryHint="Search"/>
-            </LinearLayout>
 
+                <FrameLayout
+                    android:id="@+id/search_edit_frame"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <android.support.v7.widget.SearchView
+                        android:id="@+id/search_sv"
+                        android:layout_width="0px"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:iconifiedByDefault="false"
+                        android:inputType="textFilter"
+                        android:queryHint="Search" />
+                </FrameLayout>
+            </LinearLayout>
         </LinearLayout>
 
         <FrameLayout
@@ -94,18 +100,12 @@
                     android:textOn="" />
             </RelativeLayout>
 
-
-
         <android.support.v4.view.ViewPager
             android:id="@+id/swipe_viewpager"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:layout_gravity="center" />
-
-
-
-
 
         <LinearLayout
             android:id="@+id/title_layout"

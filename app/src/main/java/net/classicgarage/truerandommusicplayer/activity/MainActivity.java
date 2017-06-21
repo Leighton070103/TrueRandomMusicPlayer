@@ -185,19 +185,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     private void getPermissions() {
         if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE )
-                != PackageManager.PERMISSION_GRANTED ||
-                ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.SYSTEM_ALERT_WINDOW )
-                        != PackageManager.PERMISSION_GRANTED ||
-                ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.BIND_DEVICE_ADMIN )
-                        != PackageManager.PERMISSION_GRANTED ||
-                ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.RECEIVE_BOOT_COMPLETED )
-                        != PackageManager.PERMISSION_GRANTED)
+                != PackageManager.PERMISSION_GRANTED )
         {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    Manifest.permission.SYSTEM_ALERT_WINDOW,
-                    Manifest.permission.BIND_DEVICE_ADMIN,
-                    Manifest.permission.RECEIVE_BOOT_COMPLETED
             }, 1);
         }
         else{
