@@ -6,7 +6,6 @@ import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Binder;
@@ -16,10 +15,9 @@ import android.os.Message;
 import android.util.Log;
 import android.widget.RemoteViews;
 
-import net.classicgarage.truerandommusicplayer.PlayerWidgetProvider;
+import net.classicgarage.truerandommusicplayer.widget.PlayerWidgetProvider;
 import net.classicgarage.truerandommusicplayer.R;
 import net.classicgarage.truerandommusicplayer.activity.MainActivity;
-import net.classicgarage.truerandommusicplayer.broadcastreceiver.LockScreenBroadcastReceiver;
 import net.classicgarage.truerandommusicplayer.db.SongDataSource;
 import net.classicgarage.truerandommusicplayer.model.SongItem;
 
@@ -37,7 +35,7 @@ public class MusicService extends Service {
     private Timer mTimer = null;
     private TimerTask mTask = null;
     private int mCurrentSongIndex = 0;
-    private LockScreenBroadcastReceiver mLockScreenBroadcastReceiver;
+//    private LockScreenBroadcastReceiver mLockScreenBroadcastReceiver;
     public boolean pReplayFlag = false;
     public boolean pRandomFlag = false;
     public boolean pPlayFlag = false;
@@ -73,7 +71,7 @@ public class MusicService extends Service {
         KeyguardManager km = (KeyguardManager)getSystemService(KEYGUARD_SERVICE);
         key = km.newKeyguardLock("IN");
         key.disableKeyguard();
-        registerScreenBroadcastReceiver();
+        //registerScreenBroadcastReceiver();
         super.onCreate();
     }
 
@@ -430,15 +428,15 @@ public class MusicService extends Service {
         return pReplayFlag;
     }
 
-    private void registerScreenBroadcastReceiver() {
-        mLockScreenBroadcastReceiver = new LockScreenBroadcastReceiver();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(Intent.ACTION_SCREEN_OFF);//当屏幕锁屏的时候触发
-        intentFilter.addAction(Intent.ACTION_SCREEN_ON);//当屏幕解锁的时候触发
-        intentFilter.addAction(Intent.ACTION_USER_PRESENT);//当用户重新唤醒手持设备时触发
-        getApplicationContext().registerReceiver(mLockScreenBroadcastReceiver, intentFilter);
-        Log.i("screenBR", "screenBroadcastReceiver注册了");
-    }
+//    private void registerScreenBroadcastReceiver() {
+//        mLockScreenBroadcastReceiver = new LockScreenBroadcastReceiver();
+//        IntentFilter intentFilter = new IntentFilter();
+//        intentFilter.addAction(Intent.ACTION_SCREEN_OFF);//当屏幕锁屏的时候触发
+//        intentFilter.addAction(Intent.ACTION_SCREEN_ON);//当屏幕解锁的时候触发
+//        intentFilter.addAction(Intent.ACTION_USER_PRESENT);//当用户重新唤醒手持设备时触发
+//        getApplicationContext().registerReceiver(mLockScreenBroadcastReceiver, intentFilter);
+//        Log.i("screenBR", "screenBroadcastReceiver注册了");
+//    }
 
     /**
      * This class is to provide a binder which has some basic functions for activities to operate

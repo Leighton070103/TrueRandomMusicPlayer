@@ -9,20 +9,14 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
-        android:name=".activity.PlayerApplication"
         android:allowBackup="true"
         android:icon="@drawable/trmp_launcher_icon"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <service android:name=".service.PlayerService" />
         <service android:name=".service.MusicService" />
 
         <activity android:name=".activity.SongListActivity" />
-        <activity
-            android:name=".activity.MusicPlayerActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -43,7 +37,7 @@
         <activity android:name=".activity.AllSongsActivity" />
         <activity android:name=".activity.FavSongsActivity" />
 
-        <receiver android:name=".PlayerWidgetProvider">
+        <receiver android:name=".widget.PlayerWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="com.skywang.widget.UPDATE_ALL" />
@@ -53,22 +47,6 @@
                 android:name="android.appwidget.provider"
                 android:resource="@layout/appwidget_info" />
         </receiver>
-
-        <activity
-            android:name=".activity.LockScreenActivity"
-            android:launchMode="singleTask">
-
-            <intent-filter>
-                <category android:name="android.intent.category.LAUNCHER"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-            </intent-filter>
-
-        </activity>
-
-        <receiver
-            android:name=".broadcastreceiver.LockScreenBroadcastReceiver"
-            android:enabled="true"
-            android:exported="true" />
 
     </application>
 

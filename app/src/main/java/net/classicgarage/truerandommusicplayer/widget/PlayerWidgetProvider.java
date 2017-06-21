@@ -1,4 +1,4 @@
-package net.classicgarage.truerandommusicplayer;
+package net.classicgarage.truerandommusicplayer.widget;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -10,6 +10,7 @@ import android.util.Log;
 import android.widget.RemoteViews;
 
 
+import net.classicgarage.truerandommusicplayer.R;
 import net.classicgarage.truerandommusicplayer.service.MusicService;
 
 public class PlayerWidgetProvider extends AppWidgetProvider {
