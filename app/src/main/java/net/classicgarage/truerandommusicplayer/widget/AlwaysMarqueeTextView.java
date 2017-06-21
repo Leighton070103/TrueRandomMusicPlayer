@@ -2,7 +2,6 @@ package net.classicgarage.truerandommusicplayer.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.TextView;
 
 /**
  * This class is to provide a textview widget that would automatically hide part of the text if it

@@ -130,7 +130,5 @@ public class PlayerWidgetProvider extends AppWidgetProvider {
     	}
     	*/
     	super.onReceive(context, intent);    	
-    }  
-    
-
+    }
 }

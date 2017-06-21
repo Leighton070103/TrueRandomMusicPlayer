@@ -1,14 +1,9 @@
 package net.classicgarage.truerandommusicplayer.activity;
 
-import android.graphics.PixelFormat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
+import android.support.v7.app.AppCompatActivity;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
-
-import net.classicgarage.truerandommusicplayer.R;
 
 public class LockScreenActivity extends AppCompatActivity {
 
@@ -20,7 +15,14 @@ public class LockScreenActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_lock_screen);
+        /*setContentView(R.layout.activity_lock_screen);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if(!Settings.canDrawOverlays(getApplicationContext())){
+                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
+                startActivity(intent);
+            }
+        }
         WindowManager.LayoutParams localLayoutParams = new WindowManager.LayoutParams( WindowManager.LayoutParams.TYPE_SYSTEM_ERROR,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE|
                         WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL|
@@ -31,13 +33,13 @@ public class LockScreenActivity extends AppCompatActivity {
         getWindow().setAttributes(localLayoutParams);
         View.inflate(this, R.layout.widget_layout, this.wrapperView);
         this.winManager.addView(this.wrapperView, localLayoutParams);
-        Log.d(TAG, "on create");
+        Log.d(TAG, "on create");*/
     }
 
-    @Override
+    /*@Override
     protected void onDestroy() {
         this.winManager.removeView(this.wrapperView);
         this.wrapperView.removeAllViews();
         super.onDestroy();
-    }
+    }*/
 }

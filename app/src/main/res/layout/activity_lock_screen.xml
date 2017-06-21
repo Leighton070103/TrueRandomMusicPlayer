@@ -5,11 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="net.classicgarage.truerandommusicplayer.activity.LockScreenActivity">
+
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#37474f">
+        android:layout_width="368dp"
+        android:layout_height="551dp"
+        android:background="#37474f"
+        tools:layout_editor_absoluteY="8dp"
+        tools:layout_editor_absoluteX="8dp">
         android:background="@drawable/background_main">
+
         <LinearLayout
             android:id="@+id/title_layout"
             android:layout_width="match_parent"

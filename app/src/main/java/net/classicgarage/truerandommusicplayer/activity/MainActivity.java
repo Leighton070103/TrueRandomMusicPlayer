@@ -21,7 +21,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.ListViewCompat;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -151,6 +150,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 else mSongListLv.setVisibility(View.GONE);
             }
         });
+
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -237,19 +237,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void initSearchView(){
         ;
         mArrayAdapter = new ArrayAdapter<SongItem>(getApplicationContext(),
-                android.R.layout.simple_expandable_list_item_1,mSongDataSource.getAllSongs());
+                android.R.layout.simple_expandable_list_item_1, mSongDataSource.getAllSongs());
         mSongListLv.setAdapter(mArrayAdapter);
 
         mSongListLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mBaseService.callPlaySongAtPosition( position );
+                mBaseService.callPlaySongAtPosition(position);
                 mBaseService.callContinueMusic();
-                mSongListLv.setVisibility(View.GONE);
                 updateButtonDisplay();
+                //mSongListLv.setVisibility(View.GONE);
+                finish();
             }
         });
-
         mSongListLv.setTextFilterEnabled(true);
     }
 
