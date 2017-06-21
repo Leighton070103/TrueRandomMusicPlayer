@@ -6,35 +6,94 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v7.widget.SearchView;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TabHost;
 
 import net.classicgarage.truerandommusicplayer.R;
+import net.classicgarage.truerandommusicplayer.db.SongDataSource;
+import net.classicgarage.truerandommusicplayer.model.SongItem;
 import net.classicgarage.truerandommusicplayer.service.BaseService;
 import net.classicgarage.truerandommusicplayer.service.MusicService;
 
+import java.util.List;
+
+import javax.sql.DataSource;
+
 import static android.R.id.tabhost;
 
+/**
+ * This activity is to display two sub activities of two songs.
+ */
 public class SongListActivity extends TabActivity {
   //  private RecyclerView mSongListRv;
-//    private SongAdapter mAdapter;
+
+//    private ArrayAdapter<SongItem> mSearchSongsAdapter;
+//    private ListView mSongsLv;
     private TabHost mTabHost;
-   // private SongDataSource mSongDataSource;
+    //private SongDataSource mSongDataSource;
     private ServiceConnection mMusicConn;
-    private BaseService mBaseService;
     private ImageButton mReturnBtn;
+   // private SearchView mSearchView;
     public static final String SONG_POSITION = "songPosition";
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
 
-//
-//
-//        mSongDataSource = SongDataSource.getInstance(this.getApplicationContext());
         setContentView(R.layout.activity_song_list);
+//        mSearchSongsAdapter = new ArrayAdapter<SongItem>(getApplicationContext(),
+//                android.R.layout.simple_expandable_list_item_1, SongDataSource.getInstance(
+//                getApplicationContext()).getAllSongs());
+//        mSearchView = (SearchView) findViewById(R.id.songlist_searchbar_sv);
+//        mSongsLv = (ListView) findViewById(R.id.song_list_lv);
+//        mSongsLv.setAdapter(mSearchSongsAdapter);
+//
+//
+//        mSearchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View v, boolean hasFocus) {
+//                if(hasFocus) mSongsLv.setVisibility(View.VISIBLE);
+//                else mSongsLv.setVisibility(View.GONE);
+//            }
+//        });
+//        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//                if (TextUtils.isEmpty(newText)) {
+//                    // Clear the text filter.
+//                    mSongsLv.clearTextFilter();
+//                } else {
+//                    // Sets the initial value for the text filter.
+//                    mSongsLv.setFilterText(newText.toString());
+//                }
+//                return false;
+//            }
+//        });
+//
+//        mSongsLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Intent result = new Intent();
+//                result.putExtra(SONG_POSITION, position);
+//                setResult(RESULT_OK, result);
+//                finish();
+//            }
+//        });
+//
+//        mSongsLv.setTextFilterEnabled(true);
+
         super.onCreate(savedInstanceState);
-        mReturnBtn = (ImageButton)findViewById(R.id.return_btn);
+        mReturnBtn = (ImageButton) findViewById(R.id.return_btn);
         mReturnBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -48,46 +107,13 @@ public class SongListActivity extends TabActivity {
         TabHost.TabSpec favoriteTab = mTabHost.newTabSpec("Favorite");
 
         allMusicTab.setIndicator("AllMusic");
-        allMusicTab.setContent(new Intent(this,AllSongsActivity.class));
+        allMusicTab.setContent(new Intent(this, AllSongsActivity.class));
         favoriteTab.setIndicator("Favorite");
-        favoriteTab.setContent(new Intent(this,FavSongsActivity.class));
+        favoriteTab.setContent(new Intent(this, FavSongsActivity.class));
 
         mTabHost.addTab(allMusicTab);
         mTabHost.addTab(favoriteTab);
 
 
-//        mSongListRv = (RecyclerView) findViewById(R.id.song_list_rv);
-//        mAdapter = new SongAdapter(this,mSongDataSource.getAllSongs());
-//        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-//        mSongListRv.setLayoutManager(mLayoutManager);
-//        mSongListRv.setItemAnimator(new DefaultItemAnimator());
-
-        Intent intent = new Intent(SongListActivity.this, MusicService.class);
-        startService(intent);
-        mMusicConn = new ServiceConnection() {
-            @Override
-            public void onServiceConnected(ComponentName name, IBinder service) {
-                mBaseService = (BaseService) service;
-            }
-            @Override
-            public void onServiceDisconnected(ComponentName name) {
-            }
-        };
-        getApplicationContext().bindService(intent, mMusicConn, BIND_AUTO_CREATE);
-
-        // set three click listner for:song name, favBtn, Delbtn
-//        mAdapter.setOnSongItemNameClickListener(new SongAdapter.OnSongItemNameClickListener() {
-//            @Override
-//            public void onSongItemNameClick(View view, int position) {
-//                mBaseService.callPlaySongAtPosition(position);
-//                Log.d("===songlist===", "song clicked");
-//            }
-//        });
-    }
-
-    @Override
-    protected void onDestroy() {
-        getApplicationContext().unbindService(mMusicConn);
-        super.onDestroy();
     }
 }

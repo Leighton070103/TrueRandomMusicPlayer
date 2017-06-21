@@ -1,5 +1,6 @@
 package net.classicgarage.truerandommusicplayer.adapter;
 
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import net.classicgarage.truerandommusicplayer.R;
+import net.classicgarage.truerandommusicplayer.activity.AllSongsActivity;
 import net.classicgarage.truerandommusicplayer.activity.MainActivity;
 import net.classicgarage.truerandommusicplayer.db.SongDataSource;
 import net.classicgarage.truerandommusicplayer.model.SongItem;

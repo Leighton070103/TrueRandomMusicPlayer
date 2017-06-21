@@ -27,17 +27,24 @@
             android:scaleType="centerInside"
             android:src="@mipmap/return_icon" />
 
-        <EditText
-            android:id="@+id/songlist_searchbar_et"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Search"
-            android:inputType="textPersonName"
-            android:textColor="#ffffff"
-            android:textColorHint="#e6e6e6"
-            android:textColorLink="#e6e6e6" />
+        <!--<android.support.v7.widget.SearchView-->
+            <!--android:id="@+id/songlist_searchbar_sv"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:ems="10"-->
+            <!--android:hint="Search"-->
+            <!--android:inputType="textPersonName"-->
+            <!--android:textColor="#ffffff"-->
+            <!--android:textColorHint="#e6e6e6"-->
+            <!--android:textColorLink="#e6e6e6" />-->
     </LinearLayout>
+    <!--<ListView-->
+        <!--android:id="@+id/song_list_lv"-->
+        <!--android:visibility="gone"-->
+        <!--android:layout_below="@id/searchlayout"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:background="#969696" />-->
 
     <LinearLayout
         android:orientation="vertical"
