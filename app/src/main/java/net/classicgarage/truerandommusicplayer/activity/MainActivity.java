@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -89,15 +90,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ViewPager.OnPageChangeListener mOnPageChangeListener;
     private static SimpleDateFormat time = new SimpleDateFormat("mm:ss");
 
-    public static Handler handler = new Handler(){
+    public static Handler handler = new Handler(Looper.getMainLooper()){
         @Override
         public void handleMessage(Message msg) {
             Bundle bundle = msg.getData();
             int duration = bundle.getInt("duration");
             int position = bundle.getInt("position");
-            sSeekBar.setMax(duration);
-            sSeekBar.setProgress(position);
-            mSongLeftTimeTv.setText(SongItem.formateTime(position)+"");
+            try{
+                sSeekBar.setMax(duration);
+                sSeekBar.setProgress(position);
+                mSongLeftTimeTv.setText(SongItem.formateTime(position)+"");
+            }
+            catch (NullPointerException e){
+                e.printStackTrace();
+            }
         }
     };
 
