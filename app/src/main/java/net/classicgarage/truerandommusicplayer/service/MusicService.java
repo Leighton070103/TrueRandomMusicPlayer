@@ -87,6 +87,7 @@ public class MusicService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         int action = intent.getIntExtra( INTENT_ACTION, -1);
+        if(mDataSource.getAllSongs()!=null && mDataSource.getAllSongs().size()!= 0){
         switch (action){
             case OPERATE_CURRENT:
                 if (pPlayFlag) pause();
@@ -102,6 +103,8 @@ public class MusicService extends Service {
                 updateWidget();
                 break;
         }
+        }
+
         return START_NOT_STICKY;
     }
 
