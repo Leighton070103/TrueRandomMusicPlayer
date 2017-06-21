@@ -53,7 +53,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * Used for calling SongPicker activity
      */
 
-
     public boolean musicFlag = false; // use for music running or not
     ImageButton mPlayPauseBtn;
     ImageView mAlbumArtView;
@@ -90,7 +89,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             sSeekBar.setMax(duration);
             sSeekBar.setProgress(position);
             mSongLeftTimeTv.setText(SongItem.formateTime(position)+"");
-
         }
     };
 
@@ -136,18 +134,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         getPermissions();
 
     }
-
     /**
      * This method is check permissions which is necessary for this app, and if the permission is
      * not granted, request it from the user.
      */
     private void getPermissions() {
-        int code = ActivityCompat.checkSelfPermission(
-                MainActivity.this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        if (code != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE )
+                != PackageManager.PERMISSION_GRANTED ||
+                ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.SYSTEM_ALERT_WINDOW )
+                        != PackageManager.PERMISSION_GRANTED ||
+                ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.BIND_DEVICE_ADMIN )
+                        != PackageManager.PERMISSION_GRANTED ||
+                ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.RECEIVE_BOOT_COMPLETED )
+                        != PackageManager.PERMISSION_GRANTED)
+        {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.SYSTEM_ALERT_WINDOW,
+                    Manifest.permission.BIND_DEVICE_ADMIN,
+                    Manifest.permission.RECEIVE_BOOT_COMPLETED
+            }, 1);
         }
         else{
             setSeekBarListener();
