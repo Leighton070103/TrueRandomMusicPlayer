@@ -402,47 +402,53 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * @param v
      */
     public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.play_pause_btn:
-                mSongTitleTv.setText(mBaseService.getPlayingSong().getTitle());
-                mSongTimeTv.setText(mBaseService.getPlayingSong().getSongTime());
-                if(mBaseService.isPlaying()){
-                    mBaseService.callPause();
-                }
-                else if(sSeekBar.getProgress() == 0) mBaseService.callPlay();
-                else{
-                    mBaseService.callContinueMusic();
-                    mPlayPauseBtn.setImageDrawable(getResources().getDrawable(R.mipmap.pause_btn));
-                }
-                updateButtonDisplay();
-                break;
-            case R.id.playlist_btn:
-                Intent i = new Intent(this,SongListActivity.class);
-                startActivityForResult(i, REQUEST_CODE);
-                break;
-            case R.id.next_btn:
-                //mBaseService.callPause();
-                 mBaseService.callPlayNextSong();
+        try{
+            switch (v.getId()){
+                case R.id.play_pause_btn:
+                    mSongTitleTv.setText(mBaseService.getPlayingSong().getTitle());
+                    mSongTimeTv.setText(mBaseService.getPlayingSong().getSongTime());
+                    if(mBaseService.isPlaying()){
+                        mBaseService.callPause();
+                    }
+                    else if(sSeekBar.getProgress() == 0) mBaseService.callPlay();
+                    else{
+                        mBaseService.callContinueMusic();
+                        mPlayPauseBtn.setImageDrawable(getResources().getDrawable(R.mipmap.pause_btn));
+                    }
+                    updateButtonDisplay();
+                    break;
+                case R.id.playlist_btn:
+                    Intent i = new Intent(this,SongListActivity.class);
+                    startActivityForResult(i, REQUEST_CODE);
+                    break;
+                case R.id.next_btn:
+                    //mBaseService.callPause();
+                    mBaseService.callPlayNextSong();
                     updateMainPage();
-                break;
-            case R.id.pre_btn:
-                //mBaseService.callPause();
+                    break;
+                case R.id.pre_btn:
+                    //mBaseService.callPause();
                     mBaseService.callPlayLastSong();
                     updateMainPage();
-                break;
-            case R.id.activity_main_delete_btn:
-                deleteDialog();
-                break;
-            case R.id.favorite_btn:
-                mBaseService.setCurrentSongFavorite();
-                break;
-            case R.id.random_btn:
-                updateRandomButton();
-                break;
-            case R.id.replay_btn:
-                updateReplayButton();
-                break;
+                    break;
+                case R.id.activity_main_delete_btn:
+                    deleteDialog();
+                    break;
+                case R.id.favorite_btn:
+                    mBaseService.setCurrentSongFavorite();
+                    break;
+                case R.id.random_btn:
+                    updateRandomButton();
+                    break;
+                case R.id.replay_btn:
+                    updateReplayButton();
+                    break;
+            }
         }
+        catch (NullPointerException e){
+            e.printStackTrace();
+        }
+
     }
 
     /**
