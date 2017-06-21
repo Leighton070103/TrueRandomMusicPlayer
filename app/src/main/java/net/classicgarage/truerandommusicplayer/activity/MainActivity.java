@@ -282,7 +282,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 currentPos = position;
                 updateMainPage();
-                updateButtonDisplay();
             }
 
             @Override
@@ -291,7 +290,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mBaseService.callPlaySongAtPosition(position);
                 mBaseService.callSeekTo(0);
                 updateMainPage();
-                updateButtonDisplay();
                 Log.d("*******", position+"");
             }
 
