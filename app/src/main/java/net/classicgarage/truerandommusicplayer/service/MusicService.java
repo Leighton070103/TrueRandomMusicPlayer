@@ -65,8 +65,14 @@ public class MusicService extends Service {
         mMediaPlayer = new MediaPlayer();
         mDataSource = SongDataSource.getInstance(this.getApplicationContext());
         SharedPreferences preferences = getSharedPreferences("user", Context.MODE_PRIVATE);
-        mCurrentSongIndex = mDataSource.findSongIndexById(preferences.getLong( SongItem.SONG_ID,
+        try{
+            mCurrentSongIndex = mDataSource.findSongIndexById(preferences.getLong( SongItem.SONG_ID,
                 getCurrentPlayingSong().getId()));
+        }
+        catch ( NullPointerException e){
+            e.printStackTrace();
+            mCurrentSongIndex = 0;
+        }
         KeyguardManager.KeyguardLock key;
         KeyguardManager km = (KeyguardManager)getSystemService(KEYGUARD_SERVICE);
         key = km.newKeyguardLock("IN");
