@@ -20,11 +20,17 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ListViewCompat;
+import android.support.v7.widget.SearchView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -53,7 +59,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * Used for calling SongPicker activity
      */
 
-    public boolean musicFlag = false; // use for music running or not
     ImageButton mPlayPauseBtn;
     ImageView mAlbumArtView;
     ImageButton mRandomBtn;
@@ -63,6 +68,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ToggleButton mFavoriteBtn;
     ImageButton mPlayListBtn;
     ImageButton mDeleteBtn;
+    SearchView mSearchView;
+    ListView mSongListLv;
     static SeekBar sSeekBar;
     TextView mSongTitleTv;
     TextView mAuthorTv;
@@ -77,6 +84,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ViewPager mViewPager;
     private List<View> mAlbumImageViewList;
     private SwipePagerAdapter mSwipePagerAdapter;
+    private ArrayAdapter mArrayAdapter;
+    private SongItem[] mSongs;
     private ViewPager.OnPageChangeListener mOnPageChangeListener;
     private static SimpleDateFormat time = new SimpleDateFormat("mm:ss");
 
@@ -117,6 +126,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mSongTimeTv = (TextView) findViewById(R.id.timeleft_tv);
         mRandomBtn = (ImageButton) findViewById(R.id.random_btn);
         mReplayBtn = (ImageButton) findViewById(R.id.replay_btn);
+        mSearchView = (SearchView)  findViewById(R.id.search_sv);
+        mSongListLv = (ListView) findViewById(R.id.song_list_lv);
 
         mPlayPauseBtn.setOnClickListener(this);
         mPreBtn.setOnClickListener(this);
@@ -126,6 +137,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mFavoriteBtn.setOnClickListener(this);
         mRandomBtn.setOnClickListener(this);
         mReplayBtn.setOnClickListener(this);
+
+        mSearchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus) mSongListLv.setVisibility(View.VISIBLE);
+                else mSongListLv.setVisibility(View.GONE);
+            }
+        });
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (TextUtils.isEmpty(newText)) {
+                    // Clear the text filter.
+                    mSongListLv.clearTextFilter();
+                } else {
+                    // Sets the initial value for the text filter.
+                    mSongListLv.setFilterText(newText.toString());
+                }
+                return false;
+            }
+        });
+
 
         AudioManager audioManager = (AudioManager)this.getSystemService(Context.AUDIO_SERVICE);
         ComponentName name = new ComponentName(this.getPackageName(),
@@ -159,6 +197,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             setSeekBarListener();
             startServices();
             enableSwiping();
+            initSearchView();
         }
     }
 
@@ -181,7 +220,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startServices();
                 //swipe
                 enableSwiping();
+                initSearchView();
         }
+    }
+
+    /**
+     * To initialize the search view.
+     */
+    public void initSearchView(){
+        ;
+        mArrayAdapter = new ArrayAdapter<SongItem>(getApplicationContext(),
+                android.R.layout.simple_expandable_list_item_1,mSongDataSource.getAllSongs());
+        mSongListLv.setAdapter(mArrayAdapter);
+
+        mSongListLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mBaseService.callPlaySongAtPosition( position );
+                mBaseService.callContinueMusic();
+                mSongListLv.setVisibility(View.GONE);
+                updateButtonDisplay();
+            }
+        });
+
+        mSongListLv.setTextFilterEnabled(true);
     }
 
     /**
@@ -340,11 +402,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if(mBaseService.isPlaying()){
                     mBaseService.callPause();
                 }
-                else if(musicFlag){
-                    mBaseService.callContinueMusic();
-                }
+                else if(sSeekBar.getProgress() == 0) mBaseService.callPlay();
                 else{
-                    mBaseService.callPlay();
+                    mBaseService.callContinueMusic();
                     mPlayPauseBtn.setImageDrawable(getResources().getDrawable(R.mipmap.pause_btn));
                 }
                 updateButtonDisplay();
@@ -391,6 +451,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mBaseService.deleteCurrentSong();
                 MediaScannerConnection.scanFile(getApplicationContext(),new String[] {Environment.getExternalStorageDirectory().getAbsolutePath()}, null, null);
                 updateMainPage();
+                mArrayAdapter.notifyDataSetChanged();
                 dialog.dismiss();
             }
         });

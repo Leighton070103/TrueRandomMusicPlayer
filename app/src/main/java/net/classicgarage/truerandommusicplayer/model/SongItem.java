@@ -239,7 +239,7 @@ public class SongItem implements Serializable, Comparable<SongItem> {
     }
     
     public String toString() {
-    	return String.format("%s (%s - %s)", mTitleStr ,mArtistStr, mAlbumStr);
+    	return getTitle();
     }
     
     public String getNotificationText(){
@@ -330,6 +330,8 @@ public class SongItem implements Serializable, Comparable<SongItem> {
         if( mFavoriteblo ) mFavoriteblo = false;
         else mFavoriteblo = true;
     }
+
+
 
 }
 

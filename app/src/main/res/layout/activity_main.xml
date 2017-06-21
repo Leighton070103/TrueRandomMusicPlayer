@@ -7,25 +7,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="net.classicgarage.truerandommusicplayer.activity.MusicPlayerActivity">
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         android:background="#37474f">
         android:background="@drawable/background_main">
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
+            android:orientation="vertical"
             android:background="#e6e6e6"
             android:id="@+id/searchlayout"
-            android:layout_height="40dp">
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:id="@+id/SearchbarLayout"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:orientation="horizontal">
 
                 <ImageButton
@@ -38,66 +39,74 @@
                     android:scaleType="centerInside"
                     android:src="@mipmap/menu" />
 
-                <EditText
-                    android:id="@+id/search_et"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                <android.support.v7.widget.SearchView
+                    android:id="@+id/search_sv"
+                    android:layout_width="0px"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:ems="10"
-                    android:hint="Search"
-                    android:inputType="textEmailAddress"
-                    android:selectAllOnFocus="false"
-                    android:singleLine="false" />
-
+                    android:iconifiedByDefault="false"
+                    android:inputType="textFilter"
+                    android:queryHint="Search"/>
             </LinearLayout>
 
         </LinearLayout>
 
-        <RelativeLayout
-            android:id="@+id/fav_layout"
-            android:layout_width="match_parent"
+        <ListView
+            android:id="@+id/song_list_lv"
+            android:visibility="gone"
+            android:layout_below="@id/searchlayout"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/searchlayout"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <ImageButton
-                android:id="@+id/activity_main_delete_btn"
-                android:layout_width="40dp"
-                android:layout_height="30dp"
-                android:layout_alignParentLeft="true"
-                android:background="#00000000"
-                android:scaleType="centerInside"
-                android:src="@mipmap/delete1w" />
-
-            <ToggleButton
-                android:id="@+id/favorite_btn"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="24dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/main_fav_btn_toggle"
-                android:text="ToggleButton"
-                android:textOff=""
-                android:textOn="" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/cover_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/fav_layout">
+            android:background="#969696" />
 
-            <android.support.v4.view.ViewPager
-                android:id="@+id/swipe_viewpager"
+        <LinearLayout
+            android:layout_below="@id/searchlayout"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <RelativeLayout
+                android:id="@+id/fav_layout"
                 android:layout_width="match_parent"
-                android:layout_height="380dp"
-                android:layout_gravity="center" />
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/searchlayout"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/activity_main_delete_btn"
+                    android:layout_width="40dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentLeft="true"
+                    android:background="#00000000"
+                    android:scaleType="centerInside"
+                    android:src="@mipmap/delete1w" />
+
+                <ToggleButton
+                    android:id="@+id/favorite_btn"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="24dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/main_fav_btn_toggle"
+                    android:text="ToggleButton"
+                    android:textOff=""
+                    android:textOn="" />
+            </RelativeLayout>
 
 
-        </RelativeLayout>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/swipe_viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_gravity="center" />
+
+
+
 
 
         <LinearLayout
@@ -267,5 +276,6 @@
                 android:scaleType="centerInside"
                 android:src="@mipmap/replay1w" />
         </LinearLayout>
-    </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>
 </LinearLayout>
