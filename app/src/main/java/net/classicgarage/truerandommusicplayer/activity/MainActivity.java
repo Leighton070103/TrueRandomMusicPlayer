@@ -237,8 +237,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mBaseService.callPlaySongAtPosition(position);
                 mBaseService.callContinueMusic();
                 updateButtonDisplay();
-                //mSongListLv.setVisibility(View.GONE);
-                finish();
+                mSongListLv.setVisibility(View.GONE);
             }
         });
         mSongListLv.setTextFilterEnabled(true);
