@@ -57,6 +57,22 @@ public class SongDataSource {
         return mSongs;
     }
 
+    public SongItem getNextSong(int currentPosition){
+        if( mSongs != null) return getSongAtPosition(currentPosition + 1);
+        else {
+            initializeSongs();
+            return null;
+        }
+    }
+
+    public SongItem getPreviousSong(int currentPosition){
+        if (mSongs != null && currentPosition > 0) return getSongAtPosition(currentPosition - 1);
+        else {
+            initializeSongs();
+            return null;
+        }
+    }
+
     public void setSongFavorite(long songId){
         SongItem song = findSongItemById(songId);
         if( song != null ) {

@@ -29,11 +29,12 @@ public class SwipePagerAdapter extends PagerAdapter{
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        if(container.getParent()!=null)
+        if(container.getParent()!=null) {
             ((ViewGroup)container.getParent()).removeView(mViewList.get(position));
+        }
         container.addView(mViewList.get(position));
-        //container.addView(mViewList.get(position));
         return mViewList.get(position);
+        //container.addView(mViewList.get(position));
 //        container.addView(mViewList.get(position % mViewList.size()));
 //        return mViewList.get(position % mViewList.size());
     }

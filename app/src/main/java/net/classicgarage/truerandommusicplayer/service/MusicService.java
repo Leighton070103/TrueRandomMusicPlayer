@@ -438,6 +438,8 @@ public class MusicService extends Service {
 //        Log.i("screenBR", "screenBroadcastReceiver注册了");
 //    }
 
+    public int getCurrentSongIndex(){ return mCurrentSongIndex;}
+
     /**
      * This class is to provide a binder which has some basic functions for activities to operate
      * in music service.
