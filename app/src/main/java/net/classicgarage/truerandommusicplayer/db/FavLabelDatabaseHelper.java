@@ -171,9 +171,7 @@ public class FavLabelDatabaseHelper extends SQLiteOpenHelper {
         }
         cursor.close();
         return mSongFavItems;
-
     }
-
 
     /**
      * Read the favorite data from the cursor.
@@ -200,12 +198,12 @@ public class FavLabelDatabaseHelper extends SQLiteOpenHelper {
         String[] args = { String.valueOf(songId) };
         db.update( TABLE_SONGS, contentValues, COLUMN_MUSIC_ID + "=?",args);
     }
-
     /**
      * This class is used for a template to store song and its favorite information,
      * and used as a transformation of the integer favorite value to boolean value
      * (SQlite does not allow boolean values).
      */
+
     class SongFavItem{
         private Long mId;
         private Integer mFavorite;

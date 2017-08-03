@@ -369,6 +369,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mViewPager.addOnPageChangeListener(mOnPageChangeListener);
     }
 
+    private void getArtWorkForward(){
+
+    }
+
+    private void getArtWorkBackward(){
+
+    }
+
     private void getCurrentArtWork(int currentPosition) {
         LayoutInflater inflater = getLayoutInflater();
         View album_view = inflater.inflate(R.layout.album_img_layout, null);
@@ -593,4 +601,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onDestroy();
         getApplicationContext().unbindService(mMusicConn);
     }
+
+    /*public static void changeTheOrientation(){
+        getApplicationContext().
+    }*/
 }
