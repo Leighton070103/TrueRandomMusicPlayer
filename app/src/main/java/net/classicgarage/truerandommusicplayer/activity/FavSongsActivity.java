@@ -57,11 +57,11 @@ public class FavSongsActivity extends AppCompatActivity {
         getApplicationContext().bindService(intent, mMusicConn, BIND_AUTO_CREATE);
 
         // set three click listner for:song name, favBtn, Delbtn
-        mAdapter.setOnSongItemNameClickListener(new SongAdapter.OnSongItemNameClickListener() {
+        mAdapter.setOnSongItemNameClickListener( new SongAdapter.OnSongItemNameClickListener() {
             @Override
             public void onSongItemNameClick(View view, int position) {
-                long id = mSongDataSource.getFavoriteSongs().get(position).getId();
-                mBaseService.callPlaySongAtPosition(mSongDataSource.findSongIndexById(id));
+                mBaseService.callChangePlayFavorite();
+                mBaseService.callPlaySongAtPosition(position);
                 finish();
             }
         });
