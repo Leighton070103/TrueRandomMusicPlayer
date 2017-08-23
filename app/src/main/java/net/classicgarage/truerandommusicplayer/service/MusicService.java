@@ -36,9 +36,10 @@ public class MusicService extends Service {
     private TimerTask mTask = null;
     private int mCurrentSongIndex = 0;
 //    private LockScreenBroadcastReceiver mLockScreenBroadcastReceiver;
-    public boolean pReplayFlag = false;
-    public boolean pRandomFlag = false;
-    public boolean pPlayFlag = false;
+    private boolean mReplayFlag = false;
+    private boolean mRandomFlag = false;
+    private boolean mPlayFlag = false;
+    private boolean mPlayFavoriteFlag = false;
 
     public static final String INTENT_ACTION = "Intent action";
     public static final int PLAY_PREVIOUS = 0;
@@ -88,7 +89,7 @@ public class MusicService extends Service {
         if(mDataSource.getAllSongs()!=null && mDataSource.getAllSongs().size()!= 0){
         switch (action){
             case OPERATE_CURRENT:
-                if (pPlayFlag) pause();
+                if (mPlayFlag) pause();
                 else play();
                 break;
             case PLAY_NEXT:
@@ -137,7 +138,7 @@ public class MusicService extends Service {
         mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
-                if (pReplayFlag) {
+                if (mReplayFlag) {
                     mTask.cancel();
                     mTimer.cancel();
                     play();
@@ -157,19 +158,19 @@ public class MusicService extends Service {
      */
     private void play() {
         prepare();
-        pPlayFlag = true;
+        mPlayFlag = true;
         updateWidget();
         mMediaPlayer.start();
         refreshSeekBar();
     }
 
     /**
-     * Use the current index to get the song.
+     * Use the current index to get the song according to the playing mode.
      * @return
      */
     private SongItem getSongFromListByIndex() {
         try {
-            return mDataSource.getAllSongs().get(mCurrentSongIndex);
+            return mDataSource.getAllSongs(mPlayFavoriteFlag).get( mCurrentSongIndex );
         }
         catch (IndexOutOfBoundsException e){
             e.printStackTrace();
@@ -198,13 +199,13 @@ public class MusicService extends Service {
      * Play the next song.
      */
     public void playNextSong(){
-        if(pRandomFlag){
+        if(mRandomFlag){
             randomSongIndex();
         }
         else{
             updateCurrentSongIndex(PLAY_NEXT);
         }
-        if( pPlayFlag ) play();
+        if(mPlayFlag) play();
         else prepare();
     }
 
@@ -212,13 +213,13 @@ public class MusicService extends Service {
      * Called when the previous song button is clicked.
      */
     public void playLastSong(){
-        if(pRandomFlag){
+        if(mRandomFlag){
             randomSongIndex();
         }
         else {
             updateCurrentSongIndex(PLAY_PREVIOUS);
         }
-        if(pPlayFlag) play();
+        if(mPlayFlag) play();
         else prepare();
     }
 
@@ -262,7 +263,7 @@ public class MusicService extends Service {
      */
     private void continueMusic() {
         mMediaPlayer.start();
-        pPlayFlag = true;
+        mPlayFlag = true;
     }
 
     /**
@@ -270,7 +271,7 @@ public class MusicService extends Service {
      */
     private void pause() {
         mMediaPlayer.pause();
-        pPlayFlag = false;
+        mPlayFlag = false;
         updateWidget();
     }
 
@@ -290,8 +291,9 @@ public class MusicService extends Service {
     public void updateCurrentSongIndex(int action){
         if(action == PLAY_NEXT) mCurrentSongIndex++;
         if(action == PLAY_PREVIOUS) mCurrentSongIndex--;
-        if( mCurrentSongIndex > mDataSource.getAllSongs().size() - 1) mCurrentSongIndex = 0;
-        if( mCurrentSongIndex < 0) mCurrentSongIndex = mDataSource.getAllSongs().size() - 1;
+        if( mCurrentSongIndex > mDataSource.getAllSongs(mPlayFavoriteFlag).size() - 1) mCurrentSongIndex = 0;
+        if( mCurrentSongIndex < 0) mCurrentSongIndex = mDataSource.getAllSongs(mPlayFavoriteFlag).size() - 1;
+
         SharedPreferences preferences = getSharedPreferences("user",Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putLong( SongItem.SONG_ID, getSongFromListByIndex().getId());
@@ -317,26 +319,28 @@ public class MusicService extends Service {
     public void randomSongIndex(){
         java.util.Random r = new java.util.Random();
         boolean isAllPlayedInARow = true;
-        int randomSongIndex = r.nextInt(mDataSource.getAllSongs().size());
-        if (mDataSource.getSongAtPosition(randomSongIndex).getmPlayedTime() == 0){
+
+
+        int randomSongIndex = r.nextInt(mDataSource.getAllSongs(mPlayFavoriteFlag).size());
+        if (mDataSource.getSongAtPosition(mPlayFavoriteFlag, randomSongIndex).getmPlayedTime() == 0){
             mCurrentSongIndex = randomSongIndex;
-            mDataSource.getSongAtPosition(randomSongIndex).setmPlayedTime(1);
+            mDataSource.getSongAtPosition(mPlayFavoriteFlag, randomSongIndex).setmPlayedTime(1);
             isAllPlayedInARow = false;
         }
-        else if (mDataSource.getSongAtPosition(randomSongIndex).getmPlayedTime() > 0){
-            for(int i = 0;i < mDataSource.getAllSongs().size();i++){
-                if(mDataSource.getSongAtPosition(i).getmPlayedTime() == 0){
+        else if (mDataSource.getSongAtPosition(mPlayFavoriteFlag, randomSongIndex).getmPlayedTime() > 0){
+            for(int i = 0;i < mDataSource.getAllSongs(mPlayFavoriteFlag).size();i++){
+                if(mDataSource.getSongAtPosition(mPlayFavoriteFlag, i).getmPlayedTime() == 0){
                     mCurrentSongIndex = i;
                     isAllPlayedInARow = false;
                 }
             }
             if(isAllPlayedInARow){
-                for (int i = 0;i < mDataSource.getAllSongs().size();i++){
-                    mDataSource.getSongAtPosition(i).setmPlayedTime(0);
+                for (int i = 0;i < mDataSource.getAllSongs(mPlayFavoriteFlag).size();i++){
+                    mDataSource.getSongAtPosition(mPlayFavoriteFlag, i).setmPlayedTime(0);
                 }
             }
         }
-        mCurrentSongIndex = r.nextInt(mDataSource.getAllSongs().size());
+        mCurrentSongIndex = r.nextInt(mDataSource.getAllSongs(mPlayFavoriteFlag).size());
 
     }
 
@@ -354,9 +358,15 @@ public class MusicService extends Service {
      * @param position
      */
     private void playSongAtPosition(int position) {
-        Log.d("===playAtPosition===", mDataSource.getAllSongs().size()+" pos:"+position);
+        if(mPlayFavoriteFlag){
+            Log.d("===playAtPosition===", mDataSource.getAllSongs().size()+" pos:" + position);
+        }
+        else {
+            Log.d("====playAtPosition===", mDataSource.getFavoriteSongs().size()+ "pos: " +
+                    position);
+        }
         setCurrentSongIndex(position);
-        if(pPlayFlag) play();
+        if( mPlayFlag ) play();
         else prepare();
 
     }
@@ -378,7 +388,7 @@ public class MusicService extends Service {
         if(song != null){
             remoteViews.setTextViewText(R.id.widget_title_tv, song.getTitle());
             remoteViews.setTextViewText(R.id.widget_artist_tv, song.getArtist());
-            if( pPlayFlag ) remoteViews.setInt(R.id.widget_play_btn, "setBackgroundResource",
+            if(mPlayFlag) remoteViews.setInt(R.id.widget_play_btn, "setBackgroundResource",
                     R.mipmap.widget_pause_btn);
             else remoteViews.setInt(R.id.widget_play_btn, "setBackgroundResource",
                     R.mipmap.widget_play_btn);
@@ -396,36 +406,44 @@ public class MusicService extends Service {
      * Change the random flag.
      */
     private void changeRandomFlag(){
-        if(!pRandomFlag) {
-            pRandomFlag = true;
+        if(!mRandomFlag) {
+            mRandomFlag = true;
         }
         else
-            pRandomFlag = false;
+            mRandomFlag = false;
     }
 
     /**
      * Change the replayflag.
      */
     private void changeReplayFlag(){
-        if(!pReplayFlag) {
-            pReplayFlag = true;
+        if(!mReplayFlag) {
+            mReplayFlag = true;
         }
         else
-            pReplayFlag = false;
+            mReplayFlag = false;
+    }
+
+    /**
+     * Change the playfavoriteflag.
+     */
+    private void changePlayFavoriteFlag(){
+        if(! mPlayFavoriteFlag ) mPlayFavoriteFlag = true;
+        else mPlayFavoriteFlag = false;
     }
 
     /**
      *  Return the ramdomflag.
      */
     private boolean getRandomflag(){
-        return pRandomFlag;
+        return mRandomFlag;
     }
 
     /**
      *  Return the replayflag.
      */
     private boolean getReplayflag(){
-        return pReplayFlag;
+        return mReplayFlag;
     }
 
 //    private void registerScreenBroadcastReceiver() {
@@ -472,7 +490,7 @@ public class MusicService extends Service {
 
         @Override
         public boolean isPlaying() {
-            return pPlayFlag;
+            return mPlayFlag;
         }
 
         @Override
@@ -510,6 +528,9 @@ public class MusicService extends Service {
 
         @Override
         public boolean callGetReplayFlag(){ return getReplayflag();}
+
+        @Override
+        public void callChangePlayFavorite(){ changePlayFavoriteFlag();}
 
     }
 }
