@@ -72,26 +72,9 @@
                 android:gravity="center"
                 android:orientation="horizontal">
 
-                <ImageButton
-                    android:id="@+id/activity_main_delete_btn"
-                    android:layout_width="40dp"
-                    android:layout_height="30dp"
-                    android:layout_alignParentLeft="true"
-                    android:background="#00000000"
-                    android:scaleType="centerInside"
-                    android:src="@mipmap/delete1w" />
+                //
 
-                <ToggleButton
-                    android:id="@+id/favorite_btn"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="24dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/main_fav_btn_toggle"
-                    android:text="ToggleButton"
-                    android:textOff=""
-                    android:textOn="" />
+
             </RelativeLayout>
 
         <android.support.v4.view.ViewPager
@@ -203,6 +186,30 @@
                 android:gravity="center"
                 android:text="Album"
                 android:textColor="#ffffff" />
+
+            <ImageButton
+                android:id="@+id/activity_main_delete_btn"
+                android:layout_width="40dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="20dp"
+                android:layout_alignParentLeft="true"
+                android:background="#00000000"
+                android:scaleType="centerInside"
+                android:src="@mipmap/delete1w"
+                />
+
+            <ToggleButton
+                android:id="@+id/favorite_btn"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="340dp"
+                android:layout_marginTop="-20dp"
+                android:background="@drawable/main_fav_btn_toggle"
+                android:text="ToggleButton"
+                android:textOff=""
+                android:textOn="" />
+
         </LinearLayout>
 
         <LinearLayout
