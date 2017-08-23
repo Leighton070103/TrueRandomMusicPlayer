@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private BaseService mBaseService;
     private SongDataSource mSongDataSource;
 
+
     private ViewPager mViewPager;
     private List<View> mAlbumImageViewList;
     private SwipePagerAdapter mSwipePagerAdapter;
@@ -311,7 +312,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onStart();
     }
 
+    public void slideBar(){
 
+    }
     /**
      * Initialization of the swipe view.
      * @throws IllegalAccessException
@@ -330,12 +333,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mAlbumArtView.setImageBitmap(bitmap);
             mAlbumImageViewList.add(album_view);
         }
-        /*getCurrentArtWork(currentPos);
-        if(currentPos < mSongDataSource.getAllSongs().size())getNextArtWork(currentPos);
-        if(currentPos > 0) getPreviousArtWork(currentPos);*/
         mSwipePagerAdapter = new SwipePagerAdapter(mAlbumImageViewList);
-        final int currentItem = Integer.MAX_VALUE / 2;
-        mViewPager.setCurrentItem(currentItem);
+        /*final int currentItem = Integer.MAX_VALUE / 2;
+        mViewPager.setCurrentItem(currentItem);*/
         mViewPager.setAdapter(mSwipePagerAdapter);
         mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
 
