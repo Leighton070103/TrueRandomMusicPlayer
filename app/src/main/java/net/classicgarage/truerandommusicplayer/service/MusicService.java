@@ -282,6 +282,14 @@ public class MusicService extends Service {
         return getSongFromListByIndex();
     }
 
+    private SongItem getNextPlayingSong(){
+        return null;
+    }
+
+    private SongItem getPreviousPlayingSong(){
+        return null;
+    }
+
     /**
      * Update the current index of the song, while also store the current id in the shared
      * preference.
@@ -438,7 +446,6 @@ public class MusicService extends Service {
 //        Log.i("screenBR", "screenBroadcastReceiver注册了");
 //    }
 
-    public int getCurrentSongIndex(){ return mCurrentSongIndex;}
 
     /**
      * This class is to provide a binder which has some basic functions for activities to operate
@@ -484,9 +491,13 @@ public class MusicService extends Service {
         public void callPlaySongAtPosition(int position) { playSongAtPosition(position);}
 
         @Override
-        public SongItem getPlayingSong() {
-            return getCurrentPlayingSong();
-        }
+        public SongItem getPlayingSong() { return getCurrentPlayingSong();}
+
+        @Override
+        public SongItem getNextSong() { return getNextPlayingSong();}
+
+        @Override
+        public SongItem getPreviousSong() { return getPreviousPlayingSong();}
 
         @Override
         public void deleteCurrentSong() { deleteCurrentPlayingSong(); }
