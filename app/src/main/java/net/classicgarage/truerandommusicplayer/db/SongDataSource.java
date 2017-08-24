@@ -57,6 +57,11 @@ public class SongDataSource {
         return mSongs;
     }
 
+    public LinkedList<SongItem> getAllSongs(boolean isFavorite){
+        if(isFavorite) return getFavoriteSongs();
+        return getAllSongs();
+    }
+
     public SongItem getNextSong(int currentPosition){
         if( mSongs != null) return getSongAtPosition(currentPosition + 1);
         else {
@@ -164,6 +169,17 @@ public class SongDataSource {
         if( mSongs != null) return  mSongs.get(position);
         initializeSongs();
         return mSongs.get(position);
+    }
+
+    /**
+     * Get song item in favorite list or all song list.
+     * @param isFavorite
+     * @param position
+     * @return
+     */
+    public SongItem getSongAtPosition(Boolean isFavorite, int position){
+        if( isFavorite ) return getFavoriteSongs().get( position );
+        else return getSongAtPosition( position );
     }
 
 

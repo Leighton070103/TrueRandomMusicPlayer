@@ -25,4 +25,5 @@ public interface BaseService {
     void callChangeReplayFlag();
     boolean callGetRandomFlag();
     boolean callGetReplayFlag();
+    void callChangePlayFavorite();
 }
