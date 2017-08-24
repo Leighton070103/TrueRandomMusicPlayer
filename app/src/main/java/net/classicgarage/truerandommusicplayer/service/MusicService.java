@@ -108,7 +108,7 @@ public class MusicService extends Service {
     }
 
     /**
-     * Called when the service is binded.
+     * Called when the service is started.
      * @param intent
      * @return
      */
@@ -116,6 +116,7 @@ public class MusicService extends Service {
     public IBinder onBind(Intent intent) {
         return new MusicBinder();
     }
+
 
     /**
      * Called for the preperation of the music.
