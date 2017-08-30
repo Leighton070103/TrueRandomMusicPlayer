@@ -322,9 +322,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void initSwipeView() throws IllegalAccessException{
         mAlbumImageViewList = new ArrayList<View>();
         mViewPager = (ViewPager) findViewById(R.id.swipe_viewpager);
-
         LayoutInflater inflater = getLayoutInflater();
-        for(int i = 0; i < mSongDataSource.getAllSongs().size(); i++) {
+        //
+        for(int i = 0;i < mSongDataSource.getAllSongs().size(); i++) {
             View album_view = inflater.inflate(R.layout.album_img_layout, null);
             mAlbumArtView = (ImageView) album_view.findViewById(R.id.albumView);
             long songId = mSongDataSource.getAllSongs().get(i).getId();
