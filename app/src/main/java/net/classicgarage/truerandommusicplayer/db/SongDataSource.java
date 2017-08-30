@@ -82,14 +82,15 @@ public class SongDataSource {
         SongItem song = findSongItemById(songId);
         if( song != null ) {
             song.resetIsFavorite();
-            favoriteHelper.updateFavoriteSong(songId);
         }
         getFavoriteSongs();
         if(song.getFavorite()){
             mFavSongs.add(song);
+            favoriteHelper.labelFavSongInDb(songId);
         }
         else {
             mFavSongs.remove(song);
+            favoriteHelper.deleteSongFav(songId);
         }
     }
 
@@ -232,8 +233,11 @@ public class SongDataSource {
                 f.delete();
                 SongItem song = mSongs.get(i);
                 deletePlaylistTracks(mContext, song);
-                favoriteHelper.deleteSongFav(songId);
-                if(song.getFavorite()) mFavSongs.remove(song);
+
+                if(song.getFavorite()){
+                    mFavSongs.remove(song);
+                    favoriteHelper.deleteSongFav(songId);
+                }
                 mSongs.remove(i);
             }
         }
