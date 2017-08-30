@@ -98,7 +98,7 @@ public class SongDataSource {
         if( mFavSongs == null) {
             mFavSongs = new LinkedList<SongItem>();
             for(SongItem song: getAllSongs()){
-                if(song.getFavorite()) mFavSongs.add(song);
+                if(song.getFavorite() && !(mFavSongs.contains(song))) mFavSongs.add(song);
             }
         }
         return mFavSongs;
