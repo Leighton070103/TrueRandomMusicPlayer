@@ -547,25 +547,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void updateRandomButton() {
         if(!mBaseService.callGetRandomFlag()) {
-            mRandomBtn.setImageDrawable(getResources().getDrawable(R.mipmap.random1b));
+            mRandomBtn.setImageDrawable(getResources().getDrawable(R.mipmap.non_random_playlist));
             mBaseService.callChangeRandomFlag();
-            if(mBaseService.callGetReplayFlag()){
+            /* if(mBaseService.callGetReplayFlag()){
                 mReplayBtn.setImageDrawable(getResources().getDrawable(R.mipmap.replay1w));
                 mBaseService.callChangeReplayFlag();
             }
+            */
         }
         else {
-            mRandomBtn.setImageDrawable(getResources().getDrawable(R.mipmap.randomw));
+            mRandomBtn.setImageDrawable(getResources().getDrawable(R.mipmap.random_playlist));
             mBaseService.callChangeRandomFlag();
         }
     }
 
     private void updateReplayButton() {
         if(!mBaseService.callGetReplayFlag()) {
-            mReplayBtn.setImageDrawable(getResources().getDrawable(R.mipmap.replay1b));
+            mReplayBtn.setImageDrawable(getResources().getDrawable(R.mipmap.replay1r));
             mBaseService.callChangeReplayFlag();
             if(mBaseService.callGetRandomFlag()){
-                mRandomBtn.setImageDrawable(getResources().getDrawable(R.mipmap.randomw));
+                mRandomBtn.setImageDrawable(getResources().getDrawable(R.mipmap.non_random_playlist));
                 mBaseService.callChangeRandomFlag();
             }
         }
