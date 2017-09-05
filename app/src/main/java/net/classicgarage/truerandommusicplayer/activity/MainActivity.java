@@ -590,7 +590,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         super.onActivityResult(requestCode, resultCode, intent);
 
-        if (requestCode == REQUEST_CODE) {
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
 
             Bundle extras = intent.getExtras();
             int position = extras.getInt(SONG_POSITION);

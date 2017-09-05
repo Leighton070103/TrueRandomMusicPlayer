@@ -91,6 +91,7 @@ public class SongListActivity extends FragmentActivity {
         mReturnBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setResult(RESULT_CANCELED);
                 SongListActivity.this.finish();
             }
         });
