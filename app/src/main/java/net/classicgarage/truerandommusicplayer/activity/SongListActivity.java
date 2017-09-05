@@ -4,6 +4,8 @@ import android.app.TabActivity;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTabHost;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
@@ -16,6 +18,8 @@ import android.widget.TabHost;
 
 import net.classicgarage.truerandommusicplayer.R;
 import net.classicgarage.truerandommusicplayer.db.SongDataSource;
+import net.classicgarage.truerandommusicplayer.fragment.AllSongFragment;
+import net.classicgarage.truerandommusicplayer.fragment.FavSongFragment;
 import net.classicgarage.truerandommusicplayer.model.SongItem;
 
 import static android.R.id.tabhost;
@@ -23,14 +27,11 @@ import static android.R.id.tabhost;
 /**
  * This activity is to display two sub activities of two songs.
  */
-public class SongListActivity extends TabActivity {
-    private RecyclerView mSongListRv;
+public class SongListActivity extends FragmentActivity {
 
     private ArrayAdapter<SongItem> mSearchSongsAdapter;
     private ListView mSongsLv;
-    private TabHost mTabHost;
-    private SongDataSource mSongDataSource;
-    private ServiceConnection mMusicConn;
+    private FragmentTabHost mTabHost;
     private ImageButton mReturnBtn;
     private SearchView mSearchView;
     public static final String SONG_POSITION = "songPosition";
@@ -94,19 +95,21 @@ public class SongListActivity extends TabActivity {
             }
         });
 
-        mTabHost = (TabHost) findViewById(tabhost);
-        mTabHost.setup();
-        TabHost.TabSpec allMusicTab = mTabHost.newTabSpec("All music");
-        TabHost.TabSpec favoriteTab = mTabHost.newTabSpec("Favorite");
-
-        allMusicTab.setIndicator("AllMusic");
-        allMusicTab.setContent(new Intent(this, AllSongsActivity.class));
-        favoriteTab.setIndicator("Favorite");
-        favoriteTab.setContent(new Intent(this, FavSongsActivity.class));
-
-        mTabHost.addTab(allMusicTab);
-        mTabHost.addTab(favoriteTab);
-
+        mTabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
+        mTabHost.setup(this, getSupportFragmentManager(), android.R.id.tabcontent);
+        mTabHost.addTab(mTabHost.newTabSpec("All").setIndicator("All"), AllSongFragment.class, null);
+        mTabHost.addTab(mTabHost.newTabSpec("Favorite").setIndicator("Favorite"), FavSongFragment.class, null);
+//        mTabHost.setup();
+//        TabHost.TabSpec allMusicTab = mTabHost.newTabSpec("All music");
+//        TabHost.TabSpec favoriteTab = mTabHost.newTabSpec("Favorite");
+//
+//        allMusicTab.setIndicator("AllMusic");
+//        allMusicTab.setContent(new Intent(this, AllSongsActivity.class));
+//        favoriteTab.setIndicator("Favorite");
+//        favoriteTab.setContent(new Intent(this, FavSongsActivity.class));
+//
+//        mTabHost.addTab(allMusicTab);
+//        mTabHost.addTab(favoriteTab);
 
     }
 }
