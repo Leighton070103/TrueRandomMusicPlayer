@@ -47,6 +47,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import static net.classicgarage.truerandommusicplayer.activity.SongListActivity.SONG_POSITION;
+import static net.classicgarage.truerandommusicplayer.fragment.FavSongFragment.FAV_MODE;
+import static net.classicgarage.truerandommusicplayer.fragment.FavSongFragment.PLAY_MODE;
+
 /**
  * This activity is to provide the main view for this app.
  * And enable users to check the song lists, play, pause, delete music, or label them as favorite.
@@ -586,13 +590,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         super.onActivityResult(requestCode, resultCode, intent);
 
-        if (resultCode == RESULT_CANCELED) return;
-        Bundle extras = intent.getExtras();
-        int position = extras.getInt("songPosition");
-        mBaseService.callPlaySongAtPosition(position);
-
         if (requestCode == REQUEST_CODE) {
 
+            Bundle extras = intent.getExtras();
+            int position = extras.getInt(SONG_POSITION);
+            int mode = extras.getInt(PLAY_MODE);
+            if( mode == FAV_MODE) mBaseService.callChangePlayFavorite();
+            mBaseService.callPlaySongAtPosition(position);
         }
     }
 
