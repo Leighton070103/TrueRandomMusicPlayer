@@ -36,9 +36,6 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".activity.AllSongsActivity" />
-        <activity android:name=".activity.FavSongsActivity" />
-
         <receiver android:name=".widget.PlayerWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />

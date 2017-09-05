@@ -20,9 +20,7 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import net.classicgarage.truerandommusicplayer.R;
-import net.classicgarage.truerandommusicplayer.activity.AllSongsActivity;
-import net.classicgarage.truerandommusicplayer.activity.MainActivity;
-import net.classicgarage.truerandommusicplayer.activity.SongListActivity;
+
 import net.classicgarage.truerandommusicplayer.db.SongDataSource;
 import net.classicgarage.truerandommusicplayer.model.SongItem;
 

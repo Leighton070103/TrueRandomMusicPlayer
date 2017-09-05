@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#e1e1e1"
-    tools:context="net.classicgarage.truerandommusicplayer.activity.AllSongsActivity">
+    tools:context="net.classicgarage.truerandommusicplayer.fragment.FavSongFragment">
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="368dp"
@@ -60,7 +60,7 @@
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/activity_all_music_rv"
+        android:id="@+id/fav_song_list_rv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
@@ -70,5 +70,7 @@
         tools:listitem="@layout/song_item"
         tools:layout_editor_absoluteY="0dp"
         tools:layout_editor_absoluteX="8dp" />
+
+
 
 </android.support.constraint.ConstraintLayout>

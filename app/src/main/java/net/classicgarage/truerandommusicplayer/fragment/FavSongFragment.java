@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import net.classicgarage.truerandommusicplayer.R;
 import net.classicgarage.truerandommusicplayer.activity.SongListActivity;
@@ -36,7 +35,7 @@ public class FavSongFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.activity_favorite, container, false);
+        View v = inflater.inflate(R.layout.fragment_favorite, container, false);
         mSongDataSource = SongDataSource.getInstance(this.getContext().getApplicationContext());
         super.onCreate(savedInstanceState);
         mSongListRv = (RecyclerView) v.findViewById(R.id.fav_song_list_rv);

@@ -99,17 +99,6 @@ public class SongListActivity extends FragmentActivity {
         mTabHost.setup(this, getSupportFragmentManager(), android.R.id.tabcontent);
         mTabHost.addTab(mTabHost.newTabSpec("All").setIndicator("All"), AllSongFragment.class, null);
         mTabHost.addTab(mTabHost.newTabSpec("Favorite").setIndicator("Favorite"), FavSongFragment.class, null);
-//        mTabHost.setup();
-//        TabHost.TabSpec allMusicTab = mTabHost.newTabSpec("All music");
-//        TabHost.TabSpec favoriteTab = mTabHost.newTabSpec("Favorite");
-//
-//        allMusicTab.setIndicator("AllMusic");
-//        allMusicTab.setContent(new Intent(this, AllSongsActivity.class));
-//        favoriteTab.setIndicator("Favorite");
-//        favoriteTab.setContent(new Intent(this, FavSongsActivity.class));
-//
-//        mTabHost.addTab(allMusicTab);
-//        mTabHost.addTab(favoriteTab);
 
     }
 }
