@@ -24,7 +24,7 @@ public class AllSongFragment extends Fragment {
     private RecyclerView mSongListRv;
     private SongAdapter mAdapter;
     private SongDataSource mSongDataSource;
-    public static final int NORMAL_MODE = 1;
+    public static final int NORMAL_MODE = 0;
 
     public AllSongFragment() {
         // Required empty public constructor
