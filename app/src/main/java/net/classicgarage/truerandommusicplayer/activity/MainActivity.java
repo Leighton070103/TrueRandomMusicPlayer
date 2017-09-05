@@ -47,6 +47,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.view.View.GONE;
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
 import static net.classicgarage.truerandommusicplayer.activity.SongListActivity.SONG_POSITION;
 import static net.classicgarage.truerandommusicplayer.fragment.FavSongFragment.FAV_MODE;
 import static net.classicgarage.truerandommusicplayer.fragment.FavSongFragment.PLAY_MODE;
@@ -80,20 +83,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TextView mAlbumTv;
     TextView mSongTimeTv;
     static TextView mSongLeftTimeTv;
+    ImageView mNoMusicImg;
 
     private ServiceConnection mMusicConn;
     private BaseService mBaseService;
     private SongDataSource mSongDataSource;
 
-
     private ViewPager mViewPager;
     private List<View> mAlbumImageViewList;
     private SwipePagerAdapter mSwipePagerAdapter;
     private ArrayAdapter mArrayAdapter;
-    private SongItem[] mSongs;
     private ViewPager.OnPageChangeListener mOnPageChangeListener;
-    private static SimpleDateFormat time = new SimpleDateFormat("mm:ss");
-    private int currentPos;
+    //private int currentPos;
 
     public static Handler handler = new Handler(Looper.getMainLooper()){
         @Override
@@ -139,6 +140,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mReplayBtn = (ImageButton) findViewById(R.id.replay_btn);
         mSearchView = (SearchView)  findViewById(R.id.search_sv);
         mSongListLv = (ListView) findViewById(R.id.song_list_lv);
+        mNoMusicImg = (ImageView) findViewById(R.id.no_music_image_view);
 
         mPlayPauseBtn.setOnClickListener(this);
         mPreBtn.setOnClickListener(this);
@@ -152,8 +154,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mSearchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus) mSongListLv.setVisibility(View.VISIBLE);
-                else mSongListLv.setVisibility(View.GONE);
+                if(hasFocus) mSongListLv.setVisibility(VISIBLE);
+                else mSongListLv.setVisibility(GONE);
             }
         });
 
@@ -245,7 +247,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mBaseService.callPlaySongAtPosition(position);
                 mBaseService.callContinueMusic();
                 updateButtonDisplay();
-                mSongListLv.setVisibility(View.GONE);
+                mSongListLv.setVisibility(GONE);
             }
         });
         mSongListLv.setTextFilterEnabled(true);
@@ -327,6 +329,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mAlbumImageViewList = new ArrayList<View>();
         mViewPager = (ViewPager) findViewById(R.id.swipe_viewpager);
 
+        /*if( mBaseService == null){
+            mViewPager.setVisibility(GONE);
+            mNoMusicImg.setVisibility(VISIBLE);
+        }*/
+
         LayoutInflater inflater = getLayoutInflater();
         for(int i = 0; i < mSongDataSource.getAllSongs().size(); i++) {
             View album_view = inflater.inflate(R.layout.album_img_layout, null);
@@ -342,7 +349,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mViewPager.setCurrentItem(currentItem);*/
         mViewPager.setAdapter(mSwipePagerAdapter);
         mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
-
             /**
              * position:current page;
              * positionOffset: offset of current page
@@ -350,7 +356,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
              */
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                currentPos = position;
+                Log.d("position", String.valueOf(position));
                 updateMainPage();
             }
 
@@ -362,7 +368,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 updateMainPage();
                 Log.d("*******", position+"");
             }
-
             /**
              * state == ViewPager.SCROLL_STATE_DRAGGING ||  ViewPager.SCROLL_STATE_SETTLING
              * || ViewPager.SCROLL_STATE_IDLE
@@ -371,47 +376,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onPageScrollStateChanged(int state) {}
         };
         mViewPager.addOnPageChangeListener(mOnPageChangeListener);
-    }
-
-    private void getArtWorkForward(){
-
-    }
-
-    private void getArtWorkBackward(){
-
-    }
-
-    private void getCurrentArtWork(int currentPosition) {
-        LayoutInflater inflater = getLayoutInflater();
-        View album_view = inflater.inflate(R.layout.album_img_layout, null);
-        mAlbumArtView = (ImageView) album_view.findViewById(R.id.albumView);
-        long songId = mSongDataSource.getAllSongs().get(currentPosition).getId();
-        long album = mSongDataSource.getAllSongs().get(currentPosition).getAlbumId();
-        Bitmap bitmap = SongItem.getArtwork(this.getApplicationContext(),songId,album,false);
-        mAlbumArtView.setImageBitmap(bitmap);
-        mAlbumImageViewList.add(album_view);
-    }
-
-    private void getNextArtWork(int currentPosition){
-        LayoutInflater inflater = getLayoutInflater();
-        View album_view = inflater.inflate(R.layout.album_img_layout, null);
-        mAlbumArtView = (ImageView) album_view.findViewById(R.id.albumView);
-        long songId = mSongDataSource.getAllSongs().get(currentPosition + 1).getId();
-        long album = mSongDataSource.getAllSongs().get(currentPosition + 1).getAlbumId();
-        Bitmap bitmap = SongItem.getArtwork(this.getApplicationContext(),songId,album,false);
-        mAlbumArtView.setImageBitmap(bitmap);
-        mAlbumImageViewList.add(album_view);
-    }
-
-    public void getPreviousArtWork(int currentPosition) {
-        LayoutInflater inflater = getLayoutInflater();
-        View album_view = inflater.inflate(R.layout.album_img_layout, null);
-        mAlbumArtView = (ImageView) album_view.findViewById(R.id.albumView);
-        long songId = mSongDataSource.getAllSongs().get(currentPosition - 1).getId();
-        long album = mSongDataSource.getAllSongs().get(currentPosition - 1).getAlbumId();
-        Bitmap bitmap = SongItem.getArtwork(this.getApplicationContext(),songId,album,false);
-        mAlbumArtView.setImageBitmap(bitmap);
-        mAlbumImageViewList.add(album_view);
     }
 
     /**
@@ -521,19 +485,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void updateMainPage(){
         if( mBaseService != null){
             SongItem song = mBaseService.getPlayingSong();
-            if(  song != null) {
+            if( song != null) {
                 mSongTitleTv.setText( song.getTitle());
                 mAuthorTv.setText( song.getArtist());
                 mAlbumTv.setText( song.getAlbum() );
                 mSongTimeTv.setText(mBaseService.getPlayingSong().getSongTime());
             }
-            else mSongTitleTv.setText("No music stored in this phone.");
+            else {
+                mSongTitleTv.setText("No Music");
+                mViewPager.setVisibility(GONE);
+                mNoMusicImg.setVisibility(VISIBLE);
+            }
             updateButtonDisplay();
         }
-    }
-
-    public void updateScrollViewPosition(){
-
     }
 
     /**
@@ -587,7 +551,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-
         super.onActivityResult(requestCode, resultCode, intent);
 
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
@@ -605,8 +568,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onDestroy();
         getApplicationContext().unbindService(mMusicConn);
     }
-
-    /*public static void changeTheOrientation(){
-        getApplicationContext().
-    }*/
 }

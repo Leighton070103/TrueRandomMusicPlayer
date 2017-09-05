@@ -40,6 +40,12 @@ public class SwipePagerAdapter extends PagerAdapter{
     }
 
     @Override
+    public void startUpdate(ViewGroup container) {
+        super.startUpdate(container);
+
+    }
+
+    @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
 //        container.removeView(mViewList.get(position % mViewList.size()));
         container.removeView(mViewList.get(position));

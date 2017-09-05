@@ -71,20 +71,27 @@
                 android:layout_marginTop="10dp"
                 android:gravity="center"
                 android:orientation="horizontal">
-
-                //
-
-
             </RelativeLayout>
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/swipe_viewpager"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_gravity="center" />
+            <android.support.v4.view.ViewPager
+                android:id="@+id/swipe_viewpager"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="visible"
+                android:layout_weight="1" />
 
-        <LinearLayout
+            <ImageView
+                android:id="@+id/no_music_image_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:visibility="gone"
+                app:srcCompat="@drawable/trmp_launcher_icon" />
+
+            <LinearLayout
             android:id="@+id/title_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
