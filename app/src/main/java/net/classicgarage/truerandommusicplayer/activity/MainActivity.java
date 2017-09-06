@@ -25,9 +25,11 @@ import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -155,6 +157,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mRandomBtn.setOnClickListener(this);
         mReplayBtn.setOnClickListener(this);
 
+        mFavoriteBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mFavoriteBtn.setBackgroundResource(isChecked? R.mipmap.main_fav_on:R.mipmap
+                        .main_fav_off);
+            }
+        });
         mSearchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -494,11 +503,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mAuthorTv.setText( song.getArtist());
                 mAlbumTv.setText( song.getAlbum() );
                 mSongTimeTv.setText(mBaseService.getPlayingSong().getSongTime());
+                mFavoriteBtn.setChecked( song.getFavorite() );
             }
             else {
                 mSongTitleTv.setText("No Music");
                 mViewPager.setVisibility(GONE);
                 mNoMusicImg.setVisibility(VISIBLE);
+                mDeleteBtn.setClickable(false);
+                mFavoriteBtn.setClickable(false);
+                sSeekBar.setClickable(false);
+                sSeekBar.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        return true;
+                    }
+                });
+                mNextBtn.setClickable(false);
+                mPreBtn.setClickable(false);
+                mPlayPauseBtn.setClickable(false);
+                mPlayListBtn.setClickable(false);
+                mRandomBtn.setClickable(false);
+                mReplayBtn.setClickable(false);
             }
             updateButtonDisplay();
         }
@@ -516,6 +541,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
     }
+
 
     private void updateRandomButton() {
         if( mBaseService.getPlayMode() == NORMAL_RANDOM ) {
