@@ -51,8 +51,12 @@ import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 import static net.classicgarage.truerandommusicplayer.activity.SongListActivity.SONG_POSITION;
-import static net.classicgarage.truerandommusicplayer.fragment.FavSongFragment.FAV_MODE;
 import static net.classicgarage.truerandommusicplayer.fragment.FavSongFragment.PLAY_MODE;
+import static net.classicgarage.truerandommusicplayer.service.MusicService.FAV_MODE;
+import static net.classicgarage.truerandommusicplayer.service.MusicService.FAV_RANDOM;
+import static net.classicgarage.truerandommusicplayer.service.MusicService.NORMAL_MODE;
+import static net.classicgarage.truerandommusicplayer.service.MusicService.NORMAL_RANDOM;
+import static net.classicgarage.truerandommusicplayer.service.MusicService.NORMAL_SEQUENCE;
 
 /**
  * This activity is to provide the main view for this app.
@@ -514,9 +518,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void updateRandomButton() {
-        if(!mBaseService.callGetRandomFlag()) {
+        if( mBaseService.getPlayMode() == NORMAL_RANDOM ) {
             mRandomBtn.setImageDrawable(getResources().getDrawable(R.mipmap.random1b));
-            mBaseService.callChangeRandomFlag();
+            mBaseService.setPlayMode(NORMAL_SEQUENCE);
             if(mBaseService.callGetReplayFlag()){
                 mReplayBtn.setImageDrawable(getResources().getDrawable(R.mipmap.replay1w));
                 mBaseService.callChangeReplayFlag();
@@ -524,7 +528,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         else {
             mRandomBtn.setImageDrawable(getResources().getDrawable(R.mipmap.randomw));
-            mBaseService.callChangeRandomFlag();
+            mBaseService.setPlayMode(NORMAL_RANDOM);
         }
     }
 
@@ -532,10 +536,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(!mBaseService.callGetReplayFlag()) {
             mReplayBtn.setImageDrawable(getResources().getDrawable(R.mipmap.replay1b));
             mBaseService.callChangeReplayFlag();
-            if(mBaseService.callGetRandomFlag()){
-                mRandomBtn.setImageDrawable(getResources().getDrawable(R.mipmap.randomw));
-                mBaseService.callChangeRandomFlag();
-            }
+//            if(mBaseService.callGetRandomFlag()){
+//                mRandomBtn.setImageDrawable(getResources().getDrawable(R.mipmap.randomw));
+//                mBaseService.callChangeRandomFlag();
+//            }
         }
         else {
             mReplayBtn.setImageDrawable(getResources().getDrawable(R.mipmap.replay1w));
@@ -558,7 +562,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Bundle extras = intent.getExtras();
             int position = extras.getInt(SONG_POSITION);
             int mode = extras.getInt(PLAY_MODE);
-            if( mode == FAV_MODE) mBaseService.callChangePlayFavorite();
+            if( mode == FAV_MODE) mBaseService.setPlayMode( FAV_MODE, null);
+            else mBaseService.setPlayMode( NORMAL_MODE, null);
             mBaseService.callPlaySongAtPosition(position);
         }
     }
