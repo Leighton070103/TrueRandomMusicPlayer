@@ -159,6 +159,10 @@ public class SongItem implements Serializable, Comparable<SongItem> {
         return  bm;
     }
 
+    public Uri getCoverUri(){
+        return  ContentUris.withAppendedId(albumIdUri, getAlbumId());
+    }
+
     public static Bitmap getArtwork(Context context, long song_id, long album_id,boolean small)
     {
         ContentResolver res = context.getContentResolver();

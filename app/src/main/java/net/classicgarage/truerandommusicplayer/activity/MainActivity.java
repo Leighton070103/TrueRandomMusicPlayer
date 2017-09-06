@@ -33,7 +33,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import net.classicgarage.truerandommusicplayer.R;
@@ -95,11 +94,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private SongDataSource mSongDataSource;
 
     private ViewPager mViewPager;
-    private List<View> mAlbumImageViewList = new ArrayList<View>();;
+    private List<View> mAlbumImageViewList;
     private SwipePagerAdapter mSwipePagerAdapter;
     private ArrayAdapter mArrayAdapter;
     private ViewPager.OnPageChangeListener mOnPageChangeListener;
-    private Toast mToast;
+    //private int currentPos;
 
     public static Handler handler = new Handler(Looper.getMainLooper()){
         @Override
@@ -204,7 +203,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }, 1);
         }
         else{
-            loadApplication();
+            startServices();
+            setSeekBarListener();
+            setAlbumArtWork();
+            enableSwiping();
+            initSearchView();
         }
     }
 
@@ -221,37 +224,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode){
             case 1:
-                configServices();
+                startServices();
                 setSeekBarListener();
-                initSearchView();
+                setAlbumArtWork();
                 enableSwiping();
+                initSearchView();
         }
     }
 
-    public void loadApplication(){
-        configServices();
-        setSeekBarListener();
-        initSearchView();
-        enableSwiping();
-    }
+    private void setAlbumArtWork() {
 
-    /**
-     * This method is to start the music service.
-     */
-    private void configServices(){
-        Intent intent = new Intent(MainActivity.this, MusicService.class);
-        startService(intent);
-        mMusicConn = new ServiceConnection() {
-            @Override
-            public void onServiceConnected(ComponentName name, IBinder service) {
-                mBaseService = (BaseService) service;
-                updateMainPage();
-            }
-
-            @Override
-            public void onServiceDisconnected(ComponentName name) {}
-        };
-        getApplicationContext().bindService(intent, mMusicConn, BIND_AUTO_CREATE);
     }
 
     /**
@@ -273,6 +255,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
         mSongListLv.setTextFilterEnabled(true);
+    }
+
+    /**
+     * This method is to start the music service.
+     */
+    private void startServices(){
+        Intent intent = new Intent(MainActivity.this, MusicService.class);
+        startService(intent);
+        mMusicConn = new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                mBaseService = (BaseService) service;
+                updateMainPage();
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {}
+        };
+        getApplicationContext().bindService(intent, mMusicConn, BIND_AUTO_CREATE);
     }
 
     /**
@@ -321,25 +322,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onStart();
     }
 
-    public void initListViews(int positionInList){
-        Log.d("position to be added: ", String.valueOf(positionInList));
-        LayoutInflater inflater = getLayoutInflater();
-        View album_view = inflater.inflate(R.layout.album_img_layout, null);
-        mAlbumArtView = (ImageView) album_view.findViewById(R.id.albumView);
-        long songId = mSongDataSource.getAllSongs().get(positionInList).getId();
-        long album = mSongDataSource.getAllSongs().get(positionInList).getAlbumId();
-        Bitmap bitmap = SongItem.getArtwork(this.getApplicationContext(),songId,album,false);
-        mAlbumArtView.setImageBitmap(bitmap);
-        mAlbumImageViewList.add(album_view);
-        Log.d("albemImageViewList: ", String.valueOf(mAlbumImageViewList.size()));
+    public void slideBar(){
+
     }
     /**
      * Initialization of the swipe view.
      * @throws IllegalAccessException
      */
     public void initSwipeView() throws IllegalAccessException{
-        //mAlbumImageViewList = new ArrayList<View>();
-        /*LayoutInflater inflater = getLayoutInflater();
+        mAlbumImageViewList = new ArrayList<View>();
+        mViewPager = (ViewPager) findViewById(R.id.swipe_viewpager);
+
+        /*if( mBaseService == null){
+            mViewPager.setVisibility(GONE);
+            mNoMusicImg.setVisibility(VISIBLE);
+        }*/
+
+        LayoutInflater inflater = getLayoutInflater();
         for(int i = 0; i < mSongDataSource.getAllSongs().size(); i++) {
             View album_view = inflater.inflate(R.layout.album_img_layout, null);
             mAlbumArtView = (ImageView) album_view.findViewById(R.id.albumView);
@@ -348,45 +347,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Bitmap bitmap = SongItem.getArtwork(this.getApplicationContext(),songId,album,false);
             mAlbumArtView.setImageBitmap(bitmap);
             mAlbumImageViewList.add(album_view);
-        }*/
+        }
+        mSwipePagerAdapter = new SwipePagerAdapter(mAlbumImageViewList);
         /*final int currentItem = Integer.MAX_VALUE / 2;
         mViewPager.setCurrentItem(currentItem);*/
-        //initListViews(count+1);
-        LayoutInflater inflater = getLayoutInflater();
-        View album_view = inflater.inflate(R.layout.album_img_layout, null);
-        mAlbumArtView = (ImageView) album_view.findViewById(R.id.albumView);
-        initListViews(mBaseService.getPlayingSongIndex());
-        mViewPager = (ViewPager) findViewById(R.id.swipe_viewpager);
-        mSwipePagerAdapter = new SwipePagerAdapter(mAlbumImageViewList);
         mViewPager.setAdapter(mSwipePagerAdapter);
         mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageSelected(int position) {
-                // play song at the position when swipe to another page
-                mBaseService.callPlaySongAtPosition(position);
-                mBaseService.callSeekTo(0);
-                updateMainPage();
-                //Log.d("*******", position+"");
-                // 页面选择响应函数
-                // 如果需要实现页面滑动时动态添加 请在此判断arg0的值
-                // 当然此方式在必须在初始化ViewPager的时候给的页数必须>2
-                // 因为给1页的话 ViewPager是响应不了此函数的
-                // 例：
-                System.out.println("================"+position);
-                if (position == mViewPager.getAdapter().getCount() - 1) {// 滑动到最后一页
-                    initListViews(mBaseService.getPlayingSongIndex());// listViews添加数据
-                    mSwipePagerAdapter.setListViews(mAlbumImageViewList);// 重构adapter对象  这是一个很重要
-                    mSwipePagerAdapter.notifyDataSetChanged();// 刷新
-                }
-
-                if (mToast == null)
-                    mToast = Toast.makeText(MainActivity.this, "翻到了第" + (position + 1) + "页",Toast.LENGTH_LONG);
-                else {
-                    mToast.setText("翻到了第" + (position + 1) + "页");
-                }
-                mToast.show();
-            }
-
             /**
              * position:current page;
              * positionOffset: offset of current page
@@ -398,6 +364,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 updateMainPage();
             }
 
+            @Override
+            public void onPageSelected(int position) {
+                // play song at the position when swipe to another page
+                mBaseService.callPlaySongAtPosition(position);
+                mBaseService.callSeekTo(0);
+                updateMainPage();
+                Log.d("*******", position+"");
+            }
             /**
              * state == ViewPager.SCROLL_STATE_DRAGGING ||  ViewPager.SCROLL_STATE_SETTLING
              * || ViewPager.SCROLL_STATE_IDLE
@@ -453,25 +427,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     break;
                 case R.id.next_btn:
                     //mBaseService.callPause();
-                    //mViewPager.setCurrentItem(mBaseService.getPlayingSongIndex());
                     mBaseService.callPlayNextSong();
-                    Log.d("the current position", String.valueOf(mBaseService.getPlayingSongIndex()));
-                    initListViews(mBaseService.getPlayingSongIndex());// listViews添加数据
-                    mSwipePagerAdapter.setListViews(mAlbumImageViewList);// 重构adapter对象  这是一个很重要
-                    mSwipePagerAdapter.notifyDataSetChanged();// 刷新
                     updateMainPage();
-                    //enableSwiping();
+                    enableSwiping();
                     break;
                 case R.id.pre_btn:
                     //mBaseService.callPause();
-                    //mViewPager.setCurrentItem(mBaseService.getPlayingSongIndex());
                     mBaseService.callPlayLastSong();
-                    Log.d("the current position", String.valueOf(mBaseService.getPlayingSongIndex()));
-                    initListViews(mBaseService.getPlayingSongIndex());// listViews添加数据
-                    mSwipePagerAdapter.setListViews(mAlbumImageViewList);// 重构adapter对象  这是一个很重要
-                    mSwipePagerAdapter.notifyDataSetChanged();// 刷新
                     updateMainPage();
-                    //enableSwiping();
+                    enableSwiping();
                     break;
                 case R.id.activity_main_delete_btn:
                     deleteDialog();

@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="net.classicgarage.truerandommusicplayer.activity.MusicPlayerActivity">
+    tools:context="net.classicgarage.truerandommusicplayer.activity.MainActivity">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -214,7 +214,6 @@
                 android:layout_marginLeft="340dp"
                 android:layout_marginTop="-20dp"
                 android:background="@drawable/main_fav_btn_toggle"
-                android:text="ToggleButton"
                 android:textOff=""
                 android:textOn="" />
 
