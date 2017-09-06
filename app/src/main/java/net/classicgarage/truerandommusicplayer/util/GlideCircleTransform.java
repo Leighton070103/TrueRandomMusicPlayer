@@ -24,18 +24,7 @@ public class GlideCircleTransform extends BitmapTransformation {
     protected Bitmap transform(BitmapPool pool, Bitmap toTransform, int outWidth, int outHeight) {
         return circleCrop(pool, toTransform);
     }
-
-    private static Bitmap reSize(Bitmap source){
-        int size = Math.min(source.getWidth(), source.getHeight());
-        float scale;
-        if( size > 2700 ) return source;
-        else scale = (float) 2700/size;
-        Matrix matrix = new Matrix();
-        matrix.postScale(scale, scale);
-        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
-
-    }
-
+    
     private static Bitmap circleCrop(BitmapPool pool, Bitmap source) {
         if (source == null) return null;
         //source = reSize(source);
