@@ -17,6 +17,7 @@ import net.classicgarage.truerandommusicplayer.adapter.SongAdapter;
 import net.classicgarage.truerandommusicplayer.db.SongDataSource;
 
 import static android.app.Activity.RESULT_OK;
+import static net.classicgarage.truerandommusicplayer.service.MusicService.FAV_MODE;
 
 
 public class FavSongFragment extends Fragment {
@@ -25,7 +26,6 @@ public class FavSongFragment extends Fragment {
     private SongAdapter mAdapter;
     private SongDataSource mSongDataSource;
     public static final String PLAY_MODE = "play mode";
-    public static final int FAV_MODE = 1;
 
     public FavSongFragment() {
         // Required empty public constructor

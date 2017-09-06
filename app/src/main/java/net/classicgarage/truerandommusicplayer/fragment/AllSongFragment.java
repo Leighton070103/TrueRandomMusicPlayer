@@ -17,6 +17,7 @@ import net.classicgarage.truerandommusicplayer.db.SongDataSource;
 
 import static android.app.Activity.RESULT_OK;
 import static net.classicgarage.truerandommusicplayer.fragment.FavSongFragment.PLAY_MODE;
+import static net.classicgarage.truerandommusicplayer.service.MusicService.NORMAL_MODE;
 
 
 public class AllSongFragment extends Fragment {
@@ -24,7 +25,6 @@ public class AllSongFragment extends Fragment {
     private RecyclerView mSongListRv;
     private SongAdapter mAdapter;
     private SongDataSource mSongDataSource;
-    public static final int NORMAL_MODE = 0;
 
     public AllSongFragment() {
         // Required empty public constructor

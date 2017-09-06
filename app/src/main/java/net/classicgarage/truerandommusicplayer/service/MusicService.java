@@ -35,6 +35,7 @@ public class MusicService extends Service {
     private Timer mTimer = null;
     private TimerTask mTask = null;
     private int mCurrentSongIndex = 0;
+    private int mPlayMode;
 //    private LockScreenBroadcastReceiver mLockScreenBroadcastReceiver;
     private boolean mReplayFlag = false;
     private boolean mRandomFlag = false;
@@ -42,10 +43,11 @@ public class MusicService extends Service {
     private boolean mPlayFavoriteFlag = false;
 
     public static final String INTENT_ACTION = "Intent action";
-    public static final int PLAY_PREVIOUS = 0;
+    public static final int ACTION_PLAY_PREVIOUS = 0;
     public static final int OPERATE_CURRENT = 1;
-    public static final int PLAY_NEXT = 2;
-    public static final int PLAY_MODE = 3;
+    public static final int ACTION_PLAY_NEXT = 2;
+    public static final int FAV_MODE = 1;
+    public static final int NORMAL_MODE = 0;
 
 
     public MusicService() {}
@@ -92,10 +94,10 @@ public class MusicService extends Service {
                 if (mPlayFlag) pause();
                 else play();
                 break;
-            case PLAY_NEXT:
+            case ACTION_PLAY_NEXT:
                 playNextSong();
                 break;
-            case PLAY_PREVIOUS:
+            case ACTION_PLAY_PREVIOUS:
                 playLastSong();
                 break;
             case -1:
@@ -204,7 +206,7 @@ public class MusicService extends Service {
             randomSongIndex();
         }
         else{
-            updateCurrentSongIndex(PLAY_NEXT);
+            updateCurrentSongIndex(ACTION_PLAY_NEXT);
         }
         if(mPlayFlag) play();
         else prepare();
@@ -218,7 +220,7 @@ public class MusicService extends Service {
             randomSongIndex();
         }
         else {
-            updateCurrentSongIndex(PLAY_PREVIOUS);
+            updateCurrentSongIndex(ACTION_PLAY_PREVIOUS);
         }
         if(mPlayFlag) play();
         else prepare();
@@ -298,8 +300,8 @@ public class MusicService extends Service {
      * @param action
      */
     public void updateCurrentSongIndex(int action){
-        if(action == PLAY_NEXT) mCurrentSongIndex++;
-        if(action == PLAY_PREVIOUS) mCurrentSongIndex--;
+        if(action == ACTION_PLAY_NEXT) mCurrentSongIndex++;
+        if(action == ACTION_PLAY_PREVIOUS) mCurrentSongIndex--;
         if( mCurrentSongIndex > mDataSource.getAllSongs(mPlayFavoriteFlag).size() - 1) mCurrentSongIndex = 0;
         if( mCurrentSongIndex < 0) mCurrentSongIndex = mDataSource.getAllSongs(mPlayFavoriteFlag).size() - 1;
 
