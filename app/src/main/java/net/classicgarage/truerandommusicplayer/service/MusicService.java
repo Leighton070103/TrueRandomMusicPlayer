@@ -307,6 +307,10 @@ public class MusicService extends Service {
         return getSongFromListByIndex();
     }
 
+    private int getCurrentPlayingSongIndex(){
+        return mCurrentSongIndex;
+    }
+
     private SongItem getNextPlayingSong(){
         return null;
     }
@@ -564,6 +568,9 @@ public class MusicService extends Service {
 
         @Override
         public SongItem getPlayingSong() { return getCurrentPlayingSong();}
+
+        @Override
+        public Integer getPlayingSongIndex() { return getCurrentPlayingSongIndex();}
 
         @Override
         public SongItem getNextSong() { return getNextPlayingSong();}

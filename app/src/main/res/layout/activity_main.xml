@@ -81,6 +81,7 @@
                 android:visibility="visible"
                 android:layout_weight="1" />
 
+
             <ImageView
                 android:id="@+id/no_music_image_view"
                 android:layout_width="wrap_content"

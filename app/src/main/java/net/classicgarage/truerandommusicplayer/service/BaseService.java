@@ -16,6 +16,7 @@ public interface BaseService {
     boolean isPlaying();
     void callPlayNextSong();
     void callPlayLastSong();
+    Integer getPlayingSongIndex();
     SongItem getPlayingSong();
     SongItem getNextSong();
     SongItem getPreviousSong();

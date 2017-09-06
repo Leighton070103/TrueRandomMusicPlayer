@@ -25,19 +25,15 @@ import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
-
-import com.bumptech.glide.Glide;
 
 import net.classicgarage.truerandommusicplayer.R;
 import net.classicgarage.truerandommusicplayer.adapter.SwipePagerAdapter;
@@ -46,16 +42,18 @@ import net.classicgarage.truerandommusicplayer.db.SongDataSource;
 import net.classicgarage.truerandommusicplayer.model.SongItem;
 import net.classicgarage.truerandommusicplayer.service.BaseService;
 import net.classicgarage.truerandommusicplayer.service.MusicService;
-import net.classicgarage.truerandommusicplayer.util.GlideCircleTransform;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import static android.view.View.GONE;
+import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 import static net.classicgarage.truerandommusicplayer.activity.SongListActivity.SONG_POSITION;
 import static net.classicgarage.truerandommusicplayer.fragment.FavSongFragment.PLAY_MODE;
 import static net.classicgarage.truerandommusicplayer.service.MusicService.FAV_MODE;
+import static net.classicgarage.truerandommusicplayer.service.MusicService.FAV_RANDOM;
 import static net.classicgarage.truerandommusicplayer.service.MusicService.NORMAL_MODE;
 import static net.classicgarage.truerandommusicplayer.service.MusicService.NORMAL_RANDOM;
 import static net.classicgarage.truerandommusicplayer.service.MusicService.NORMAL_SEQUENCE;
@@ -157,13 +155,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mRandomBtn.setOnClickListener(this);
         mReplayBtn.setOnClickListener(this);
 
-        mFavoriteBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                mFavoriteBtn.setBackgroundResource(isChecked? R.mipmap.main_fav_on:R.mipmap
-                        .main_fav_off);
-            }
-        });
         mSearchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -342,13 +333,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mAlbumImageViewList = new ArrayList<View>();
         mViewPager = (ViewPager) findViewById(R.id.swipe_viewpager);
 
+        /*if( mBaseService == null){
+            mViewPager.setVisibility(GONE);
+            mNoMusicImg.setVisibility(VISIBLE);
+        }*/
+
         LayoutInflater inflater = getLayoutInflater();
         for(int i = 0; i < mSongDataSource.getAllSongs().size(); i++) {
             View album_view = inflater.inflate(R.layout.album_img_layout, null);
             mAlbumArtView = (ImageView) album_view.findViewById(R.id.albumView);
-            Glide.with(this).load(mSongDataSource.getAllSongs().get(i).getCoverUri())
-                    .transform( new GlideCircleTransform(this))
-                    .into(mAlbumArtView);
+            long songId = mSongDataSource.getAllSongs().get(i).getId();
+            long album = mSongDataSource.getAllSongs().get(i).getAlbumId();
+            Bitmap bitmap = SongItem.getArtwork(this.getApplicationContext(),songId,album,false);
+            mAlbumArtView.setImageBitmap(bitmap);
             mAlbumImageViewList.add(album_view);
         }
         mSwipePagerAdapter = new SwipePagerAdapter(mAlbumImageViewList);
@@ -497,27 +494,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mAuthorTv.setText( song.getArtist());
                 mAlbumTv.setText( song.getAlbum() );
                 mSongTimeTv.setText(mBaseService.getPlayingSong().getSongTime());
-                mFavoriteBtn.setChecked( song.getFavorite() );
             }
             else {
                 mSongTitleTv.setText("No Music");
                 mViewPager.setVisibility(GONE);
                 mNoMusicImg.setVisibility(VISIBLE);
-                mDeleteBtn.setClickable(false);
-                mFavoriteBtn.setClickable(false);
-                sSeekBar.setClickable(false);
-                sSeekBar.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        return true;
-                    }
-                });
-                mNextBtn.setClickable(false);
-                mPreBtn.setClickable(false);
-                mPlayPauseBtn.setClickable(false);
-                mPlayListBtn.setClickable(false);
-                mRandomBtn.setClickable(false);
-                mReplayBtn.setClickable(false);
             }
             updateButtonDisplay();
         }
@@ -535,7 +516,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
     }
-
 
     private void updateRandomButton() {
         if( mBaseService.getPlayMode() == NORMAL_RANDOM ) {
