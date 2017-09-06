@@ -35,6 +35,8 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.bumptech.glide.Glide;
+
 import net.classicgarage.truerandommusicplayer.R;
 import net.classicgarage.truerandommusicplayer.adapter.SwipePagerAdapter;
 import net.classicgarage.truerandommusicplayer.broadcastreceiver.MediaButtonBroadcastReceiver;
@@ -42,6 +44,7 @@ import net.classicgarage.truerandommusicplayer.db.SongDataSource;
 import net.classicgarage.truerandommusicplayer.model.SongItem;
 import net.classicgarage.truerandommusicplayer.service.BaseService;
 import net.classicgarage.truerandommusicplayer.service.MusicService;
+import net.classicgarage.truerandommusicplayer.util.GlideCircleTransform;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -342,10 +345,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         for(int i = 0; i < mSongDataSource.getAllSongs().size(); i++) {
             View album_view = inflater.inflate(R.layout.album_img_layout, null);
             mAlbumArtView = (ImageView) album_view.findViewById(R.id.albumView);
-            long songId = mSongDataSource.getAllSongs().get(i).getId();
-            long album = mSongDataSource.getAllSongs().get(i).getAlbumId();
-            Bitmap bitmap = SongItem.getArtwork(this.getApplicationContext(),songId,album,false);
-            mAlbumArtView.setImageBitmap(bitmap);
+            Glide.with(this).load(mSongDataSource.getAllSongs().get(i).getCoverUri())
+                    .transform( new GlideCircleTransform(this)).into(mAlbumArtView);
             mAlbumImageViewList.add(album_view);
         }
         mSwipePagerAdapter = new SwipePagerAdapter(mAlbumImageViewList);

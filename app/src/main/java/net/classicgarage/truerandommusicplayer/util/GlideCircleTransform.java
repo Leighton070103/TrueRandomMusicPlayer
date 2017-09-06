@@ -24,7 +24,7 @@ public class GlideCircleTransform extends BitmapTransformation {
     protected Bitmap transform(BitmapPool pool, Bitmap toTransform, int outWidth, int outHeight) {
         return circleCrop(pool, toTransform);
     }
-    
+
     private static Bitmap circleCrop(BitmapPool pool, Bitmap source) {
         if (source == null) return null;
         //source = reSize(source);
