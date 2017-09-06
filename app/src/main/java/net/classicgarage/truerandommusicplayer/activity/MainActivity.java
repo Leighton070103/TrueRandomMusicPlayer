@@ -46,19 +46,16 @@ import net.classicgarage.truerandommusicplayer.db.SongDataSource;
 import net.classicgarage.truerandommusicplayer.model.SongItem;
 import net.classicgarage.truerandommusicplayer.service.BaseService;
 import net.classicgarage.truerandommusicplayer.service.MusicService;
+import net.classicgarage.truerandommusicplayer.util.GlideCircleTransform;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import static android.view.View.GONE;
-import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 import static net.classicgarage.truerandommusicplayer.activity.SongListActivity.SONG_POSITION;
 import static net.classicgarage.truerandommusicplayer.fragment.FavSongFragment.PLAY_MODE;
 import static net.classicgarage.truerandommusicplayer.service.MusicService.FAV_MODE;
-import static net.classicgarage.truerandommusicplayer.service.MusicService.FAV_RANDOM;
 import static net.classicgarage.truerandommusicplayer.service.MusicService.NORMAL_MODE;
 import static net.classicgarage.truerandommusicplayer.service.MusicService.NORMAL_RANDOM;
 import static net.classicgarage.truerandommusicplayer.service.MusicService.NORMAL_SEQUENCE;
@@ -345,18 +342,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mAlbumImageViewList = new ArrayList<View>();
         mViewPager = (ViewPager) findViewById(R.id.swipe_viewpager);
 
-        /*if( mBaseService == null){
-            mViewPager.setVisibility(GONE);
-            mNoMusicImg.setVisibility(VISIBLE);
-        }*/
-
         LayoutInflater inflater = getLayoutInflater();
         for(int i = 0; i < mSongDataSource.getAllSongs().size(); i++) {
             View album_view = inflater.inflate(R.layout.album_img_layout, null);
             mAlbumArtView = (ImageView) album_view.findViewById(R.id.albumView);
-            Glide.with(this).load(mSongDataSource.getAllSongs().get(i).getCoverUri()).centerCrop()
+            Glide.with(this).load(mSongDataSource.getAllSongs().get(i).getCoverUri())
+                    .transform( new GlideCircleTransform(this))
                     .into(mAlbumArtView);
-
             mAlbumImageViewList.add(album_view);
         }
         mSwipePagerAdapter = new SwipePagerAdapter(mAlbumImageViewList);
