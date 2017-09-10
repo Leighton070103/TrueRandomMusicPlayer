@@ -12,6 +12,8 @@ import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.util.Log;
 import android.widget.RemoteViews;
 
@@ -24,12 +26,15 @@ import net.classicgarage.truerandommusicplayer.model.SongItem;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Handler;
 
 /**
  * This service is to provide operations of playing, pausing, deleting songs.
  */
 public class MusicService extends Service {
 
+    //IBinder musicBinder = new MusicBinder();
+    Messenger mMessenger = null;
     private MediaPlayer mMediaPlayer;
     private SongDataSource mDataSource;
     private Timer mTimer = null;
@@ -37,13 +42,15 @@ public class MusicService extends Service {
     private int mCurrentSongIndex = 0;
 
     private Integer mPlayMode = 1;
-//    private LockScreenBroadcastReceiver mLockScreenBroadcastReceiver;
     private boolean mReplayFlag = false;
     private boolean mRandomFlag = false;
     private boolean mPlayFlag = false;
     private boolean mPlayFavoriteFlag = false;
 
     public static final String INTENT_ACTION = "Intent action";
+    public static final short REQUESTING_BINDING = 78;
+    public static final short REFRESH_ALBUM_VIEW = 74;
+    public static final short REFRESH_SEEK_BAR_ = 99;
 
     /**
      * Constants for operating the widget.
@@ -62,8 +69,8 @@ public class MusicService extends Service {
     public static final int FAV_SEQUENCE = 3;
     public static final int FAV_RANDOM = 4;
 
-
     public MusicService() {}
+
     /**
      * On create method of the service.
      * Initialize the media player and the data source.
@@ -87,7 +94,7 @@ public class MusicService extends Service {
         KeyguardManager km = (KeyguardManager)getSystemService(KEYGUARD_SERVICE);
         key = km.newKeyguardLock("IN");
         key.disableKeyguard();
-        //registerScreenBroadcastReceiver();
+        //refreshAlbumView();
         super.onCreate();
     }
 
@@ -102,23 +109,22 @@ public class MusicService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         int action = intent.getIntExtra( INTENT_ACTION, -1);
         if(mDataSource.getAllSongs()!=null && mDataSource.getAllSongs().size()!= 0){
-        switch (action){
-            case OPERATE_CURRENT:
-                if (mPlayFlag) pause();
-                else play();
-                break;
-            case ACTION_PLAY_NEXT:
-                playNextSong();
-                break;
-            case ACTION_PLAY_PREVIOUS:
-                playLastSong();
-                break;
-            case -1:
-                updateWidget();
-                break;
+            switch (action){
+                case OPERATE_CURRENT:
+                    if (mPlayFlag) pause();
+                    else play();
+                    break;
+                case ACTION_PLAY_NEXT:
+                    playNextSong();
+                    break;
+                case ACTION_PLAY_PREVIOUS:
+                    playLastSong();
+                    break;
+                case -1:
+                    updateWidget();
+                    break;
+            }
         }
-        }
-
         return START_NOT_STICKY;
     }
 
@@ -129,6 +135,7 @@ public class MusicService extends Service {
      */
     @Override
     public IBinder onBind(Intent intent) {
+        //IBinder musicBinder = new MusicBinder();
         return new MusicBinder();
     }
 
@@ -247,6 +254,20 @@ public class MusicService extends Service {
         else prepare();
     }
 
+    private void refreshAlbumView(){
+        Messenger client = new Messenger(mMessenger.getBinder());
+        Message refreshAlbumViewMsg = Message.obtain(null,MusicService.REFRESH_ALBUM_VIEW);
+        Bundle data = new Bundle();
+        //data.putInt("initialAlbum",REFRESH_ALBUM_VIEW);
+        refreshAlbumViewMsg.setData(data);
+        try {
+            client.send(refreshAlbumViewMsg);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        //MainActivity.handler.sendMessage(refreshAlbumViewMsg);
+    }
+
     /**
      * Update the seek bar of the main activity.
      */
@@ -258,13 +279,18 @@ public class MusicService extends Service {
                 if(mMediaPlayer == null) return;
                 int position = mMediaPlayer.getCurrentPosition();
                 int duration = mMediaPlayer.getDuration();
-                Message msg = new Message();
+                /*Messenger client = new Messenger(mMessenger.getBinder());*/
+                Message refreshSeekBarMsg = Message.obtain(null,MusicService.REFRESH_SEEK_BAR_);
                 Bundle data = new Bundle();
                 data.putInt("duration", duration);
                 data.putInt("position", position);
-                msg.setData(data);
-                MainActivity.handler.sendMessage(msg);
-
+                refreshSeekBarMsg.setData(data);
+                /*try {
+                    client.send(refreshSeekBarMsg);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }*/
+                MainActivity.musicInfoHandler.sendMessage(refreshSeekBarMsg);
             }
         };
         mTimer.schedule(mTask,100,1000);
@@ -528,6 +554,7 @@ public class MusicService extends Service {
      * in music service.
      */
     class MusicBinder extends Binder implements BaseService{
+
         @Override
         public void callPlay() {
             play();
@@ -609,6 +636,7 @@ public class MusicService extends Service {
         public void setPlayMode(Integer isFavorite, Integer playMode) {
             MusicService.this.setPlayMode( isFavorite == FAV_MODE );
         }
-
     }
+
+
 }

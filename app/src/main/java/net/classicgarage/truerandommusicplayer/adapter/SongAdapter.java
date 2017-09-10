@@ -140,8 +140,6 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
         builder.create().show();
     }
 
-
-
     @Override
     public int getItemCount() {
         return mSongs.size();

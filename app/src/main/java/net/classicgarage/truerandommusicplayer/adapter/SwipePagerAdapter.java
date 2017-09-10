@@ -2,8 +2,11 @@ package net.classicgarage.truerandommusicplayer.adapter;
 
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 
 import java.util.List;
 
@@ -38,6 +41,7 @@ public class SwipePagerAdapter extends PagerAdapter{
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
+        Log.d("pageradapter:", String.valueOf(position)+" is instantiated");
         ((ViewPager) container).addView(mViewList.get(position % size),0);
         return mViewList.get(position % size);
     }
@@ -55,8 +59,8 @@ public class SwipePagerAdapter extends PagerAdapter{
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
         ((ViewPager) container).removeView(mViewList.get(position% size));
+        Log.d("pageradapter:", String.valueOf(position)+" is destoried");
 //        container.removeView(mViewList.get(position % mViewList.size()));
         //container.removeView(mViewList.get(position));
     }
-
 }

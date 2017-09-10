@@ -1,12 +1,14 @@
 package net.classicgarage.truerandommusicplayer.service;
 
+import android.app.Service;
+
 import net.classicgarage.truerandommusicplayer.model.SongItem;
 
 /**
  * Created by Tong on 2017/5/17.
  */
 
-public interface BaseService {
+public interface BaseService{
     void callPlay();
     void callStop();
     void callPause();
