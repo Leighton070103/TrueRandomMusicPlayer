@@ -198,10 +198,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 return false;
             }
         });
-        AudioManager audioManager = (AudioManager)this.getSystemService(Context.AUDIO_SERVICE);
-        ComponentName name = new ComponentName(this.getPackageName(),
-                MediaButtonBroadcastReceiver.class.getName());
-        audioManager.registerMediaButtonEventReceiver(name);
+//        AudioManager audioManager = (AudioManager)this.getSystemService(Context.AUDIO_SERVICE);
+//        ComponentName name = new ComponentName(this.getPackageName(),
+//                MediaButtonBroadcastReceiver.class.getName());
+//        audioManager.registerMediaButtonEventReceiver(name);
         getPermissions();
         debug();
     }
@@ -245,10 +245,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode){
             case 1:
-                configServices();
-                setSeekBarListener();
-                initSearchView();
-                enableSwiping();
+                loadApplication();
         }
     }
 
@@ -346,19 +343,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onStart();
     }
 
+    /**
+     *
+     * @param positionInList
+     * @param isFistInitialized
+     */
     public void initListViews(int positionInList, boolean isFistInitialized){
         if(positionInList<mSongDataSource.getAllSongs().size()){
             //Log.d("pos to be added:", String.valueOf(positionInList));
             LayoutInflater inflater = getLayoutInflater();
             View album_view = inflater.inflate(R.layout.album_img_layout,null);
             mAlbumArtView = (ImageView) album_view.findViewById(R.id.albumView);
-//            long songId = mSongDataSource.getAllSongs().get(positionInList).getId();
-//            long album = mSongDataSource.getAllSongs().get(positionInList).getAlbumId();
-//            Bitmap bitmap = SongItem.getArtwork(this.getApplicationContext(),songId,album,false);
-//            mAlbumArtView.setImageBitmap(bitmap);
             Glide.with(this).load(mSongDataSource.getAllSongs().get(positionInList).getCoverUri())
                     .transform( new GlideCircleTransform(this)).into(mAlbumArtView);
-
             mAlbumImageViewList.add(album_view);
             //Log.d("albumImageViewList:", String.valueOf(mAlbumImageViewList.size()));
             if(isFistInitialized){
@@ -408,7 +405,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 updateMainPage();
                 if (position == mViewPager.getAdapter().getCount() - 1) {
                     initListViews((mBaseService.getPlayingSongIndex()+1),false);// listViews添加数据 // 滑动到最后一页
-                    mSwipePagerAdapter.setListViews(mAlbumImageViewList);// 重构adapter对象  这是一个很重要
+ //                   mSwipePagerAdapter.setListViews(mAlbumImageViewList);// 重构adapter对象  这是一个很重要
                     mSwipePagerAdapter.notifyDataSetChanged();// 刷新
                     Log.d("song index: ", String.valueOf(mBaseService.getPlayingSongIndex()));
                 }

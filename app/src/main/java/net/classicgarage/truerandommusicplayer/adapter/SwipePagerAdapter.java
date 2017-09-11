@@ -17,16 +17,13 @@ import java.util.List;
 public class SwipePagerAdapter extends PagerAdapter{
 
     private List<View> mViewList;
-    private int size;// 页数
 
     public SwipePagerAdapter(List<View> mViewList) {
         this.mViewList = mViewList;
-        size = mViewList == null ? 0 : mViewList.size();
     }
 
     public void setListViews(List<View> listViews) {// 自行添加数据
         this.mViewList = listViews;
-        size = listViews == null ? 0 : listViews.size();
     }
 
     @Override
@@ -41,9 +38,9 @@ public class SwipePagerAdapter extends PagerAdapter{
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        Log.d("pageradapter:", String.valueOf(position)+" is instantiated");
-        ((ViewPager) container).addView(mViewList.get(position % size),0);
-        return mViewList.get(position % size);
+        Log.d("pageradapter:", String.valueOf(position)+" is instantiated, list size = " + getCount());
+        ((ViewPager) container).addView(mViewList.get( position ),0);
+        return mViewList.get(position) ;
     }
 
     /*@Override
@@ -58,8 +55,8 @@ public class SwipePagerAdapter extends PagerAdapter{
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-        ((ViewPager) container).removeView(mViewList.get(position% size));
-        Log.d("pageradapter:", String.valueOf(position)+" is destoried");
+        ((ViewPager) container).removeView(mViewList.get( position ));
+        Log.d("pageradapter:", String.valueOf(position)+" is destroyed");
 //        container.removeView(mViewList.get(position % mViewList.size()));
         //container.removeView(mViewList.get(position));
     }
