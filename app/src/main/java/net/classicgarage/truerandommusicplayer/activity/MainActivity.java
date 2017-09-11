@@ -342,10 +342,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             LayoutInflater inflater = getLayoutInflater();
             View album_view = inflater.inflate(R.layout.album_img_layout,null);
             mAlbumArtView = (ImageView) album_view.findViewById(R.id.albumView);
-            long songId = mSongDataSource.getAllSongs().get(positionInList).getId();
-            long album = mSongDataSource.getAllSongs().get(positionInList).getAlbumId();
-            Bitmap bitmap = SongItem.getArtwork(this.getApplicationContext(),songId,album,false);
-            mAlbumArtView.setImageBitmap(bitmap);
+//            long songId = mSongDataSource.getAllSongs().get(positionInList).getId();
+//            long album = mSongDataSource.getAllSongs().get(positionInList).getAlbumId();
+//            Bitmap bitmap = SongItem.getArtwork(this.getApplicationContext(),songId,album,false);
+//            mAlbumArtView.setImageBitmap(bitmap);
+            Glide.with(this).load(mSongDataSource.getAllSongs().get(positionInList).getCoverUri())
+                    .transform( new GlideCircleTransform(this)).into(mAlbumArtView);
+
             mAlbumImageViewList.add(album_view);
             //Log.d("albumImageViewList:", String.valueOf(mAlbumImageViewList.size()));
             if(isFistInitialized){
