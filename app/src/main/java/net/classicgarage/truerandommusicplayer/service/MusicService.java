@@ -43,9 +43,7 @@ public class MusicService extends Service {
 
     private Integer mPlayMode = 1;
     private boolean mReplayFlag = false;
-    private boolean mRandomFlag = false;
     private boolean mPlayFlag = false;
-    private boolean mPlayFavoriteFlag = false;
 
     public static final String INTENT_ACTION = "Intent action";
     public static final short REQUESTING_BINDING = 78;
@@ -420,7 +418,7 @@ public class MusicService extends Service {
      * @param position
      */
     private void playSongAtPosition(int position) {
-        if(mPlayFavoriteFlag){
+        if(isFavorite()){
             Log.d("===playAtPosition===", mDataSource.getAllSongs().size()+" pos:" + position);
         }
         else {
@@ -486,20 +484,6 @@ public class MusicService extends Service {
             mReplayFlag = false;
     }
 
-    /**
-     * Change the playfavoriteflag.
-     */
-//    private void changePlayFavoriteFlag(){
-//        if(! mPlayFavoriteFlag ) mPlayFavoriteFlag = true;
-//        else mPlayFavoriteFlag = false;
-//    }
-
-    /**
-     *  Return the ramdomflag.
-     */
-//    private boolean getRandomflag(){
-//        return mRandomFlag;
-//    }
 
     /**
      *  Return the replayflag.
