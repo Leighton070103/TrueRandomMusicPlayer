@@ -17,6 +17,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
+import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
@@ -40,6 +41,7 @@ import android.widget.ToggleButton;
 
 import com.bumptech.glide.Glide;
 
+import net.classicgarage.truerandommusicplayer.BuildConfig;
 import net.classicgarage.truerandommusicplayer.R;
 import net.classicgarage.truerandommusicplayer.adapter.SwipePagerAdapter;
 import net.classicgarage.truerandommusicplayer.broadcastreceiver.MediaButtonBroadcastReceiver;
@@ -196,13 +198,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 return false;
             }
         });
-
         AudioManager audioManager = (AudioManager)this.getSystemService(Context.AUDIO_SERVICE);
         ComponentName name = new ComponentName(this.getPackageName(),
                 MediaButtonBroadcastReceiver.class.getName());
         audioManager.registerMediaButtonEventReceiver(name);
         getPermissions();
+        debug();
+    }
 
+    public void debug(){
+        if(BuildConfig.DEBUG){
+            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+                    .detectAll().build());
+            StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
+                    .detectAll().build());
+        }
     }
 
     /**

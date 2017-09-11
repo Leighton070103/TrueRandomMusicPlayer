@@ -279,17 +279,17 @@ public class MusicService extends Service {
                 if(mMediaPlayer == null) return;
                 int position = mMediaPlayer.getCurrentPosition();
                 int duration = mMediaPlayer.getDuration();
-                /*Messenger client = new Messenger(mMessenger.getBinder());*/
+                Messenger client = new Messenger(mMessenger.getBinder());
                 Message refreshSeekBarMsg = Message.obtain(null,MusicService.REFRESH_SEEK_BAR_);
                 Bundle data = new Bundle();
                 data.putInt("duration", duration);
                 data.putInt("position", position);
                 refreshSeekBarMsg.setData(data);
-                /*try {
+                try {
                     client.send(refreshSeekBarMsg);
                 } catch (RemoteException e) {
                     e.printStackTrace();
-                }*/
+                }
                 MainActivity.musicInfoHandler.sendMessage(refreshSeekBarMsg);
             }
         };
