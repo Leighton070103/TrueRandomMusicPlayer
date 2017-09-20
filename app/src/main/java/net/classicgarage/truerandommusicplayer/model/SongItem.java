@@ -158,6 +158,11 @@ public class SongItem implements Serializable, Comparable<SongItem> {
         }
         return  bm;
     }
+
+    public Uri getCoverUri(){
+        return  ContentUris.withAppendedId(albumIdUri, getAlbumId());
+    }
+
     public static Bitmap getArtwork(Context context, long song_id, long album_id,boolean small)
     {
         ContentResolver res = context.getContentResolver();
@@ -169,7 +174,7 @@ public class SongItem implements Serializable, Comparable<SongItem> {
                 in = res.openInputStream(uri);
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inSampleSize = 1;
-                options.inJustDecodeBounds = true;
+                /*options.inJustDecodeBounds = false;
                 BitmapFactory.decodeStream(in,null,options);
                 if(small)
                 {
@@ -178,10 +183,10 @@ public class SongItem implements Serializable, Comparable<SongItem> {
                 else
                 {
                     options.inSampleSize = computeSampleSize(options,2000);
-                }
+                }*/
                 options.inJustDecodeBounds = false;
                 options.inDither = false;
-                options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                options.inPreferredConfig = Bitmap.Config.RGB_565;
                 in = res.openInputStream(uri);
                 return BitmapFactory.decodeStream(in,null,options);
             } catch (FileNotFoundException e) {

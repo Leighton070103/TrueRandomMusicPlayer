@@ -37,13 +37,13 @@ public class PlayerWidgetProvider extends AppWidgetProvider {
 					.widget_layout);
             //Set intent for playing previous song.
             remoteViews.setOnClickPendingIntent(R.id.widget_pre_btn, getPendingIntentByAction(
-            		context, PLAY_PREVIOUS_REQUEST_CODE, MusicService.PLAY_PREVIOUS));
+            		context, PLAY_PREVIOUS_REQUEST_CODE, MusicService.ACTION_PLAY_PREVIOUS));
             //Set intent for play pause button.
             remoteViews.setOnClickPendingIntent(R.id.widget_play_btn, getPendingIntentByAction(
             		context, OPERATE_CURRENT_REQUEST_CODE, MusicService.OPERATE_CURRENT));
             // sets intent for play next button
             remoteViews.setOnClickPendingIntent(R.id.widget_next_btn, getPendingIntentByAction(
-            		context, PLAY_NEXT_REQUEST_CODE, MusicService.PLAY_NEXT));
+            		context, PLAY_NEXT_REQUEST_CODE, MusicService.ACTION_PLAY_NEXT));
             appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
       }
 	}

@@ -47,7 +47,7 @@ public class MediaButtonBroadcastReceiver extends BroadcastReceiver {
             int keyCode = keyEvent.getKeyCode();
             switch ( keyCode ){
                 case KeyEvent.KEYCODE_MEDIA_NEXT:
-                    buttonIntent.putExtra( MusicService.INTENT_ACTION, MusicService.PLAY_NEXT);
+                    buttonIntent.putExtra( MusicService.INTENT_ACTION, MusicService.ACTION_PLAY_NEXT);
                     break;
                 case KeyEvent.KEYCODE_HEADSETHOOK:
                     if(!mDouble)
@@ -60,7 +60,7 @@ public class MediaButtonBroadcastReceiver extends BroadcastReceiver {
                     }
                     break;
                 case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
-                    buttonIntent.putExtra( MusicService.INTENT_ACTION, MusicService.PLAY_PREVIOUS);
+                    buttonIntent.putExtra( MusicService.INTENT_ACTION, MusicService.ACTION_PLAY_PREVIOUS);
                     break;
             }
             context.startService(buttonIntent);

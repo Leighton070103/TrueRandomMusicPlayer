@@ -20,8 +20,7 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import net.classicgarage.truerandommusicplayer.R;
-import net.classicgarage.truerandommusicplayer.activity.AllSongsActivity;
-import net.classicgarage.truerandommusicplayer.activity.MainActivity;
+
 import net.classicgarage.truerandommusicplayer.db.SongDataSource;
 import net.classicgarage.truerandommusicplayer.model.SongItem;
 
@@ -101,6 +100,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
                     Log.d("====songname==", position+"");
                     mOnSongItemNameClickListener.onSongItemNameClick(holder.itemView, position);
                 }
+
             }
         });
         holder.mDelBtn.setOnClickListener(new View.OnClickListener() {
@@ -139,8 +139,6 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
         });
         builder.create().show();
     }
-
-
 
     @Override
     public int getItemCount() {

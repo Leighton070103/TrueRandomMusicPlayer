@@ -8,9 +8,8 @@
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
-
     <application
-        android:hardwareAccelerated="false"
+        android:hardwareAccelerated="true"
         android:largeHeap="true"
         android:allowBackup="true"
         android:icon="@drawable/trmp_launcher_icon"
@@ -36,9 +35,6 @@
                 <category android:name="android.intent.categoy.DEFAULT" />
             </intent-filter>
         </receiver>
-
-        <activity android:name=".activity.AllSongsActivity" />
-        <activity android:name=".activity.FavSongsActivity" />
 
         <receiver android:name=".widget.PlayerWidgetProvider">
             <intent-filter>

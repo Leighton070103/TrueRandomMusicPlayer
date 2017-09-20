@@ -15,8 +15,9 @@
     <string name="title">Title</string>
     <string name="artist">Artist</string>
     <string name="no_song_hint">No music detected.</string>
-    <string name="delete_alert">Are you sure to delete this song?</string>
+    <string name="delete_alert">Are you sure to delete this song from your phone?</string>
     <string name="alert">Alert</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

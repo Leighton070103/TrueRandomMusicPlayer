@@ -1,12 +1,14 @@
 package net.classicgarage.truerandommusicplayer.service;
 
+import android.app.Service;
+
 import net.classicgarage.truerandommusicplayer.model.SongItem;
 
 /**
  * Created by Tong on 2017/5/17.
  */
 
-public interface BaseService {
+public interface BaseService{
     void callPlay();
     void callStop();
     void callPause();
@@ -16,14 +18,15 @@ public interface BaseService {
     boolean isPlaying();
     void callPlayNextSong();
     void callPlayLastSong();
+    Integer getPlayingSongIndex();
     SongItem getPlayingSong();
     SongItem getNextSong();
     SongItem getPreviousSong();
     void deleteCurrentSong();
     void setCurrentSongFavorite();
-    void callChangeRandomFlag();
     void callChangeReplayFlag();
-    boolean callGetRandomFlag();
     boolean callGetReplayFlag();
-    void callChangePlayFavorite();
+    Integer getPlayMode();
+    void setPlayMode( Integer playMode);
+    void setPlayMode( Integer isFavorite, Integer playMode);
 }

@@ -12,6 +12,8 @@ import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.util.Log;
 import android.widget.RemoteViews;
 
@@ -24,31 +26,49 @@ import net.classicgarage.truerandommusicplayer.model.SongItem;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Handler;
 
 /**
  * This service is to provide operations of playing, pausing, deleting songs.
  */
 public class MusicService extends Service {
 
+    //IBinder musicBinder = new MusicBinder();
+    Messenger mMessenger = null;
     private MediaPlayer mMediaPlayer;
     private SongDataSource mDataSource;
     private Timer mTimer = null;
     private TimerTask mTask = null;
     private int mCurrentSongIndex = 0;
-//    private LockScreenBroadcastReceiver mLockScreenBroadcastReceiver;
+
+    private Integer mPlayMode = 1;
     private boolean mReplayFlag = false;
-    private boolean mRandomFlag = false;
     private boolean mPlayFlag = false;
-    private boolean mPlayFavoriteFlag = false;
 
     public static final String INTENT_ACTION = "Intent action";
-    public static final int PLAY_PREVIOUS = 0;
-    public static final int OPERATE_CURRENT = 1;
-    public static final int PLAY_NEXT = 2;
-    public static final int PLAY_MODE = 3;
+    public static final short REQUESTING_BINDING = 78;
+    public static final short REFRESH_ALBUM_VIEW = 74;
+    public static final short REFRESH_SEEK_BAR_ = 99;
 
+    /**
+     * Constants for operating the widget.
+     */
+    public static final int ACTION_PLAY_PREVIOUS = 0;
+    public static final int OPERATE_CURRENT = 1;
+    public static final int ACTION_PLAY_NEXT = 2;
+
+    /**
+     * Constants for different modes.
+     */
+    public static final int NORMAL_MODE = -1;
+    public static final int FAV_MODE = 0;
+    public static final int NORMAL_SEQUENCE = 1;
+    public static final int NORMAL_RANDOM = 2;
+    public static final int FAV_SEQUENCE = 3;
+    public static final int FAV_RANDOM = 4;
 
     public MusicService() {}
+
     /**
      * On create method of the service.
      * Initialize the media player and the data source.
@@ -72,7 +92,7 @@ public class MusicService extends Service {
         KeyguardManager km = (KeyguardManager)getSystemService(KEYGUARD_SERVICE);
         key = km.newKeyguardLock("IN");
         key.disableKeyguard();
-        //registerScreenBroadcastReceiver();
+        //refreshAlbumView();
         super.onCreate();
     }
 
@@ -87,23 +107,22 @@ public class MusicService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         int action = intent.getIntExtra( INTENT_ACTION, -1);
         if(mDataSource.getAllSongs()!=null && mDataSource.getAllSongs().size()!= 0){
-        switch (action){
-            case OPERATE_CURRENT:
-                if (mPlayFlag) pause();
-                else play();
-                break;
-            case PLAY_NEXT:
-                playNextSong();
-                break;
-            case PLAY_PREVIOUS:
-                playLastSong();
-                break;
-            case -1:
-                updateWidget();
-                break;
+            switch (action){
+                case OPERATE_CURRENT:
+                    if (mPlayFlag) pause();
+                    else play();
+                    break;
+                case ACTION_PLAY_NEXT:
+                    playNextSong();
+                    break;
+                case ACTION_PLAY_PREVIOUS:
+                    playLastSong();
+                    break;
+                case -1:
+                    updateWidget();
+                    break;
+            }
         }
-        }
-
         return START_NOT_STICKY;
     }
 
@@ -114,6 +133,7 @@ public class MusicService extends Service {
      */
     @Override
     public IBinder onBind(Intent intent) {
+        //IBinder musicBinder = new MusicBinder();
         return new MusicBinder();
     }
 
@@ -171,7 +191,7 @@ public class MusicService extends Service {
      */
     private SongItem getSongFromListByIndex() {
         try {
-            return mDataSource.getAllSongs(mPlayFavoriteFlag).get( mCurrentSongIndex );
+            return mDataSource.getAllSongs(isFavorite()).get( mCurrentSongIndex );
         }
         catch (IndexOutOfBoundsException e){
             e.printStackTrace();
@@ -200,28 +220,50 @@ public class MusicService extends Service {
      * Play the next song.
      */
     public void playNextSong(){
-        if(mRandomFlag){
+        if(isRandom()){
             randomSongIndex();
         }
         else{
-            updateCurrentSongIndex(PLAY_NEXT);
+            updateCurrentSongIndex(ACTION_PLAY_NEXT);
         }
         if(mPlayFlag) play();
         else prepare();
+    }
+
+    public boolean isRandom(){
+        return mPlayMode == FAV_RANDOM || mPlayMode == NORMAL_RANDOM;
+    }
+
+    public boolean isFavorite(){
+        return mPlayMode == FAV_RANDOM || mPlayMode == FAV_SEQUENCE;
     }
 
     /**
      * Called when the previous song button is clicked.
      */
     public void playLastSong(){
-        if(mRandomFlag){
+        if(isRandom()){
             randomSongIndex();
         }
         else {
-            updateCurrentSongIndex(PLAY_PREVIOUS);
+            updateCurrentSongIndex(ACTION_PLAY_PREVIOUS);
         }
         if(mPlayFlag) play();
         else prepare();
+    }
+
+    private void refreshAlbumView(){
+        Messenger client = new Messenger(mMessenger.getBinder());
+        Message refreshAlbumViewMsg = Message.obtain(null,MusicService.REFRESH_ALBUM_VIEW);
+        Bundle data = new Bundle();
+        //data.putInt("initialAlbum",REFRESH_ALBUM_VIEW);
+        refreshAlbumViewMsg.setData(data);
+        try {
+            client.send(refreshAlbumViewMsg);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        //MainActivity.handler.sendMessage(refreshAlbumViewMsg);
     }
 
     /**
@@ -235,13 +277,18 @@ public class MusicService extends Service {
                 if(mMediaPlayer == null) return;
                 int position = mMediaPlayer.getCurrentPosition();
                 int duration = mMediaPlayer.getDuration();
-                Message msg = new Message();
+//                Messenger client = new Messenger(mMessenger.getBinder());
+                Message refreshSeekBarMsg = Message.obtain(null,MusicService.REFRESH_SEEK_BAR_);
                 Bundle data = new Bundle();
                 data.putInt("duration", duration);
                 data.putInt("position", position);
-                msg.setData(data);
-                MainActivity.handler.sendMessage(msg);
-
+                refreshSeekBarMsg.setData(data);
+//                try {
+//                    client.send(refreshSeekBarMsg);
+//                } catch (RemoteException e) {
+//                    e.printStackTrace();
+//                }
+                MainActivity.musicInfoHandler.sendMessage(refreshSeekBarMsg);
             }
         };
         mTimer.schedule(mTask,100,1000);
@@ -284,6 +331,10 @@ public class MusicService extends Service {
         return getSongFromListByIndex();
     }
 
+    private int getCurrentPlayingSongIndex(){
+        return mCurrentSongIndex;
+    }
+
     private SongItem getNextPlayingSong(){
         return null;
     }
@@ -298,10 +349,10 @@ public class MusicService extends Service {
      * @param action
      */
     public void updateCurrentSongIndex(int action){
-        if(action == PLAY_NEXT) mCurrentSongIndex++;
-        if(action == PLAY_PREVIOUS) mCurrentSongIndex--;
-        if( mCurrentSongIndex > mDataSource.getAllSongs(mPlayFavoriteFlag).size() - 1) mCurrentSongIndex = 0;
-        if( mCurrentSongIndex < 0) mCurrentSongIndex = mDataSource.getAllSongs(mPlayFavoriteFlag).size() - 1;
+        if(action == ACTION_PLAY_NEXT) mCurrentSongIndex++;
+        if(action == ACTION_PLAY_PREVIOUS) mCurrentSongIndex--;
+        if( mCurrentSongIndex > mDataSource.getAllSongs(isFavorite()).size() - 1) mCurrentSongIndex = 0;
+        if( mCurrentSongIndex < 0) mCurrentSongIndex = mDataSource.getAllSongs(isFavorite()).size() - 1;
 
         SharedPreferences preferences = getSharedPreferences("user",Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
@@ -323,33 +374,33 @@ public class MusicService extends Service {
     }
 
     /**
-     * Get a random index of the song.
+     * Get a random index of the song according to the play mode.
      */
     public void randomSongIndex(){
         java.util.Random r = new java.util.Random();
         boolean isAllPlayedInARow = true;
 
 
-        int randomSongIndex = r.nextInt(mDataSource.getAllSongs(mPlayFavoriteFlag).size());
-        if (mDataSource.getSongAtPosition(mPlayFavoriteFlag, randomSongIndex).getmPlayedTime() == 0){
+        int randomSongIndex = r.nextInt(mDataSource.getAllSongs( isFavorite() ).size());
+        if (mDataSource.getSongAtPosition( isFavorite(), randomSongIndex).getmPlayedTime() == 0){
             mCurrentSongIndex = randomSongIndex;
-            mDataSource.getSongAtPosition(mPlayFavoriteFlag, randomSongIndex).setmPlayedTime(1);
+            mDataSource.getSongAtPosition( isFavorite(), randomSongIndex).setmPlayedTime(1);
             isAllPlayedInARow = false;
         }
-        else if (mDataSource.getSongAtPosition(mPlayFavoriteFlag, randomSongIndex).getmPlayedTime() > 0){
-            for(int i = 0;i < mDataSource.getAllSongs(mPlayFavoriteFlag).size();i++){
-                if(mDataSource.getSongAtPosition(mPlayFavoriteFlag, i).getmPlayedTime() == 0){
+        else if (mDataSource.getSongAtPosition( isFavorite(), randomSongIndex).getmPlayedTime() > 0){
+            for(int i = 0;i < mDataSource.getAllSongs( isFavorite()).size();i++){
+                if(mDataSource.getSongAtPosition( isFavorite(), i).getmPlayedTime() == 0){
                     mCurrentSongIndex = i;
                     isAllPlayedInARow = false;
                 }
             }
             if(isAllPlayedInARow){
-                for (int i = 0;i < mDataSource.getAllSongs(mPlayFavoriteFlag).size();i++){
-                    mDataSource.getSongAtPosition(mPlayFavoriteFlag, i).setmPlayedTime(0);
+                for (int i = 0;i < mDataSource.getAllSongs(isFavorite()).size();i++){
+                    mDataSource.getSongAtPosition(isFavorite(), i).setmPlayedTime(0);
                 }
             }
         }
-        mCurrentSongIndex = r.nextInt(mDataSource.getAllSongs(mPlayFavoriteFlag).size());
+        mCurrentSongIndex = r.nextInt(mDataSource.getAllSongs(isFavorite()).size());
 
     }
 
@@ -367,7 +418,7 @@ public class MusicService extends Service {
      * @param position
      */
     private void playSongAtPosition(int position) {
-        if(mPlayFavoriteFlag){
+        if(isFavorite()){
             Log.d("===playAtPosition===", mDataSource.getAllSongs().size()+" pos:" + position);
         }
         else {
@@ -414,13 +465,13 @@ public class MusicService extends Service {
     /**
      * Change the random flag.
      */
-    private void changeRandomFlag(){
-        if(!mRandomFlag) {
-            mRandomFlag = true;
-        }
-        else
-            mRandomFlag = false;
-    }
+//    private void changeRandomFlag(){
+//        if(!mRandomFlag) {
+//            mRandomFlag = true;
+//        }
+//        else
+//            mRandomFlag = false;
+//    }
 
     /**
      * Change the replayflag.
@@ -433,20 +484,6 @@ public class MusicService extends Service {
             mReplayFlag = false;
     }
 
-    /**
-     * Change the playfavoriteflag.
-     */
-    private void changePlayFavoriteFlag(){
-        if(! mPlayFavoriteFlag ) mPlayFavoriteFlag = true;
-        else mPlayFavoriteFlag = false;
-    }
-
-    /**
-     *  Return the ramdomflag.
-     */
-    private boolean getRandomflag(){
-        return mRandomFlag;
-    }
 
     /**
      *  Return the replayflag.
@@ -465,12 +502,43 @@ public class MusicService extends Service {
 //        Log.i("screenBR", "screenBroadcastReceiver注册了");
 //    }
 
+    public Integer getPlayMode() {
+        return mPlayMode;
+    }
+
+    public void setPlayMode(Integer playMode) {
+        this.mPlayMode = playMode;
+    }
+
+    /**
+     * Set the play mode to normal or favorite mode.
+     * @param isFavorite
+     */
+    public void setPlayMode(boolean isFavorite){
+        //If the user wants it to be favorite mode.
+        if( isFavorite ){
+            // If now it is not favorite mode, change it..
+            if(!isFavorite()){
+                if( isRandom() ) mPlayMode = FAV_RANDOM;
+                else mPlayMode = FAV_SEQUENCE;
+            }
+        }
+        else {
+            // If now it is favorite mode, change it to normal.
+            if(isFavorite){
+                if(isRandom()) mPlayMode = NORMAL_RANDOM;
+                else mPlayMode = NORMAL_SEQUENCE;
+            }
+        }
+
+    }
 
     /**
      * This class is to provide a binder which has some basic functions for activities to operate
      * in music service.
      */
     class MusicBinder extends Binder implements BaseService{
+
         @Override
         public void callPlay() {
             play();
@@ -513,6 +581,9 @@ public class MusicService extends Service {
         public SongItem getPlayingSong() { return getCurrentPlayingSong();}
 
         @Override
+        public Integer getPlayingSongIndex() { return getCurrentPlayingSongIndex();}
+
+        @Override
         public SongItem getNextSong() { return getNextPlayingSong();}
 
         @Override
@@ -533,16 +604,23 @@ public class MusicService extends Service {
         public void callChangeReplayFlag(){ changeReplayFlag(); }
 
         @Override
-        public void callChangeRandomFlag(){ changeRandomFlag(); }
-
-        @Override
-        public boolean callGetRandomFlag(){ return getRandomflag(); }
-
-        @Override
         public boolean callGetReplayFlag(){ return getReplayflag();}
 
         @Override
-        public void callChangePlayFavorite(){ changePlayFavoriteFlag();}
+        public Integer getPlayMode() {
+            return MusicService.this.getPlayMode();
+        }
 
+        @Override
+        public void setPlayMode(Integer playMode) {
+            MusicService.this.setPlayMode(playMode);
+        }
+
+        @Override
+        public void setPlayMode(Integer isFavorite, Integer playMode) {
+            MusicService.this.setPlayMode( isFavorite == FAV_MODE );
+        }
     }
+
+
 }

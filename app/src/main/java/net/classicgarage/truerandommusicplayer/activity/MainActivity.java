@@ -1,6 +1,7 @@
 package net.classicgarage.truerandommusicplayer.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -16,6 +17,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
+import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
@@ -25,6 +27,7 @@ import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -33,8 +36,12 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.bumptech.glide.Glide;
+
+import net.classicgarage.truerandommusicplayer.BuildConfig;
 import net.classicgarage.truerandommusicplayer.R;
 import net.classicgarage.truerandommusicplayer.adapter.SwipePagerAdapter;
 import net.classicgarage.truerandommusicplayer.broadcastreceiver.MediaButtonBroadcastReceiver;
@@ -42,10 +49,23 @@ import net.classicgarage.truerandommusicplayer.db.SongDataSource;
 import net.classicgarage.truerandommusicplayer.model.SongItem;
 import net.classicgarage.truerandommusicplayer.service.BaseService;
 import net.classicgarage.truerandommusicplayer.service.MusicService;
+import net.classicgarage.truerandommusicplayer.util.GlideCircleTransform;
+import net.classicgarage.truerandommusicplayer.widget.SwipeViewPager;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.view.View.GONE;
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
+import static net.classicgarage.truerandommusicplayer.activity.SongListActivity.SONG_POSITION;
+import static net.classicgarage.truerandommusicplayer.fragment.FavSongFragment.PLAY_MODE;
+import static net.classicgarage.truerandommusicplayer.service.MusicService.FAV_MODE;
+import static net.classicgarage.truerandommusicplayer.service.MusicService.FAV_RANDOM;
+import static net.classicgarage.truerandommusicplayer.service.MusicService.NORMAL_MODE;
+import static net.classicgarage.truerandommusicplayer.service.MusicService.NORMAL_RANDOM;
+import static net.classicgarage.truerandommusicplayer.service.MusicService.NORMAL_SEQUENCE;
 
 /**
  * This activity is to provide the main view for this app.
@@ -54,10 +74,6 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     public static final int REQUEST_CODE = 070103;
-
-    /**
-     * Used for calling SongPicker activity
-     */
 
     ImageButton mPlayPauseBtn;
     ImageView mAlbumArtView;
@@ -76,37 +92,47 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TextView mAlbumTv;
     TextView mSongTimeTv;
     static TextView mSongLeftTimeTv;
+    ImageView mNoMusicImg;
 
     private ServiceConnection mMusicConn;
     private BaseService mBaseService;
     private SongDataSource mSongDataSource;
 
-
-    private ViewPager mViewPager;
-    private List<View> mAlbumImageViewList;
+    private SwipeViewPager mViewPager;
+    private List<View> mAlbumImageViewList = new ArrayList<View>();
     private SwipePagerAdapter mSwipePagerAdapter;
     private ArrayAdapter mArrayAdapter;
-    private SongItem[] mSongs;
     private ViewPager.OnPageChangeListener mOnPageChangeListener;
-    private static SimpleDateFormat time = new SimpleDateFormat("mm:ss");
-    private int currentPos;
+    private Toast mToast;
+    private int currentIndex;
 
-    public static Handler handler = new Handler(Looper.getMainLooper()){
+    public static Handler musicInfoHandler = new Handler(Looper.getMainLooper()){
+        @SuppressLint("SetTextI18n")
         @Override
         public void handleMessage(Message msg) {
-            Bundle bundle = msg.getData();
-            int duration = bundle.getInt("duration");
-            int position = bundle.getInt("position");
-            try{
-                sSeekBar.setMax(duration);
-                sSeekBar.setProgress(position);
-                mSongLeftTimeTv.setText(SongItem.formateTime(position)+"");
-            }
-            catch (NullPointerException e){
-                e.printStackTrace();
+            switch(msg.what){
+                case MusicService.REFRESH_ALBUM_VIEW: {
+                    //enableSwiping();
+                    break;
+                }
+                case MusicService.REFRESH_SEEK_BAR_: {
+                    Bundle bundle = msg.getData();
+                    int duration = bundle.getInt("duration");
+                    int position = bundle.getInt("position");
+                    try {
+                        sSeekBar.setMax(duration);
+                        sSeekBar.setProgress(position);
+                        mSongLeftTimeTv.setText(SongItem.formateTime(position) + "");
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                }
             }
         }
     };
+
+    //public static Handler
 
     /**
      * Called when the activity is first created.
@@ -135,6 +161,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mReplayBtn = (ImageButton) findViewById(R.id.replay_btn);
         mSearchView = (SearchView)  findViewById(R.id.search_sv);
         mSongListLv = (ListView) findViewById(R.id.song_list_lv);
+        mNoMusicImg = (ImageView) findViewById(R.id.no_music_image_view);
 
         mPlayPauseBtn.setOnClickListener(this);
         mPreBtn.setOnClickListener(this);
@@ -148,8 +175,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mSearchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus) mSongListLv.setVisibility(View.VISIBLE);
-                else mSongListLv.setVisibility(View.GONE);
+                if(hasFocus) mSongListLv.setVisibility(VISIBLE);
+                else mSongListLv.setVisibility(GONE);
             }
         });
 
@@ -171,13 +198,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 return false;
             }
         });
-
-        AudioManager audioManager = (AudioManager)this.getSystemService(Context.AUDIO_SERVICE);
-        ComponentName name = new ComponentName(this.getPackageName(),
-                MediaButtonBroadcastReceiver.class.getName());
-        audioManager.registerMediaButtonEventReceiver(name);
+//        AudioManager audioManager = (AudioManager)this.getSystemService(Context.AUDIO_SERVICE);
+//        ComponentName name = new ComponentName(this.getPackageName(),
+//                MediaButtonBroadcastReceiver.class.getName());
+//        audioManager.registerMediaButtonEventReceiver(name);
         getPermissions();
+        debug();
+    }
 
+    public void debug(){
+        if(BuildConfig.DEBUG){
+            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+                    .detectAll().build());
+            StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
+                    .detectAll().build());
+        }
     }
 
     /**
@@ -193,11 +228,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }, 1);
         }
         else{
-            startServices();
-            setSeekBarListener();
-            setAlbumArtWork();
-            enableSwiping();
-            initSearchView();
+            loadApplication();
         }
     }
 
@@ -214,23 +245,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode){
             case 1:
-                startServices();
-                setSeekBarListener();
-                setAlbumArtWork();
-                enableSwiping();
-                initSearchView();
+                loadApplication();
         }
     }
 
-    private void setAlbumArtWork() {
-
+    public void loadApplication(){
+        configServices();
+        setSeekBarListener();
+        initSearchView();
+        enableSwiping();
     }
 
     /**
      * To initialize the search view.
      */
     public void initSearchView(){
-        ;
+
         mArrayAdapter = new ArrayAdapter<SongItem>(getApplicationContext(),
                 android.R.layout.simple_expandable_list_item_1, mSongDataSource.getAllSongs());
         mSongListLv.setAdapter(mArrayAdapter);
@@ -241,7 +271,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mBaseService.callPlaySongAtPosition(position);
                 mBaseService.callContinueMusic();
                 updateButtonDisplay();
-                mSongListLv.setVisibility(View.GONE);
+                mSongListLv.setVisibility(GONE);
             }
         });
         mSongListLv.setTextFilterEnabled(true);
@@ -250,9 +280,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /**
      * This method is to start the music service.
      */
-    private void startServices(){
+    private void configServices(){
         Intent intent = new Intent(MainActivity.this, MusicService.class);
         startService(intent);
+        //Message msg = Message.obtain(null,MusicService.REQUESTING_BINDING,0,0);
         mMusicConn = new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
@@ -312,33 +343,50 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onStart();
     }
 
-    public void slideBar(){
-
+    /**
+     *
+     * @param positionInList
+     * @param isFistInitialized
+     */
+    public void initListViews(int positionInList, boolean isFistInitialized){
+        if(positionInList<mSongDataSource.getAllSongs().size()){
+            //Log.d("pos to be added:", String.valueOf(positionInList));
+            LayoutInflater inflater = getLayoutInflater();
+            View album_view = inflater.inflate(R.layout.album_img_layout,null);
+            mAlbumArtView = (ImageView) album_view.findViewById(R.id.albumView);
+            Glide.with(this).load(mSongDataSource.getAllSongs().get(positionInList).getCoverUri())
+                    .transform( new GlideCircleTransform(this)).into(mAlbumArtView);
+            mAlbumImageViewList.add(album_view);
+            //Log.d("albumImageViewList:", String.valueOf(mAlbumImageViewList.size()));
+            if(isFistInitialized){
+                initListViews(positionInList+1,false);
+            }
+        }
     }
+
     /**
      * Initialization of the swipe view.
      * @throws IllegalAccessException
      */
     public void initSwipeView() throws IllegalAccessException{
-        mAlbumImageViewList = new ArrayList<View>();
-        mViewPager = (ViewPager) findViewById(R.id.swipe_viewpager);
-        LayoutInflater inflater = getLayoutInflater();
-        //
-        for(int i = 0;i < mSongDataSource.getAllSongs().size(); i++) {
-            View album_view = inflater.inflate(R.layout.album_img_layout, null);
-            mAlbumArtView = (ImageView) album_view.findViewById(R.id.albumView);
-            long songId = mSongDataSource.getAllSongs().get(i).getId();
-            long album = mSongDataSource.getAllSongs().get(i).getAlbumId();
-            Bitmap bitmap = SongItem.getArtwork(this.getApplicationContext(),songId,album,false);
-            mAlbumArtView.setImageBitmap(bitmap);
-            mAlbumImageViewList.add(album_view);
+        /*mAlbumImageViewList = new ArrayList<View>();
+        if( mBaseService == null){
+            mViewPager.setVisibility(GONE);
+            mNoMusicImg.setVisibility(VISIBLE);
         }
-        mSwipePagerAdapter = new SwipePagerAdapter(mAlbumImageViewList);
-        /*final int currentItem = Integer.MAX_VALUE / 2;
+        final int currentItem = Integer.MAX_VALUE / 2;
         mViewPager.setCurrentItem(currentItem);*/
-        mViewPager.setAdapter(mSwipePagerAdapter);
-        mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
 
+        //mViewPager = (ViewPager) findViewById(R.id.swipe_viewpager);
+        LayoutInflater inflater = getLayoutInflater();
+        View album_view = inflater.inflate(R.layout.album_img_layout,null);
+        mAlbumArtView = (ImageView) album_view.findViewById(R.id.albumView);
+        initListViews(0,true);
+        mViewPager = (SwipeViewPager) findViewById(R.id.swipe_viewpager);
+        mSwipePagerAdapter = new SwipePagerAdapter(mAlbumImageViewList);
+        mViewPager.setAdapter(mSwipePagerAdapter);
+        mViewPager.setOffscreenPageLimit(2);
+        mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
             /**
              * position:current page;
              * positionOffset: offset of current page
@@ -346,19 +394,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
              */
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                currentPos = position;
+                //Log.d("position", String.valueOf(position));
                 updateMainPage();
             }
-
             @Override
             public void onPageSelected(int position) {
                 // play song at the position when swipe to another page
                 mBaseService.callPlaySongAtPosition(position);
                 mBaseService.callSeekTo(0);
                 updateMainPage();
-                Log.d("*******", position+"");
+                if (position == mViewPager.getAdapter().getCount() - 1) {
+                    initListViews((mBaseService.getPlayingSongIndex()+1),false);// listViews添加数据 // 滑动到最后一页
+ //                   mSwipePagerAdapter.setListViews(mAlbumImageViewList);// 重构adapter对象  这是一个很重要
+                    mSwipePagerAdapter.notifyDataSetChanged();// 刷新
+                    Log.d("song index: ", String.valueOf(mBaseService.getPlayingSongIndex()));
+                }
             }
-
             /**
              * state == ViewPager.SCROLL_STATE_DRAGGING ||  ViewPager.SCROLL_STATE_SETTLING
              * || ViewPager.SCROLL_STATE_IDLE
@@ -366,48 +417,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onPageScrollStateChanged(int state) {}
         };
+        mViewPager.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                v.getParent().requestDisallowInterceptTouchEvent(true);
+                return false;
+            }
+        });
         mViewPager.addOnPageChangeListener(mOnPageChangeListener);
-    }
-
-    private void getArtWorkForward(){
-
-    }
-
-    private void getArtWorkBackward(){
-
-    }
-
-    private void getCurrentArtWork(int currentPosition) {
-        LayoutInflater inflater = getLayoutInflater();
-        View album_view = inflater.inflate(R.layout.album_img_layout, null);
-        mAlbumArtView = (ImageView) album_view.findViewById(R.id.albumView);
-        long songId = mSongDataSource.getAllSongs().get(currentPosition).getId();
-        long album = mSongDataSource.getAllSongs().get(currentPosition).getAlbumId();
-        Bitmap bitmap = SongItem.getArtwork(this.getApplicationContext(),songId,album,false);
-        mAlbumArtView.setImageBitmap(bitmap);
-        mAlbumImageViewList.add(album_view);
-    }
-
-    private void getNextArtWork(int currentPosition){
-        LayoutInflater inflater = getLayoutInflater();
-        View album_view = inflater.inflate(R.layout.album_img_layout, null);
-        mAlbumArtView = (ImageView) album_view.findViewById(R.id.albumView);
-        long songId = mSongDataSource.getAllSongs().get(currentPosition + 1).getId();
-        long album = mSongDataSource.getAllSongs().get(currentPosition + 1).getAlbumId();
-        Bitmap bitmap = SongItem.getArtwork(this.getApplicationContext(),songId,album,false);
-        mAlbumArtView.setImageBitmap(bitmap);
-        mAlbumImageViewList.add(album_view);
-    }
-
-    public void getPreviousArtWork(int currentPosition) {
-        LayoutInflater inflater = getLayoutInflater();
-        View album_view = inflater.inflate(R.layout.album_img_layout, null);
-        mAlbumArtView = (ImageView) album_view.findViewById(R.id.albumView);
-        long songId = mSongDataSource.getAllSongs().get(currentPosition - 1).getId();
-        long album = mSongDataSource.getAllSongs().get(currentPosition - 1).getAlbumId();
-        Bitmap bitmap = SongItem.getArtwork(this.getApplicationContext(),songId,album,false);
-        mAlbumArtView.setImageBitmap(bitmap);
-        mAlbumImageViewList.add(album_view);
+        mViewPager.getParent().requestDisallowInterceptTouchEvent(true);
     }
 
     /**
@@ -456,14 +474,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 case R.id.next_btn:
                     //mBaseService.callPause();
                     mBaseService.callPlayNextSong();
+                    Log.d("the current position", String.valueOf(mBaseService.getPlayingSongIndex()+1));
+                    initListViews(mBaseService.getPlayingSongIndex(),false);// listViews添加数据
+                    mSwipePagerAdapter.setListViews(mAlbumImageViewList);// 重构adapter对象  这是一个很重要
+                    mSwipePagerAdapter.notifyDataSetChanged();// 刷新
+                    mViewPager.setCurrentItem(mBaseService.getPlayingSongIndex(),false);
+                    currentIndex = mBaseService.getPlayingSongIndex();
                     updateMainPage();
-                    enableSwiping();
                     break;
                 case R.id.pre_btn:
                     //mBaseService.callPause();
                     mBaseService.callPlayLastSong();
+                    Log.d("the current position", String.valueOf(mBaseService.getPlayingSongIndex()+1));
+                    initListViews(mBaseService.getPlayingSongIndex(),false);// listViews添加数据
+                    mSwipePagerAdapter.setListViews(mAlbumImageViewList);// 重构adapter对象  这是一个很重要
+                    mSwipePagerAdapter.notifyDataSetChanged();// 刷新
+                    mViewPager.setCurrentItem(mBaseService.getPlayingSongIndex(), false);
+                    currentIndex = mBaseService.getPlayingSongIndex();
                     updateMainPage();
-                    enableSwiping();
                     break;
                 case R.id.activity_main_delete_btn:
                     deleteDialog();
@@ -517,19 +545,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void updateMainPage(){
         if( mBaseService != null){
             SongItem song = mBaseService.getPlayingSong();
-            if(  song != null) {
+            if( song != null) {
                 mSongTitleTv.setText( song.getTitle());
                 mAuthorTv.setText( song.getArtist());
                 mAlbumTv.setText( song.getAlbum() );
                 mSongTimeTv.setText(mBaseService.getPlayingSong().getSongTime());
             }
-            else mSongTitleTv.setText("No music stored in this phone.");
+            else {
+                mSongTitleTv.setText("No Music");
+                mViewPager.setVisibility(GONE);
+                mNoMusicImg.setVisibility(VISIBLE);
+            }
             updateButtonDisplay();
         }
-    }
-
-    public void updateScrollViewPosition(){
-
     }
 
     /**
@@ -546,18 +574,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void updateRandomButton() {
+<<<<<<< HEAD
         if(!mBaseService.callGetRandomFlag()) {
             mRandomBtn.setImageDrawable(getResources().getDrawable(R.mipmap.non_random_playlist));
             mBaseService.callChangeRandomFlag();
             /* if(mBaseService.callGetReplayFlag()){
+=======
+        if( mBaseService.getPlayMode() == NORMAL_RANDOM ) {
+            mRandomBtn.setImageDrawable(getResources().getDrawable(R.mipmap.random1b));
+            mBaseService.setPlayMode(NORMAL_SEQUENCE);
+            if(mBaseService.callGetReplayFlag()){
+>>>>>>> 10ae36222d2ec0976db8b79141a2c3d44cae6630
                 mReplayBtn.setImageDrawable(getResources().getDrawable(R.mipmap.replay1w));
                 mBaseService.callChangeReplayFlag();
             }
             */
         }
         else {
+<<<<<<< HEAD
             mRandomBtn.setImageDrawable(getResources().getDrawable(R.mipmap.random_playlist));
             mBaseService.callChangeRandomFlag();
+=======
+            mRandomBtn.setImageDrawable(getResources().getDrawable(R.mipmap.randomw));
+            mBaseService.setPlayMode(NORMAL_RANDOM);
+>>>>>>> 10ae36222d2ec0976db8b79141a2c3d44cae6630
         }
     }
 
@@ -565,10 +605,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(!mBaseService.callGetReplayFlag()) {
             mReplayBtn.setImageDrawable(getResources().getDrawable(R.mipmap.replay1r));
             mBaseService.callChangeReplayFlag();
+<<<<<<< HEAD
             if(mBaseService.callGetRandomFlag()){
                 mRandomBtn.setImageDrawable(getResources().getDrawable(R.mipmap.non_random_playlist));
                 mBaseService.callChangeRandomFlag();
             }
+=======
+//            if(mBaseService.callGetRandomFlag()){
+//                mRandomBtn.setImageDrawable(getResources().getDrawable(R.mipmap.randomw));
+//                mBaseService.callChangeRandomFlag();
+//            }
+>>>>>>> 10ae36222d2ec0976db8b79141a2c3d44cae6630
         }
         else {
             mReplayBtn.setImageDrawable(getResources().getDrawable(R.mipmap.replay1w));
@@ -584,16 +631,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-
         super.onActivityResult(requestCode, resultCode, intent);
 
-        if (resultCode == RESULT_CANCELED) return;
-        Bundle extras = intent.getExtras();
-        int position = extras.getInt("songPosition");
-        mBaseService.callPlaySongAtPosition(position);
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
 
-        if (requestCode == REQUEST_CODE) {
-
+            Bundle extras = intent.getExtras();
+            int position = extras.getInt(SONG_POSITION);
+            int mode = extras.getInt(PLAY_MODE);
+            if( mode == FAV_MODE) mBaseService.setPlayMode( FAV_MODE, null);
+            else mBaseService.setPlayMode( NORMAL_MODE, null);
+            mBaseService.callPlaySongAtPosition(position);
         }
     }
 
@@ -602,8 +649,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onDestroy();
         getApplicationContext().unbindService(mMusicConn);
     }
-
-    /*public static void changeTheOrientation(){
-        getApplicationContext().
-    }*/
 }
