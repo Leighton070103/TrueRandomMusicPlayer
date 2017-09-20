@@ -574,28 +574,48 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void updateRandomButton() {
+<<<<<<< HEAD
+        if(!mBaseService.callGetRandomFlag()) {
+            mRandomBtn.setImageDrawable(getResources().getDrawable(R.mipmap.non_random_playlist));
+            mBaseService.callChangeRandomFlag();
+            /* if(mBaseService.callGetReplayFlag()){
+=======
         if( mBaseService.getPlayMode() == NORMAL_RANDOM ) {
             mRandomBtn.setImageDrawable(getResources().getDrawable(R.mipmap.random1b));
             mBaseService.setPlayMode(NORMAL_SEQUENCE);
             if(mBaseService.callGetReplayFlag()){
+>>>>>>> 10ae36222d2ec0976db8b79141a2c3d44cae6630
                 mReplayBtn.setImageDrawable(getResources().getDrawable(R.mipmap.replay1w));
                 mBaseService.callChangeReplayFlag();
             }
+            */
         }
         else {
+<<<<<<< HEAD
+            mRandomBtn.setImageDrawable(getResources().getDrawable(R.mipmap.random_playlist));
+            mBaseService.callChangeRandomFlag();
+=======
             mRandomBtn.setImageDrawable(getResources().getDrawable(R.mipmap.randomw));
             mBaseService.setPlayMode(NORMAL_RANDOM);
+>>>>>>> 10ae36222d2ec0976db8b79141a2c3d44cae6630
         }
     }
 
     private void updateReplayButton() {
         if(!mBaseService.callGetReplayFlag()) {
-            mReplayBtn.setImageDrawable(getResources().getDrawable(R.mipmap.replay1b));
+            mReplayBtn.setImageDrawable(getResources().getDrawable(R.mipmap.replay1r));
             mBaseService.callChangeReplayFlag();
+<<<<<<< HEAD
+            if(mBaseService.callGetRandomFlag()){
+                mRandomBtn.setImageDrawable(getResources().getDrawable(R.mipmap.non_random_playlist));
+                mBaseService.callChangeRandomFlag();
+            }
+=======
 //            if(mBaseService.callGetRandomFlag()){
 //                mRandomBtn.setImageDrawable(getResources().getDrawable(R.mipmap.randomw));
 //                mBaseService.callChangeRandomFlag();
 //            }
+>>>>>>> 10ae36222d2ec0976db8b79141a2c3d44cae6630
         }
         else {
             mReplayBtn.setImageDrawable(getResources().getDrawable(R.mipmap.replay1w));
