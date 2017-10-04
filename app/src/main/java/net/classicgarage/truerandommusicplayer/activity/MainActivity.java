@@ -583,6 +583,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mAuthorTv.setText( song.getArtist());
                 mAlbumTv.setText( song.getAlbum() );
                 mSongTimeTv.setText(mBaseService.getPlayingSong().getSongTime());
+                mFavoriteBtn.setChecked(song.getFavorite());
             }
             else {
                 mSongTitleTv.setText("No Music");
@@ -666,6 +667,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if( mode == FAV_MODE) mBaseService.setPlayMode( FAV_MODE, null);
             else mBaseService.setPlayMode( NORMAL_MODE, null);
             mBaseService.callPlaySongAtPosition(position);
+            sSeekBar.setProgress(0);
+            initializeModeBtn(mBaseService.getPlayMode(), mBaseService.callGetReplayFlag());
         }
     }
 
