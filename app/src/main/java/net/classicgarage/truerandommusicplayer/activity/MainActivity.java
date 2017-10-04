@@ -500,7 +500,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     mBaseService.setCurrentSongFavorite();
                     break;
                 case R.id.random_btn:
-                    updateRandomButton();
+                    updateModeButton();
                     break;
                 case R.id.replay_btn:
                     updateReplayButton();
@@ -573,24 +573,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void updateRandomButton() {
-        if( mBaseService.getPlayMode() == NORMAL_RANDOM ) {
-            mRandomBtn.setImageDrawable(getResources().getDrawable(R.mipmap.random1b));
-            mBaseService.setPlayMode(NORMAL_SEQUENCE);
-            if(mBaseService.callGetReplayFlag()){
-                mReplayBtn.setImageDrawable(getResources().getDrawable(R.mipmap.replay1w));
-                mBaseService.callChangeReplayFlag();
-            }
-        }
-        else {
-            mRandomBtn.setImageDrawable(getResources().getDrawable(R.mipmap.randomw));
-            mBaseService.setPlayMode(NORMAL_RANDOM);
+    private void updateModeButton()
+    {
+        switch (mBaseService.getPlayMode()){
+            case NORMAL_MODE:
+                mBaseService.setPlayMode(NORMAL_RANDOM);
+                mRandomBtn.setImageDrawable(getResources().getDrawable(R.drawable.random_playlist));
+                break;
+            case NORMAL_RANDOM:
+                mBaseService.setPlayMode(FAV_MODE);
+                mRandomBtn.setImageDrawable(getResources().getDrawable(R.drawable.non_random_favorite));
+                break;
+            case FAV_MODE:
+                mBaseService.setPlayMode(FAV_RANDOM);
+                mRandomBtn.setImageDrawable(getResources().getDrawable(R.drawable.random_favorite));
+                break;
+            case FAV_RANDOM:
+                mBaseService.setPlayMode(NORMAL_MODE);
+                mRandomBtn.setImageDrawable(getResources().getDrawable(R.drawable.non_random_playlist));
+                break;
         }
     }
 
     private void updateReplayButton() {
         if(!mBaseService.callGetReplayFlag()) {
-            mReplayBtn.setImageDrawable(getResources().getDrawable(R.mipmap.replay1b));
+            mReplayBtn.setImageDrawable(getResources().getDrawable(R.mipmap.replayb));
             mBaseService.callChangeReplayFlag();
 //            if(mBaseService.callGetRandomFlag()){
 //                mRandomBtn.setImageDrawable(getResources().getDrawable(R.mipmap.randomw));
