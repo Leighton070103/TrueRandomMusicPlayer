@@ -25,6 +25,7 @@ public interface BaseService{
     void deleteCurrentSong();
     void setCurrentSongFavorite();
     void callChangeReplayFlag();
+    void callChangeReplayFlag(boolean replayFlag);
     boolean callGetReplayFlag();
     Integer getPlayMode();
     void setPlayMode( Integer playMode);

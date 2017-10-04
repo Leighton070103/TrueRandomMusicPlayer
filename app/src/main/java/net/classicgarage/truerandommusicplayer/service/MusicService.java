@@ -26,7 +26,6 @@ import net.classicgarage.truerandommusicplayer.model.SongItem;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.logging.Handler;
 
 /**
  * This service is to provide operations of playing, pausing, deleting songs.
@@ -42,10 +41,14 @@ public class MusicService extends Service {
     private int mCurrentSongIndex = 0;
 
     private Integer mPlayMode = 1;
+
+
+
     private boolean mReplayFlag = false;
     private boolean mPlayFlag = false;
 
     public static final String PLAY_MODE = "play mode";
+    public static final String REPLAY_FLAG = "Replay flag";
     public static final String INTENT_ACTION = "Intent action";
     public static final short REQUESTING_BINDING = 78;
     public static final short REFRESH_ALBUM_VIEW = 74;
@@ -221,11 +224,13 @@ public class MusicService extends Service {
      * Play the next song.
      */
     public void playNextSong(){
-        if(isRandom()){
-            randomSongIndex();
-        }
-        else{
-            updateCurrentSongIndex(ACTION_PLAY_NEXT);
+        if(!getReplayflag()){
+            if(isRandom()){
+                randomSongIndex();
+            }
+            else{
+                updateCurrentSongIndex(ACTION_PLAY_NEXT);
+            }
         }
         if(mPlayFlag) play();
         else prepare();
@@ -243,11 +248,13 @@ public class MusicService extends Service {
      * Called when the previous song button is clicked.
      */
     public void playLastSong(){
-        if(isRandom()){
-            randomSongIndex();
-        }
-        else {
-            updateCurrentSongIndex(ACTION_PLAY_PREVIOUS);
+        if(!mReplayFlag){
+            if(isRandom()){
+                randomSongIndex();
+            }
+            else {
+                updateCurrentSongIndex(ACTION_PLAY_PREVIOUS);
+            }
         }
         if(mPlayFlag) play();
         else prepare();
@@ -463,16 +470,9 @@ public class MusicService extends Service {
                 PlayerWidgetProvider.class), remoteViews);
     }
 
-    /**
-     * Change the random flag.
-     */
-//    private void changeRandomFlag(){
-//        if(!mRandomFlag) {
-//            mRandomFlag = true;
-//        }
-//        else
-//            mRandomFlag = false;
-//    }
+    private void setReplayFlag(boolean mReplayFlag) {
+        this.mReplayFlag = mReplayFlag;
+    }
 
     /**
      * Change the replayflag.
@@ -603,6 +603,11 @@ public class MusicService extends Service {
 
         @Override
         public void callChangeReplayFlag(){ changeReplayFlag(); }
+
+        @Override
+        public void callChangeReplayFlag(boolean replayFlag) {
+            MusicService.this.setReplayFlag(replayFlag);
+        }
 
         @Override
         public boolean callGetReplayFlag(){ return getReplayflag();}

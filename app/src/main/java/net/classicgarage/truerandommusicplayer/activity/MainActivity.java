@@ -69,6 +69,7 @@ import static net.classicgarage.truerandommusicplayer.service.MusicService.FAV_S
 import static net.classicgarage.truerandommusicplayer.service.MusicService.NORMAL_MODE;
 import static net.classicgarage.truerandommusicplayer.service.MusicService.NORMAL_RANDOM;
 import static net.classicgarage.truerandommusicplayer.service.MusicService.NORMAL_SEQUENCE;
+import static net.classicgarage.truerandommusicplayer.service.MusicService.REPLAY_FLAG;
 
 /**
  * This activity is to provide the main view for this app.
@@ -296,8 +297,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 updateMainPage();
                 SharedPreferences preferences = getSharedPreferences("user", Context.MODE_PRIVATE);
                 Integer playMode = preferences.getInt( MusicService.PLAY_MODE, NORMAL_SEQUENCE );
+                boolean replayFlag = preferences.getBoolean(REPLAY_FLAG, false);
                 mBaseService.setPlayMode(playMode);
-                initializeRandomBtn(playMode);
+                mBaseService.callChangeReplayFlag(replayFlag);
+                initializeModeBtn(playMode, replayFlag);
+
 
             }
 
@@ -307,7 +311,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         getApplicationContext().bindService(intent, mMusicConn, BIND_AUTO_CREATE);
     }
 
-    private void initializeRandomBtn(Integer playMode){
+    private void initializeModeBtn(Integer playMode, boolean replayFlag){
         switch (playMode){
             case NORMAL_SEQUENCE:
                 mRandomBtn.setImageDrawable(getResources().getDrawable(R.drawable.non_random_playlist));
@@ -322,6 +326,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mRandomBtn.setImageDrawable(getResources().getDrawable(R.drawable.random_favorite));
                 break;
         }
+        if(replayFlag) mReplayBtn.setImageDrawable(getResources().getDrawable(R.mipmap.replay1w));
+        else mReplayBtn.setImageDrawable(getResources().getDrawable( R.mipmap.replayb));
     }
 
     /**
@@ -630,15 +636,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(!mBaseService.callGetReplayFlag()) {
             mReplayBtn.setImageDrawable(getResources().getDrawable(R.mipmap.replayb));
             mBaseService.callChangeReplayFlag();
-//            if(mBaseService.callGetRandomFlag()){
-//                mRandomBtn.setImageDrawable(getResources().getDrawable(R.mipmap.randomw));
-//                mBaseService.callChangeRandomFlag();
-//            }
+
         }
         else {
             mReplayBtn.setImageDrawable(getResources().getDrawable(R.mipmap.replay1w));
             mBaseService.callChangeReplayFlag();
         }
+        SharedPreferences preferences = getSharedPreferences("user",Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean( REPLAY_FLAG, mBaseService.callGetReplayFlag() );
+        editor.commit();
     }
 
     /**
