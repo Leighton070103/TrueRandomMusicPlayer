@@ -45,6 +45,7 @@ public class MusicService extends Service {
     private boolean mReplayFlag = false;
     private boolean mPlayFlag = false;
 
+    public static final String PLAY_MODE = "play mode";
     public static final String INTENT_ACTION = "Intent action";
     public static final short REQUESTING_BINDING = 78;
     public static final short REFRESH_ALBUM_VIEW = 74;

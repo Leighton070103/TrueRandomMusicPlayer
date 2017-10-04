@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.media.AudioManager;
@@ -18,6 +19,7 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.os.StrictMode;
+import android.support.annotation.IntegerRes;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
@@ -63,6 +65,7 @@ import static net.classicgarage.truerandommusicplayer.activity.SongListActivity.
 import static net.classicgarage.truerandommusicplayer.fragment.FavSongFragment.PLAY_MODE;
 import static net.classicgarage.truerandommusicplayer.service.MusicService.FAV_MODE;
 import static net.classicgarage.truerandommusicplayer.service.MusicService.FAV_RANDOM;
+import static net.classicgarage.truerandommusicplayer.service.MusicService.FAV_SEQUENCE;
 import static net.classicgarage.truerandommusicplayer.service.MusicService.NORMAL_MODE;
 import static net.classicgarage.truerandommusicplayer.service.MusicService.NORMAL_RANDOM;
 import static net.classicgarage.truerandommusicplayer.service.MusicService.NORMAL_SEQUENCE;
@@ -198,6 +201,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 return false;
             }
         });
+
+
 //        AudioManager audioManager = (AudioManager)this.getSystemService(Context.AUDIO_SERVICE);
 //        ComponentName name = new ComponentName(this.getPackageName(),
 //                MediaButtonBroadcastReceiver.class.getName());
@@ -289,12 +294,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onServiceConnected(ComponentName name, IBinder service) {
                 mBaseService = (BaseService) service;
                 updateMainPage();
+                SharedPreferences preferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+                Integer playMode = preferences.getInt( MusicService.PLAY_MODE, NORMAL_SEQUENCE );
+                mBaseService.setPlayMode(playMode);
+                initializeRandomBtn(playMode);
+
             }
 
             @Override
             public void onServiceDisconnected(ComponentName name) {}
         };
         getApplicationContext().bindService(intent, mMusicConn, BIND_AUTO_CREATE);
+    }
+
+    private void initializeRandomBtn(Integer playMode){
+        switch (playMode){
+            case NORMAL_SEQUENCE:
+                mRandomBtn.setImageDrawable(getResources().getDrawable(R.drawable.non_random_playlist));
+                break;
+            case FAV_SEQUENCE:
+                mRandomBtn.setImageDrawable(getResources().getDrawable(R.drawable.non_random_favorite));
+                break;
+            case NORMAL_RANDOM:
+                mRandomBtn.setImageDrawable(getResources().getDrawable(R.drawable.random_playlist));
+                break;
+            case FAV_RANDOM:
+                mRandomBtn.setImageDrawable(getResources().getDrawable(R.drawable.random_favorite));
+                break;
+        }
     }
 
     /**
@@ -576,7 +603,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void updateModeButton()
     {
         switch (mBaseService.getPlayMode()){
-            case NORMAL_MODE:
+            case NORMAL_SEQUENCE:
                 mBaseService.setPlayMode(NORMAL_RANDOM);
                 mRandomBtn.setImageDrawable(getResources().getDrawable(R.drawable.random_playlist));
                 break;
@@ -589,10 +616,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mRandomBtn.setImageDrawable(getResources().getDrawable(R.drawable.random_favorite));
                 break;
             case FAV_RANDOM:
-                mBaseService.setPlayMode(NORMAL_MODE);
+                mBaseService.setPlayMode(NORMAL_SEQUENCE);
                 mRandomBtn.setImageDrawable(getResources().getDrawable(R.drawable.non_random_playlist));
                 break;
         }
+        SharedPreferences preferences = getSharedPreferences("user",Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt( PLAY_MODE, mBaseService.getPlayMode() );
+        editor.commit();
     }
 
     private void updateReplayButton() {
