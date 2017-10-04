@@ -633,7 +633,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void updateReplayButton() {
-        if(!mBaseService.callGetReplayFlag()) {
+        if( mBaseService.callGetReplayFlag()) {
             mReplayBtn.setImageDrawable(getResources().getDrawable(R.mipmap.replayb));
             mBaseService.callChangeReplayFlag();
 
