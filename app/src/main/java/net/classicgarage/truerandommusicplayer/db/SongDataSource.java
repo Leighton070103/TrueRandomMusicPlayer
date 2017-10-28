@@ -31,7 +31,7 @@ public class SongDataSource {
      * The constructor.
      * @param applicationContext
      */
-    private SongDataSource(Context applicationContext){
+    public SongDataSource(Context applicationContext){
         mContext = applicationContext;
         favoriteHelper = FavLabelDatabaseHelper.getInstance(mContext);
     }
@@ -110,7 +110,7 @@ public class SongDataSource {
      * @return
      */
     public SongItem findSongItemById(long songId){
-        if( mSongs == null ) mSongs = new LinkedList<SongItem>();
+        if( mSongs == null ) getAllSongs(); //new LinkedList<SongItem>();
         for(SongItem song: mSongs){
             if( song.getId() == songId ) return song;
         }

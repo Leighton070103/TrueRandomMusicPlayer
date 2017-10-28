@@ -17,7 +17,7 @@ import android.os.RemoteException;
 import android.util.Log;
 import android.widget.RemoteViews;
 
-import net.classicgarage.truerandommusicplayer.widget.PlayerWidgetProvider;
+import net.classicgarage.truerandommusicplayer.util.PlayerWidgetProvider;
 import net.classicgarage.truerandommusicplayer.R;
 import net.classicgarage.truerandommusicplayer.activity.MainActivity;
 import net.classicgarage.truerandommusicplayer.db.SongDataSource;

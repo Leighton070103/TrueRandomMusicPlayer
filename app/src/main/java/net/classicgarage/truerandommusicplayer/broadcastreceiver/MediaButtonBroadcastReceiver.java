@@ -25,7 +25,7 @@ import android.view.KeyEvent;
 import net.classicgarage.truerandommusicplayer.service.MusicService;
 
 /**
- * Receives broadcasted intents. In particular, we are interested in the
+ * Receives broadcast intents. In particular, we are interested in the
  * android.media.AUDIO_BECOMING_NOISY, which is
  * broadcast, for example, when the user disconnects the headphones
  * we have register to this broadcast in the manifest file

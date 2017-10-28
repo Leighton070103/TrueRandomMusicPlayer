@@ -14,6 +14,8 @@ import net.classicgarage.truerandommusicplayer.R;
 import net.classicgarage.truerandommusicplayer.activity.SongListActivity;
 import net.classicgarage.truerandommusicplayer.adapter.SongAdapter;
 import net.classicgarage.truerandommusicplayer.db.SongDataSource;
+import net.classicgarage.truerandommusicplayer.util.PinnedHeaderDecoration;
+import net.classicgarage.truerandommusicplayer.view.WaveSideBarView;
 
 import static android.app.Activity.RESULT_OK;
 import static net.classicgarage.truerandommusicplayer.fragment.FavSongFragment.PLAY_MODE;
@@ -25,9 +27,10 @@ public class AllSongFragment extends Fragment {
     private RecyclerView mSongListRv;
     private SongAdapter mAdapter;
     private SongDataSource mSongDataSource;
+    private WaveSideBarView mSideBarView;
 
     public AllSongFragment() {
-        // Required empty public constructor
+
     }
 
 
@@ -46,18 +49,27 @@ public class AllSongFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_all_music, container, false);
         mSongDataSource = SongDataSource.getInstance(getContext().getApplicationContext());
         super.onCreate(savedInstanceState);
         mSongListRv = (RecyclerView) v.findViewById(R.id.activity_all_music_rv);
+        mSideBarView = (WaveSideBarView) v.findViewById(R.id.side_bar_view);
 
+        mSongListRv.setLayoutManager(new LinearLayoutManager(getContext()
+                .getApplicationContext()));
+
+        final PinnedHeaderDecoration decoration = new PinnedHeaderDecoration();
+        decoration.registerTypePinnedHeader(1, new PinnedHeaderDecoration.PinnedHeaderCreator() {
+            @Override
+            public boolean create(RecyclerView parent, int adapterPosition) {
+                return true;
+            }
+        });
+        mSongListRv.addItemDecoration(decoration);
+        mSongListRv.setItemAnimator( new DefaultItemAnimator() );
         mAdapter = new SongAdapter(getContext().getApplicationContext(),
                 mSongDataSource.getAllSongs());
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext()
-                .getApplicationContext());
-        mSongListRv.setLayoutManager(mLayoutManager);
-        mSongListRv.setItemAnimator( new DefaultItemAnimator() );
+
         mAdapter.setOnSongItemNameClickListener(new SongAdapter.OnSongItemNameClickListener() {
             @Override
             public void onSongItemNameClick(View view, int position) {
@@ -69,6 +81,19 @@ public class AllSongFragment extends Fragment {
             }
         });
         mSongListRv.setAdapter(mAdapter);
+
+        mSideBarView.setOnTouchLetterChangeListener(new WaveSideBarView.OnTouchLetterChangeListener() {
+            @Override
+            public void onLetterChange(String letter) {
+                int pos = mAdapter.getLetterPosition(letter);
+                if(pos != -1) {
+                    mSongListRv.scrollToPosition(pos);
+                    LinearLayoutManager mLayoutManager =
+                            (LinearLayoutManager) mSongListRv.getLayoutManager();
+                    mLayoutManager.scrollToPositionWithOffset(pos,0);
+                }
+            }
+        });
         return v;
 
     }

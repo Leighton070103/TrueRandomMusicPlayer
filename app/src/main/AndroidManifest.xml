@@ -36,7 +36,7 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".widget.PlayerWidgetProvider">
+        <receiver android:name=".util.PlayerWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="com.skywang.widget.UPDATE_ALL" />

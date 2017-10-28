@@ -72,7 +72,7 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <net.classicgarage.truerandommusicplayer.widget.AlwaysMarqueeTextView
+            <net.classicgarage.truerandommusicplayer.view.AlwaysMarqueeTextView
                 android:id="@+id/title_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
