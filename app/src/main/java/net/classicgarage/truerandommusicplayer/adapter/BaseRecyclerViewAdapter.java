@@ -15,15 +15,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import net.classicgarage.truerandommusicplayer.R;
-import net.classicgarage.truerandommusicplayer.listener.OnItemClickListener;
-import net.classicgarage.truerandommusicplayer.listener.OnLoadMoreListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class BaseRecyclerViewAdapter<T, VH extends SongAdapter.BaseViewHolder>
-        extends RecyclerView.Adapter<SongAdapter.BaseViewHolder>
-        implements OnLoadMoreListener {
+        extends RecyclerView.Adapter<SongAdapter.BaseViewHolder> {
 
     protected static final String TAG = "BaseRecyclerViewAdapter";
 
@@ -37,6 +34,8 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends SongAdapter.BaseView
 
     private boolean mLoading = false;
     private boolean mEmptyEnable;
+    private OnLoadMoreListener mOnLoadMoreListener;
+    private OnMyItemClickListener mOnItemClickListener;
 
     private View mHeaderView;
     private View mFooterView;
@@ -58,6 +57,23 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends SongAdapter.BaseView
         this.mItems = items == null ? new ArrayList<T>() : new ArrayList<T>(items);
         this.mContext = context;
         this.mLayoutInflater = LayoutInflater.from(context);
+    }
+
+    public interface OnMyItemClickListener {
+        void onItemLongClick(RecyclerView.ViewHolder vh, int position);
+        void onItemClick(RecyclerView.ViewHolder vh, int postion);
+    }
+
+    public interface OnLoadMoreListener {
+        void onLoadingMore();
+    }
+
+    public void setOnLoadingMoreListener(OnLoadMoreListener listener) {
+        mOnLoadMoreListener = listener;
+    }
+
+    public void setOnItemClickListeners(OnMyItemClickListener listener) {
+        mOnItemClickListener = listener;
     }
 
     public List<T> getItems() {
@@ -244,14 +260,6 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends SongAdapter.BaseView
                 type == EMPTY_VIEW;
     }
 
-    @Override
-    public void onLoadingMore() {
-        if (!mLoading) {
-            mLoading = true;
-            notifyDataSetChanged();
-        }
-    }
-
     private void dispatchItemClickListener(final SongAdapter.BaseViewHolder viewHolder) {
 
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -259,7 +267,7 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends SongAdapter.BaseView
             public void onClick(View v) {
                 if (mOnItemClickListeners != null && mOnItemClickListeners.size() > 0) {
                     for (int i = 0; i < mOnItemClickListeners.size(); i++) {
-                        final OnItemClickListener listener = (OnItemClickListener) mOnItemClickListeners.get(i);
+                        final OnMyItemClickListener listener = (OnMyItemClickListener) mOnItemClickListeners.get(i);
                         listener.onItemClick(viewHolder, viewHolder.getLayoutPosition() - getHeaderViewsCount());
                     }
                 }
@@ -271,7 +279,7 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends SongAdapter.BaseView
             public boolean onLongClick(View v) {
                 if (mOnItemClickListeners != null && mOnItemClickListeners.size() > 0) {
                     for (int i = 0; i < mOnItemClickListeners.size(); i++) {
-                        final OnItemClickListener listener = (OnItemClickListener) mOnItemClickListeners.get(i);
+                        final OnMyItemClickListener listener = (OnMyItemClickListener) mOnItemClickListeners.get(i);
                         listener.onItemLongClick(viewHolder, viewHolder.getLayoutPosition() - getHeaderViewsCount());
                     }
                     return true;

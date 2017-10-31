@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     static TextView mSongLeftTimeTv;
     ImageView mNoMusicImg;
 
-    private ServiceConnection mMusicConn;
+    private ServiceConnection mServiceCon;
     private BaseService mBaseService;
     private SongDataSource mSongDataSource;
 
@@ -200,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 //        AudioManager audioManager = (AudioManager)this.getSystemService(Context.AUDIO_SERVICE);
 //        ComponentName name = new ComponentName(this.getPackageName(),
-//                MediaButtonBroadcastReceiver.class.getName());
+//                MediaButtonReceiver.class.getName());
 //        audioManager.registerMediaButtonEventReceiver(name);
         getPermissions();
         debug();
@@ -284,7 +284,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Intent intent = new Intent(MainActivity.this, MusicService.class);
         startService(intent);
         //Message msg = Message.obtain(null,MusicService.REQUESTING_BINDING,0,0);
-        mMusicConn = new ServiceConnection() {
+        mServiceCon = new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
                 mBaseService = (BaseService) service;
@@ -295,14 +295,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mBaseService.setPlayMode(playMode);
                 mBaseService.callChangeReplayFlag(replayFlag);
                 initializeModeBtn(playMode, replayFlag);
-
-
             }
 
             @Override
             public void onServiceDisconnected(ComponentName name) {}
         };
-        getApplicationContext().bindService(intent, mMusicConn, BIND_AUTO_CREATE);
+        getApplicationContext().bindService(intent, mServiceCon, BIND_AUTO_CREATE);
     }
 
     private void initializeModeBtn(Integer playMode, boolean replayFlag){
@@ -669,6 +667,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        getApplicationContext().unbindService(mMusicConn);
+        getApplicationContext().unbindService(mServiceCon);
     }
 }

@@ -80,6 +80,15 @@ public class AllSongFragment extends Fragment {
                 getActivity().finish();
             }
         });
+        mAdapter.setOnLoadingMoreListener(new SongAdapter.OnLoadMoreListener() {
+            @Override
+            public void onLoadingMore() {
+//                if (!mLoading) {
+//                    mLoading = true;
+//                    notifyDataSetChanged();
+//                }
+            }
+        });
         mSongListRv.setAdapter(mAdapter);
 
         mSideBarView.setOnTouchLetterChangeListener(new WaveSideBarView.OnTouchLetterChangeListener() {

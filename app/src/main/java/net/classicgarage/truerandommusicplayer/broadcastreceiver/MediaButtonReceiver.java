@@ -30,7 +30,7 @@ import net.classicgarage.truerandommusicplayer.service.MusicService;
  * broadcast, for example, when the user disconnects the headphones
  * we have register to this broadcast in the manifest file
  */
-public class MediaButtonBroadcastReceiver extends BroadcastReceiver {
+public class MediaButtonReceiver extends BroadcastReceiver {
 
 	private static final String TAG="MediaButtonReceiver";
     private static boolean mDouble = false;

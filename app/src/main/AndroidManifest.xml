@@ -9,11 +9,11 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
-        android:hardwareAccelerated="true"
-        android:largeHeap="true"
         android:allowBackup="true"
+        android:hardwareAccelerated="true"
         android:icon="@drawable/trmp_launcher_icon"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <service android:name=".service.MusicService" />
@@ -24,19 +24,19 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+
                 <categor android:name="android.intent.category.HOME" />
             </intent-filter>
         </activity>
 
-        <receiver android:name=".broadcastreceiver.MediaButtonBroadcastReceiver">
+        <receiver android:name=".broadcastreceiver.MediaButtonReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
 
                 <category android:name="android.intent.categoy.DEFAULT" />
             </intent-filter>
         </receiver>
-
-        <receiver android:name=".util.PlayerWidgetProvider">
+        <receiver android:name=".widget.PlayerWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="com.skywang.widget.UPDATE_ALL" />
@@ -46,7 +46,10 @@
                 android:name="android.appwidget.provider"
                 android:resource="@layout/appwidget_info" />
         </receiver>
-
+        <receiver
+            android:name=".broadcastreceiver.PhoneStatusReceiver"
+            android:enabled="true"
+            android:exported="true"></receiver>
     </application>
 
 </manifest>
