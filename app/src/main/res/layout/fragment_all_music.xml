@@ -14,8 +14,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/menu_tablayout"
         tools:layout_editor_absoluteY="0dp"
-        tools:layout_editor_absoluteX="8dp">
-
+        tools:layout_editor_absoluteX="8dp"
+        tools:ignore="MissingConstraints">
         <TabHost
             android:id="@android:id/tabhost"
             android:layout_width="match_parent"
@@ -59,16 +59,29 @@
         </TabHost>
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/activity_all_music_rv"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_weight="1"
-        android:elevation="1dp"
-        android:descendantFocusability="blocksDescendants"
-        tools:listitem="@layout/song_item"
-        tools:layout_editor_absoluteY="0dp"
-        tools:layout_editor_absoluteX="8dp" />
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/activity_all_music_rv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_weight="0.9"
+            android:elevation="1dp"
+            android:descendantFocusability="blocksDescendants"
+            tools:listitem="@layout/song_item"
+            tools:layout_editor_absoluteY="0dp"
+            tools:layout_editor_absoluteX="8dp"
+            tools:ignore="MissingConstraints" />
+
+        <net.classicgarage.truerandommusicplayer.view.WaveSideBarView
+            android:id="@+id/side_bar_view"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.1" />
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

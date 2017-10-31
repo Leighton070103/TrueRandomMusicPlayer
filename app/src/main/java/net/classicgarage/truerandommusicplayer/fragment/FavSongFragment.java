@@ -15,6 +15,7 @@ import net.classicgarage.truerandommusicplayer.R;
 import net.classicgarage.truerandommusicplayer.activity.SongListActivity;
 import net.classicgarage.truerandommusicplayer.adapter.SongAdapter;
 import net.classicgarage.truerandommusicplayer.db.SongDataSource;
+import net.classicgarage.truerandommusicplayer.view.WaveSideBarView;
 
 import static android.app.Activity.RESULT_OK;
 import static net.classicgarage.truerandommusicplayer.service.MusicService.FAV_MODE;
@@ -25,6 +26,7 @@ public class FavSongFragment extends Fragment {
     private RecyclerView mSongListRv;
     private SongAdapter mAdapter;
     private SongDataSource mSongDataSource;
+    private WaveSideBarView mSideBarView;
     public static final String PLAY_MODE = "play mode";
 
     public FavSongFragment() {
@@ -39,6 +41,7 @@ public class FavSongFragment extends Fragment {
         mSongDataSource = SongDataSource.getInstance(this.getContext().getApplicationContext());
         super.onCreate(savedInstanceState);
         mSongListRv = (RecyclerView) v.findViewById(R.id.fav_song_list_rv);
+        mSideBarView = (WaveSideBarView) v.findViewById(R.id.side_bar_view);
 
         mAdapter = new SongAdapter(this.getContext(), mSongDataSource.getFavoriteSongs());
         //mAdapter = new SongAdapter(this, mSongDataSource.getAllSongs());
@@ -46,6 +49,7 @@ public class FavSongFragment extends Fragment {
                 .getApplicationContext());
         mSongListRv.setLayoutManager(mLayoutManager);
         mSongListRv.setItemAnimator(new DefaultItemAnimator());
+
         mAdapter.setOnSongItemNameClickListener(new SongAdapter.OnSongItemNameClickListener() {
             @Override
             public void onSongItemNameClick(View view, int position) {
@@ -57,6 +61,19 @@ public class FavSongFragment extends Fragment {
             }
         });
         mSongListRv.setAdapter(mAdapter);
+
+        mSideBarView.setOnTouchLetterChangeListener(new WaveSideBarView.OnTouchLetterChangeListener() {
+            @Override
+            public void onLetterChange(String letter) {
+                int pos = mAdapter.getLetterPosition(letter);
+                if(pos != -1){
+                    mSongListRv.scrollToPosition(pos);
+                    LinearLayoutManager mLayoutManager =
+                            (LinearLayoutManager) mSongListRv.getLayoutManager();
+                    mLayoutManager.scrollToPositionWithOffset(pos,0);
+                }
+            }
+        });
         return v;
     }
 

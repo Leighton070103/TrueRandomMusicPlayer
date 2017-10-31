@@ -1,4 +1,4 @@
-package net.classicgarage.truerandommusicplayer.widget;
+package net.classicgarage.truerandommusicplayer.util;
 
 import android.content.Context;
 import android.os.Bundle;
