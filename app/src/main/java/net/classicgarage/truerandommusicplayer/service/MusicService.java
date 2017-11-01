@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Binder;
@@ -14,9 +15,11 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.RemoteViews;
 
+import net.classicgarage.truerandommusicplayer.broadcastreceiver.PhoneStatusReceiver;
 import net.classicgarage.truerandommusicplayer.widget.PlayerWidgetProvider;
 import net.classicgarage.truerandommusicplayer.R;
 import net.classicgarage.truerandommusicplayer.activity.MainActivity;
@@ -32,7 +35,6 @@ import java.util.TimerTask;
  */
 public class MusicService extends Service {
 
-    //IBinder musicBinder = new MusicBinder();
     Messenger mMessenger = null;
     private MediaPlayer mMediaPlayer;
     private SongDataSource mDataSource;
@@ -42,14 +44,14 @@ public class MusicService extends Service {
 
     private Integer mPlayMode = 1;
 
-
-
     private boolean mReplayFlag = false;
     private boolean mPlayFlag = false;
 
     public static final String PLAY_MODE = "play mode";
     public static final String REPLAY_FLAG = "Replay flag";
     public static final String INTENT_ACTION = "Intent action";
+    public static final int ACTION_CONTINUE = 5;
+    public static final int ACTION_PAUSE = 6;
     public static final short REQUESTING_BINDING = 78;
     public static final short REFRESH_ALBUM_VIEW = 74;
     public static final short REFRESH_SEEK_BAR_ = 99;
@@ -96,7 +98,6 @@ public class MusicService extends Service {
         KeyguardManager km = (KeyguardManager)getSystemService(KEYGUARD_SERVICE);
         key = km.newKeyguardLock("IN");
         key.disableKeyguard();
-        //refreshAlbumView();
         super.onCreate();
     }
 
@@ -121,6 +122,12 @@ public class MusicService extends Service {
                     break;
                 case ACTION_PLAY_PREVIOUS:
                     playLastSong();
+                    break;
+                case ACTION_CONTINUE:
+                    play();
+                    break;
+                case ACTION_PAUSE:
+                    pause();
                     break;
                 case -1:
                     updateWidget();

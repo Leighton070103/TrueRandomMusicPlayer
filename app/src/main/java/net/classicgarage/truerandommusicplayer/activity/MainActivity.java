@@ -203,7 +203,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //                MediaButtonReceiver.class.getName());
 //        audioManager.registerMediaButtonEventReceiver(name);
         getPermissions();
-        debug();
+
     }
 
     public void debug(){
@@ -221,10 +221,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     private void getPermissions() {
         if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE )
-                != PackageManager.PERMISSION_GRANTED )
+                == PackageManager.PERMISSION_DENIED ||
+                ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_PHONE_STATE )
+                == PackageManager.PERMISSION_DENIED ||
+                ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE )
+                == PackageManager.PERMISSION_DENIED ||
+                ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.SYSTEM_ALERT_WINDOW )
+                        == PackageManager.PERMISSION_DENIED )
         {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_PHONE_STATE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.SYSTEM_ALERT_WINDOW
             }, 1);
         }
         else{

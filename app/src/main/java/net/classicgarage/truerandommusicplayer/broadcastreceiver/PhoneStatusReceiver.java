@@ -6,43 +6,33 @@ package net.classicgarage.truerandommusicplayer.broadcastreceiver;
 
 import android.app.Service;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
-import android.os.IBinder;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
-import net.classicgarage.truerandommusicplayer.service.BaseService;
+import net.classicgarage.truerandommusicplayer.service.MusicService;
+
 
 public class PhoneStatusReceiver extends BroadcastReceiver {
 
-    private ServiceConnection mServiceCon;
-    private BaseService mBaseService;
     private static boolean isCallIncoming = false;
+    private Intent mPhoneCallIntent;
+    private Context context;
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        mServiceCon = new ServiceConnection() {
-            @Override
-            public void onServiceConnected(ComponentName name, IBinder service) {
-                mBaseService = (BaseService) service;
-            }
 
-            @Override
-            public void onServiceDisconnected(ComponentName name) {
-
-            }
-        };
-
+        this.context = context;
+        mPhoneCallIntent = new Intent(context, MusicService.class);
         //dialing a phone call
         if (intent.getAction().equals(Intent.ACTION_NEW_OUTGOING_CALL)) {
             isCallIncoming = false;
-            mBaseService.callPause();
+            mPhoneCallIntent.putExtra(MusicService.INTENT_ACTION,MusicService.ACTION_PAUSE);
             final String phoneNum = intent.getStringExtra(Intent.EXTRA_PHONE_NUMBER);
             Log.d("PhoneReceiver", "phoneNum: " + phoneNum);
+            this.context.startService(mPhoneCallIntent);
         } else {
             TelephonyManager tm = (TelephonyManager) context.getSystemService(Service.TELEPHONY_SERVICE);
             tm.listen(listener, PhoneStateListener.LISTEN_CALL_STATE);
@@ -56,24 +46,29 @@ public class PhoneStatusReceiver extends BroadcastReceiver {
             switch(state){
                 //Ringing
                 case TelephonyManager.CALL_STATE_RINGING:
-                    mBaseService.callPause();
+                    mPhoneCallIntent.putExtra(MusicService.INTENT_ACTION,MusicService.ACTION_PAUSE);
                     isCallIncoming = true;
                     Log.i("PhoneReceiver", "CALL IN RINGING :" + incomingNumber);
+                    context.startService(mPhoneCallIntent);
                     break;
-                //answered the phone call
+                //answering the phone call
                 case TelephonyManager.CALL_STATE_OFFHOOK:
                     if (isCallIncoming) {
+                        mPhoneCallIntent.putExtra(MusicService.INTENT_ACTION,MusicService.ACTION_PAUSE);
                         Log.i("PhoneReceiver", "CALL IN ACCEPT :" + incomingNumber);
+                        context.startService(mPhoneCallIntent);
                     }
                     break;
                 //hang up the phone call
                 case TelephonyManager.CALL_STATE_IDLE:
                     if (isCallIncoming) {
-                        mBaseService.callPlay();
+                        mPhoneCallIntent.putExtra(MusicService.INTENT_ACTION,MusicService.ACTION_PAUSE);
                         Log.i("PhoneReceiver", "CALL IDLE");
+                        context.startService(mPhoneCallIntent);
                     }
                     break;
             }
+
         }
     };
 }

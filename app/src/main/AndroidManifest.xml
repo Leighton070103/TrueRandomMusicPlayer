@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.MEDIA_CONTENT_CONTROL" />
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
         android:allowBackup="true"
@@ -29,13 +30,6 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".broadcastreceiver.MediaButtonReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.MEDIA_BUTTON" />
-
-                <category android:name="android.intent.categoy.DEFAULT" />
-            </intent-filter>
-        </receiver>
         <receiver android:name=".widget.PlayerWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -46,10 +40,22 @@
                 android:name="android.appwidget.provider"
                 android:resource="@layout/appwidget_info" />
         </receiver>
+
         <receiver
             android:name=".broadcastreceiver.PhoneStatusReceiver"
             android:enabled="true"
-            android:exported="true"></receiver>
-    </application>
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.PHONE_STATE"/>
+            </intent-filter>
+        </receiver>
 
+        <receiver android:name=".broadcastreceiver.MediaButtonReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
+                <category android:name="android.intent.categoy.DEFAULT" />
+            </intent-filter>
+        </receiver>
+
+    </application>
 </manifest>
