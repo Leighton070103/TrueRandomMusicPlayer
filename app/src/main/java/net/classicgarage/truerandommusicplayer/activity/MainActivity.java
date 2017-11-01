@@ -20,6 +20,7 @@ import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.view.accessibility.AccessibilityManagerCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -610,24 +611,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void updateModeButton()
     {
+        String s = "";
         switch (mBaseService.getPlayMode()){
             case NORMAL_SEQUENCE:
                 mBaseService.setPlayMode(NORMAL_RANDOM);
                 mRandomBtn.setImageDrawable(getResources().getDrawable(R.drawable.random_playlist));
+                s = "Sequence play";
                 break;
             case NORMAL_RANDOM:
                 mBaseService.setPlayMode(FAV_MODE);
                 mRandomBtn.setImageDrawable(getResources().getDrawable(R.drawable.non_random_favorite));
+                s = "Sequence favorite";
                 break;
             case FAV_MODE:
                 mBaseService.setPlayMode(FAV_RANDOM);
                 mRandomBtn.setImageDrawable(getResources().getDrawable(R.drawable.random_favorite));
+                s = "Random favorite";
                 break;
             case FAV_RANDOM:
                 mBaseService.setPlayMode(NORMAL_SEQUENCE);
                 mRandomBtn.setImageDrawable(getResources().getDrawable(R.drawable.non_random_playlist));
+                s = "Random play";
                 break;
         }
+        Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
         SharedPreferences preferences = getSharedPreferences("user",Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt( PLAY_MODE, mBaseService.getPlayMode() );
@@ -635,6 +642,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void updateReplayButton() {
+
         if( mBaseService.callGetReplayFlag()) {
             mReplayBtn.setImageDrawable(getResources().getDrawable(R.mipmap.replayb));
             mBaseService.callChangeReplayFlag();
@@ -643,6 +651,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         else {
             mReplayBtn.setImageDrawable(getResources().getDrawable(R.mipmap.replay1w));
             mBaseService.callChangeReplayFlag();
+            Toast.makeText(getApplicationContext(), "Repeat", Toast.LENGTH_SHORT).show();
         }
         SharedPreferences preferences = getSharedPreferences("user",Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
